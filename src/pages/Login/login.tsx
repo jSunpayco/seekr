@@ -1,6 +1,7 @@
 import styles from './login.module.scss';
 
 import FullFormField from '../../components/FullFormField/fullformfield';
+import FormButton from '../../components/FormButton/formbutton';
 
 const Login = () => {
 
@@ -11,6 +12,7 @@ const Login = () => {
                 <div className={styles.loginFormContainer}>
                     <FullFormField title="email" type="email"></FullFormField>
                     <FullFormField title="password" type="password"></FullFormField>
+                    <FormButton></FormButton>
                 </div>
             </div>
         </div>

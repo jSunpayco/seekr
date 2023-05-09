@@ -1,0 +1,85 @@
+.container{
+    width: 10vw;
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    height: 3vw;
+    padding: 0 2vw 0 2.5vw;
+    text-align: center;
+    &:hover {
+        cursor: pointer;
+    }
+    &::before{
+        content: "";
+        color: white;
+        border-radius: 100%;
+        height: 3vw;
+        width: 3vw;
+
+        background-color: #D9D9D9;
+        position: absolute;
+
+        display: block;
+        transition: border-radius 0.4s ease, width 0.4s ease;
+        overflow: hidden;
+    }
+    &:hover::before{
+        border-radius: 100px;
+        width: 10vw;
+        transition: border-radius 0.4s ease, width 0.4s ease-out;
+    }
+    &:hover .buttonText{
+        color: black;
+        transform: translate(-40%, -50%);
+        transition: all 0.3s ease;
+    }
+    &:hover .innerCircle{
+        background-color: black;
+        transform: scale(0.6) translate(150%, -80%);
+        transition: all 0.5s ease;
+    }
+    &:hover .arrow{
+        opacity: 0;
+    }
+    background-color: transparent;
+}
+
+.innerCircle{
+    position: absolute;
+    background-color: transparent;
+    left: 1vw;
+    top: 50%;
+    width: 2vw;
+    height: 2vw;
+    transform: translate(91%, -50%);
+    transition: all .7s ease;
+    display: inline-block;
+    border-radius: 100%;
+    border: black solid;
+    border-width: 1px;
+}
+
+.arrow{
+    position: absolute;
+    top: 15%;
+    width: 70%;
+    height: 70%;
+    margin: auto;
+    position: relative;
+    opacity: 1;
+    transform: translateX(0);
+    transition: all .7s var(--expoOut);
+    will-change: transform;
+}
+
+.buttonText{
+    color: white;
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    font-family: Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
