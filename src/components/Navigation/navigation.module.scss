@@ -1,0 +1,39 @@
+.navigationContainer{
+    height: 96vh;
+    width: 320px;
+    background-color: #D9D9D9;
+    margin-top: 2vh;
+    margin-left: 15px;
+    border-radius: 20px;
+    transition: all 0.5s ease;
+}
+
+.navigationHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+.logo{
+    font-weight: 600px;
+    font-family: Arial, sans-serif;
+    user-select: none;
+    font-size: 48px;
+}
+
+.navigationCloseButton{
+    background-color: transparent;
+    border: none;
+    height: fit-content;
+    font-size: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.5s ease-out;
+    &:hover{
+        transform: rotate(180deg);
+        transition: all 0.5s ease-out;
+    }
+}
