@@ -27,7 +27,7 @@
     &:hover::before{
         border-radius: 100px;
         width: 10vw;
-        transition: border-radius 0.35s ease, width 0.35s ease-out;
+        transition: border-radius 0.4s ease, width 0.4s ease-out;
     }
     &:hover .buttonText{
         color: black;
@@ -37,7 +37,7 @@
     &:hover .innerCircle{
         background-color: black;
         transform: scale(0.6) translate(150%, -80%);
-        transition: all 0.3s ease;
+        transition: all 0.5s ease;
     }
     &:hover .arrow{
         opacity: 0;
@@ -82,4 +82,5 @@
     font-weight: 600;
     letter-spacing: 1px;
     transition: all 0.3s ease;
+    user-select: none;
 }
