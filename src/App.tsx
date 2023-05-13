@@ -7,16 +7,14 @@ import Jobs from './pages/Jobs/jobs';
 function App() {
 
   return (
-    <div>
+    <>
       <Router>
-      <div id='main'>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/jobs" element={<Jobs />} />
-        </Routes> 
-      </div>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/jobs" element={<Jobs />} />
+      </Routes> 
     </Router>
-    </div>
+    </>
   )
 }
 
