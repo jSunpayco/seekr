@@ -6,6 +6,12 @@ import { useState } from 'react';
 
 const Navigation = () => {
 
+    const locationOptions = ['Remote', 'Sacramento', 'Boston', 'San Francisco']
+    const categoryOptions = ['SWE', 'SDET', 'Cybersecurity']
+    const monthOptions = ['February', 'March', 'April', 'May']
+    const positionOptions = ['Full Time', 'Intern', 'Temporary']
+    const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview', 'Saved']
+
     const [categoryClicked, setCategoryClicked] = useState(false)
     const [locationClicked, setLocationClicked] = useState(false)
     const [monthClicked, setMonthClicked] = useState(false)
