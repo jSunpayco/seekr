@@ -12,7 +12,7 @@ const Login = () => {
                 <div className={styles.loginFormContainer}>
                     <FullFormField title="email" type="email"></FullFormField>
                     <FullFormField title="password" type="password"></FullFormField>
-                    <FormButton title='Login'></FormButton>
+                    <a href='/jobs'><FormButton title='Login'></FormButton></a>
                 </div>
             </div>
         </div>
