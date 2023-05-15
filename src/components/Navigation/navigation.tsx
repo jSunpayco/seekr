@@ -18,7 +18,7 @@ const Navigation = () => {
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
                     {filterContainers()}
-                    {/* <button>Logout</button> */}
+                    <a href='/' className={styles.logoutButton}>Logout</a>
                 </div>
                 {/* <button className={styles.navigationCloseButton}>X</button> */}
             </div>

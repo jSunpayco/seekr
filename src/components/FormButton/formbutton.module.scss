@@ -70,6 +70,7 @@
     opacity: 1;
     transform: translateX(0);
     transition: all .7s var(--expoOut);
+    color: black;
     will-change: transform;
 }
 
