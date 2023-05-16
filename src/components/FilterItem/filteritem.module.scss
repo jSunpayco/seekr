@@ -11,3 +11,33 @@
     vertical-align: middle;
     user-select: none;
 }
+
+.optionsContainer{
+    position: absolute;
+    width: 8%;
+    list-style: none;
+    transform: translateY(5%);
+    // transition: visibility 1s ease;
+    padding: 15px 5px;
+    
+    border: none;
+    border-radius: 7px;
+    background-color: #D9D9D9;
+
+    z-index: 30;
+}
+
+.optionName{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1vw;
+    // border: solid black;
+    margin: 5px;
+    padding: 8px;
+
+    &:hover{
+        background-color: #909090;
+        cursor: pointer;
+    }
+}

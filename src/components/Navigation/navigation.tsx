@@ -23,13 +23,13 @@ const Navigation = () => {
             <div className={styles.navigationHeader}>
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
-                    <FilterItem title='Category' isClicked={categoryClicked} clickFunction={setCategoryClicked}></FilterItem>
-                    <FilterItem title='Location' isClicked={locationClicked} clickFunction={setLocationClicked}></FilterItem>
+                    <FilterItem title='Category' isClicked={categoryClicked} clickFunction={setCategoryClicked} options={locationOptions}></FilterItem>
+                    <FilterItem title='Location' isClicked={locationClicked} clickFunction={setLocationClicked} options={categoryOptions}></FilterItem>
 
-                    <FilterItem title='Month' isClicked={monthClicked} clickFunction={setMonthClicked}></FilterItem>
-                    <FilterItem title='Position' isClicked={positionClicked} clickFunction={setPositionClicked}></FilterItem>
+                    <FilterItem title='Month' isClicked={monthClicked} clickFunction={setMonthClicked} options={monthOptions}></FilterItem>
+                    <FilterItem title='Position' isClicked={positionClicked} clickFunction={setPositionClicked} options={positionOptions}></FilterItem>
 
-                    <FilterItem title='Status' isClicked={statusClicked} clickFunction={setStatusClicked}></FilterItem>
+                    <FilterItem title='Status' isClicked={statusClicked} clickFunction={setStatusClicked} options={statusOptions}></FilterItem>
 
                     <a href='/' className={styles.logoutButton}>Logout</a>
                 </div>
