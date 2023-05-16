@@ -18,18 +18,32 @@ const Navigation = () => {
     const [positionClicked, setPositionClicked] = useState(false)
     const [statusClicked, setStatusClicked] = useState(false)
 
+    const filterButtons = [setCategoryClicked, setLocationClicked, setMonthClicked, setPositionClicked, setStatusClicked]
+
+    function clickFilterButton(toggleState:any, currState:boolean){
+        if(currState === false)
+            for(let i = 0; i < filterButtons.length; i++){
+                if(filterButtons[i] !== toggleState)
+                    filterButtons[i](false)
+                else
+                    toggleState(true)
+            }
+        else
+            toggleState(false)
+    }
+
     return (
         <div className={styles.navigationContainer}>
             <div className={styles.navigationHeader}>
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
-                    <FilterItem title='Category' isClicked={categoryClicked} clickFunction={setCategoryClicked} options={locationOptions}></FilterItem>
-                    <FilterItem title='Location' isClicked={locationClicked} clickFunction={setLocationClicked} options={categoryOptions}></FilterItem>
+                    <FilterItem title='Category' isClicked={categoryClicked} toggleSetter={setCategoryClicked} clickFunction={clickFilterButton} options={locationOptions}></FilterItem>
+                    <FilterItem title='Location' isClicked={locationClicked} toggleSetter={setLocationClicked} clickFunction={clickFilterButton} options={categoryOptions}></FilterItem>
 
-                    <FilterItem title='Month' isClicked={monthClicked} clickFunction={setMonthClicked} options={monthOptions}></FilterItem>
-                    <FilterItem title='Position' isClicked={positionClicked} clickFunction={setPositionClicked} options={positionOptions}></FilterItem>
+                    <FilterItem title='Month' isClicked={monthClicked} toggleSetter={setMonthClicked} clickFunction={clickFilterButton} options={monthOptions}></FilterItem>
+                    <FilterItem title='Position' isClicked={positionClicked} toggleSetter={setPositionClicked} clickFunction={clickFilterButton} options={positionOptions}></FilterItem>
 
-                    <FilterItem title='Status' isClicked={statusClicked} clickFunction={setStatusClicked} options={statusOptions}></FilterItem>
+                    <FilterItem title='Status' isClicked={statusClicked} toggleSetter={setStatusClicked} clickFunction={clickFilterButton} options={statusOptions}></FilterItem>
 
                     <a href='/' className={styles.logoutButton}>Logout</a>
                 </div>
