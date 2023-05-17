@@ -19,3 +19,31 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 2.5vw;
 }
+
+.jobsGrid{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    border: solid rgba(255, 255, 255, .1);
+    border-width: 1px;
+    border-radius: 10px;
+    padding: 20px;
+    margin-left: 2%;
+    margin-right: 2%;
+
+    @media (max-width: 651px) {
+        justify-content: center;
+    }
+}
+
+.jobContainer{
+    width: 255px;
+    height: 196px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    background-color: #F6EFE2;
+    border-radius: 30px;
+}
