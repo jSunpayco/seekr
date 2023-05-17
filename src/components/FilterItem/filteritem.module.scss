@@ -17,7 +17,6 @@
     width: 8%;
     list-style: none;
     transform: translateY(5%);
-    // transition: visibility 1s ease;
     padding: 15px 5px;
     
     border: none;
@@ -32,9 +31,9 @@
     overflow: hidden;
     white-space: nowrap;
     font-size: 1vw;
-    // border: solid black;
     margin: 5px;
     padding: 8px;
+    border-radius: 7px;
 
     &:hover{
         background-color: #909090;
