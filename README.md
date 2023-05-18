@@ -1,8 +1,6 @@
 # SeekR
 > A job application tracker. The design was created using Figma, and the project is currently being developed using React, Typescript, and Vite.
 
-One to two paragraph statement about your product and what it does.
-
 ![login](https://res.cloudinary.com/ddx0aorm7/image/upload/v1684385885/seekr_login.png)
 
 ## Installation
