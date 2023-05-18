@@ -3,7 +3,7 @@
 
 One to two paragraph statement about your product and what it does.
 
-![login]([header.png](https://res.cloudinary.com/ddx0aorm7/image/upload/v1684385885/seekr_login.png))
+![login](https://res.cloudinary.com/ddx0aorm7/image/upload/v1684385885/seekr_login.png)
 
 ## Installation
 To clone the application on your local environment, you may download and unzip the rep (dev branch), then open your command line in the repo's directory and type in the following commands.
