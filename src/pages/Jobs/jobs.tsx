@@ -100,8 +100,6 @@ const Jobs = () => {
             <h2 className={styles.legendTitle}>Legend</h2>
             <div className={styles.legendContainer}>{legendItems()}</div>
 
-            <h1 className={styles.warning}>This page is currently under progress</h1>
-
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
             </div>
