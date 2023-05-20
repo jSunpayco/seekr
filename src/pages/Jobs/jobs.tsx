@@ -3,14 +3,15 @@ import Navigation from "../../components/Navigation/navigation";
 
 import { useState } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import Modal from '../../components/ModalStatus/modalstatus';
 
 const Jobs = () => {
 
-    const statusLegend = ["Progressing", "Reject", "Offer"]
+    const statusLegend = ["In Progress", "Reject", "Offer"]
 
     const legendItems = () => {
         return statusLegend.map((item, index) => (
-            <div id={`status${index}`} className={styles.legendItem + " " + (item==="Progressing"?styles.legendColorProgress:item==="Reject"?styles.legendColorReject:styles.legendColorOffer)}>
+            <div id={`status${index}`} className={styles.legendItem + " " + (item==="In Progress"?styles.legendColorProgress:item==="Reject"?styles.legendColorReject:styles.legendColorOffer)}>
                 {item}
             </div>
         ))
@@ -85,11 +86,13 @@ const Jobs = () => {
                 <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
                 <p className={styles.jobInfo} style={{marginBottom:'20px'}}>{item.Date}</p>
                 <div className={styles.buttonContainer}>
-                    <a href='/' className={styles.statusButton}>Change Status</a>
+                    <button onClick={()=>setModalOpen(true)} className={styles.statusButton}>Update Status</button>
                 </div>
             </div>
         ))
     }
+
+    const [isModalOpen, setModalOpen] = useState<boolean>(false)
 
     return (
         <div className={styles.jobsContainer}>
@@ -103,6 +106,8 @@ const Jobs = () => {
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
             </div>
+            
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A'></Modal>}
         </div>
     )
 }
