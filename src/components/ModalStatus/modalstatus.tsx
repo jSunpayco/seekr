@@ -27,7 +27,7 @@ const ModalStatus = (props:Props) => {
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
 
-                <div className={styles.optionContainer} onClick={()=>setCheck1(!check1)}>
+                <div className={styles.optionContainer} onClick={()=>setCheck1(!check1)} style={{backgroundColor:(check1?'#e6e6e6':'')}}>
                     <label className={styles.label}>
                         <input type="radio" name="radio" checked={check1}/>
                         <span className={styles.check}></span>

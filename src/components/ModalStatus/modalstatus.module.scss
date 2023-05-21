@@ -73,7 +73,7 @@
         position: absolute;
 
         &:checked ~ .check{
-            background-color: #2196F3;
+            background-color: black;
         }
     }
 }
@@ -85,7 +85,9 @@
     transform: translate(-20%, -50%);
     height: 16px;
     width: 16px;
-    background-color: #ccc;
+    background-color: transparent;
+    border: solid black;
+    border-width: 1px;
     border-radius: 50%;
 }
 
