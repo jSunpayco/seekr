@@ -43,6 +43,7 @@
     font-size: 28px;
     font-weight: 600;
     cursor: pointer;
+    user-select: none;
 }
 
 .optionContainer{
@@ -50,6 +51,7 @@
     border-radius: 12px;
     height: 50px;
     margin: auto;
+    position: relative;
 
     display: flex;
     flex-direction: row;
@@ -108,8 +110,28 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
-.datalist{
-    // border: none;
+.datalistOptions{
+    position: absolute;
+    left: 0;
+    width: 50%;
+
+    margin-top: 45%;
+    margin-left: 20%;
+    padding: 0px 4%;
+
+    border: solid black;
+    border-width: 1px;
+    border-radius: 6px;
+}
+
+.datalistItem{
+    margin: 2px 0px;
+    padding: 10px 0px;
+    z-index: 100;
+    &:hover{
+        background-color: #e6e6e6;
+    }
 }
