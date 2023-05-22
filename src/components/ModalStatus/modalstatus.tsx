@@ -95,9 +95,9 @@ const ModalStatus = (props:Props) => {
             event.stopPropagation();
     };
 
-    const datalistOption = (options:string[]) => {
+    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>) => {
         return options.map((item, index)=>(
-            <p id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, (options===progressList?setCurrProgress:setCurrRejected))}>{item}</p>
+            <p id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction)}>{item}</p>
         ))
     }
 
@@ -109,11 +109,11 @@ const ModalStatus = (props:Props) => {
                     <span className={styles.check}></span>
                 </label>
                 <div className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, item.checkmark, item.dropdown, item.dropdownFunction)} style={{color:(item.checkmark?'black':'#a4a3a4'), border:(item.checkmark?'solid 1px black':'solid 1px #a4a3a4')}}>
-                    {currProgress}
+                    {item.currOption}
                     <BiChevronDown className={styles.menuArrow} style ={{transform:item.dropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 0.7s ease'}}/>
                 </div>
                 <div className={styles.datalistOptions} style={{visibility:(item.dropdown?'visible':'hidden')}}>
-                    {datalistOption(progressList)}
+                    {datalistOption(item.optionList, item.optionFunction)}
                 </div>
             </div>
         ))
