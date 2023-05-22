@@ -1,0 +1,42 @@
+.filterName{
+    cursor: pointer;
+    font-family: Arial, sans-serif;
+    font-weight: 500;
+    font-size: 1.1vw;
+    user-select: none;
+}
+
+.filterIcon{
+    margin-left: 3px;
+    vertical-align: middle;
+    user-select: none;
+}
+
+.optionsContainer{
+    position: absolute;
+    width: 8%;
+    list-style: none;
+    transform: translateY(5%);
+    padding: 15px 5px;
+    
+    border: none;
+    border-radius: 7px;
+    background-color: #D9D9D9;
+
+    z-index: 30;
+}
+
+.optionName{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 1vw;
+    margin: 5px;
+    padding: 8px;
+    border-radius: 7px;
+
+    &:hover{
+        background-color: #909090;
+        cursor: pointer;
+    }
+}

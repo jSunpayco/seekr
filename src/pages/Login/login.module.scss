@@ -1,0 +1,25 @@
+.loginContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loginContentsContainer{
+    height: 50%;
+    aspect-ratio: 1/1;
+}
+
+.loginTitle{
+    color: white;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    user-select: none;
+}
+
+.loginFormContainer{
+    background-color: #2E2E2C;
+    border-radius: 10px;
+    box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.5);
+    height: 90%;
+}
