@@ -63,12 +63,14 @@ const ModalStatus = (props:Props) => {
     ]
 
     const radioButtonList = [setProgressCheck, setRejectedCheck, setOfferCheck]
+    const dropDownList = [setProgressDrop, setRejectedDrop, setOfferDrop]
 
     const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, dropdownState:boolean, dropDown:Dispatch<SetStateAction<boolean>>) => {
         if(radioState === false){
             for(let i = 0 ; i<3; i++){
                 if(radioButtonList[i] != radioButton){
                     radioButtonList[i](false)
+                    dropDownList[i](false)
                 }
                 else{
                     radioButtonList[i](true)
