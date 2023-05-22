@@ -46,6 +46,13 @@
     user-select: none;
 }
 
+.optionsGrid{
+    width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
 .optionContainer{
     width: 80%;
     border-radius: 12px;
@@ -125,6 +132,9 @@
     border: solid black;
     border-width: 1px;
     border-radius: 6px;
+    background-color: #ffffff;
+
+    z-index: 200;
 }
 
 .datalistItem{

@@ -10,37 +10,110 @@ interface Props {
 }
 
 const ModalStatus = (props:Props) => {
-
-    const [check, setCheck] = useState(false)
-    const [check1, setCheck1] = useState(false)
     
-    const [drop1, setDrop1] = useState(false)
+    const progressList = ['Sent', 'Assessment', 'Interviewing']
+    const [currProgress, setCurrProgress] = useState('Sent')
+    
+    const rejectedList = ['Resume', 'Assessment', 'Interview']
+    const [currRejected, setCurrRejected] = useState('Resume')
+    
+    const offerList = ['Verbal', 'Written']
+    const [currOffer, setCurrOffer] = useState('Written')
+
+    const [progressCheck, setProgressCheck] = useState(false)
+    const [progressDrop, setProgressDrop] = useState(false)
+
+    const [rejectedCheck, setRejectedCheck] = useState(false)
+    const [rejectedDrop, setRejectedDrop] = useState(false)
+
+    const [offerCheck, setOfferCheck] = useState(false)
+    const [offerDrop, setOfferDrop] = useState(false)
+
+    const optionsList = [
+        {
+            name:'In Progress',
+            optionList:progressList,
+            currOption:currProgress,
+            optionFunction:setCurrProgress,
+            checkmark:progressCheck,
+            checkmarkFunction:setProgressCheck,
+            dropdown:progressDrop,
+            dropdownFunction:setProgressDrop  
+        },
+        {
+            name:'Rejected',
+            optionList:rejectedList,
+            currOption:currRejected,
+            optionFunction:setCurrRejected,
+            checkmark:rejectedCheck,
+            checkmarkFunction:setRejectedCheck,
+            dropdown:rejectedDrop,
+            dropdownFunction:setRejectedDrop  
+        },
+        {
+            name:'Offer',
+            optionList:offerList,
+            currOption:currOffer,
+            optionFunction:setCurrOffer,
+            checkmark:offerCheck,
+            checkmarkFunction:setOfferCheck,
+            dropdown:offerDrop,
+            dropdownFunction:setOfferDrop
+        }
+    ]
+
+    const radioButtonList = [setProgressCheck, setRejectedCheck, setOfferCheck]
 
     const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, dropdownState:boolean, dropDown:Dispatch<SetStateAction<boolean>>) => {
-        radioButton(!radioState)
+        if(radioState === false){
+            for(let i = 0 ; i<3; i++){
+                if(radioButtonList[i] != radioButton){
+                    radioButtonList[i](false)
+                }
+                else{
+                    radioButtonList[i](true)
+                }
+            }
+        }
+
         if(dropdownState){
             dropDown(false)
         }
     }
 
-    const handleDataListClick = (event:React.MouseEvent<HTMLDivElement>, state:boolean) => {
+    const handleDataListClick = (event:React.MouseEvent<HTMLDivElement>, state:boolean, dropdownState:boolean, dropDown:Dispatch<SetStateAction<boolean>>) => {
         if(state){
-            setDrop1(!drop1)
+            dropDown(!dropdownState)
             event.stopPropagation();
         }
     };
 
-    const handleDataListOptionClick = (event:React.MouseEvent<HTMLDivElement>, newString:string) => {
-            setCurrProgress(newString)
+    const handleDataListOptionClick = (event:React.MouseEvent<HTMLDivElement>, newString:string, optionFunction:Dispatch<SetStateAction<string>>) => {
+            optionFunction(newString)
             event.stopPropagation();
     };
-    
-    const progressList = ['Sent', 'Assessment', 'Interviewing']
-    const [currProgress, setCurrProgress] = useState('Sent')
 
     const datalistOption = (options:string[]) => {
         return options.map((item, index)=>(
-            <p id={`statusOption ${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item)}>{item}</p>
+            <p id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, (options===progressList?setCurrProgress:setCurrRejected))}>{item}</p>
+        ))
+    }
+
+    const optionItem = () => {
+        return optionsList.map((item, index) =>(
+            <div id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
+                <label className={styles.label}>
+                    <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
+                    <span className={styles.check}></span>
+                </label>
+                <div className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, item.checkmark, item.dropdown, item.dropdownFunction)} style={{color:(item.checkmark?'black':'#a4a3a4'), border:(item.checkmark?'solid 1px black':'solid 1px #a4a3a4')}}>
+                    {currProgress}
+                    <BiChevronDown className={styles.menuArrow} style ={{transform:item.dropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 0.7s ease'}}/>
+                </div>
+                <div className={styles.datalistOptions} style={{visibility:(item.dropdown?'visible':'hidden')}}>
+                    {datalistOption(progressList)}
+                </div>
+            </div>
         ))
     }
 
@@ -52,19 +125,10 @@ const ModalStatus = (props:Props) => {
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
 
-                <div className={styles.optionContainer} onClick={()=>unCheck(setCheck1, check1, drop1, setDrop1)} style={{backgroundColor:(check1?'#e6e6e6':'')}}>
-                    <label className={styles.label}>
-                        <input type="radio" name="radio" checked={check1}/>
-                        <span className={styles.check}></span>
-                    </label>
-                    <div className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, check1)} style={{color:(check1?'black':'#a4a3a4'), border:(check1?'solid 1px black':'solid 1px #a4a3a4')}}>
-                        {currProgress}
-                        <BiChevronDown className={styles.menuArrow}/>
-                    </div>
-                    <div className={styles.datalistOptions} style={{visibility:(drop1?'visible':'hidden')}}>
-                        {datalistOption(progressList)}
-                    </div>
+                <div className={styles.optionsGrid}>
+                    {optionItem()}
                 </div>
+                
             </form>
         </div>
     )
