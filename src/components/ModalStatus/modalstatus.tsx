@@ -1,5 +1,6 @@
 import styles from './modalstatus.module.scss';
 import { BiChevronDown } from "react-icons/bi";
+import FormButton from '../FormButton/formbutton';
 
 import { Dispatch, SetStateAction, useState } from 'react';
 
@@ -131,6 +132,7 @@ const ModalStatus = (props:Props) => {
                     {optionItem()}
                 </div>
                 
+                <FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton>
             </form>
         </div>
     )
