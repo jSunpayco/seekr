@@ -105,6 +105,9 @@ const Jobs = () => {
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
+                <div className={styles.jobContainer + " " + styles.newJobContainer}>
+                    <p className={styles.newJobButton}>+</p>
+                </div>
             </div>
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A'></Modal>}
