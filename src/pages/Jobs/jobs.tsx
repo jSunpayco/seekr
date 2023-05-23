@@ -4,6 +4,7 @@ import Navigation from "../../components/Navigation/navigation";
 import { useState } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Modal from '../../components/ModalStatus/modalstatus';
+import ModalCreate from '../../components/ModalCreate/modalcreate';
 
 const Jobs = () => {
 
@@ -93,6 +94,7 @@ const Jobs = () => {
     }
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
+    const [isModalCreateOpen, setModalCreateOpen] = useState<boolean>(false)
 
     return (
         <div className={styles.jobsContainer}>
@@ -105,12 +107,13 @@ const Jobs = () => {
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
-                <div className={styles.jobContainer + " " + styles.newJobContainer}>
+                <div className={styles.jobContainer + " " + styles.newJobContainer} onClick={()=>setModalCreateOpen(true)}>
                     <p className={styles.newJobButton}>+</p>
                 </div>
             </div>
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A'></Modal>}
+            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen}></ModalCreate>}
         </div>
     )
 }
