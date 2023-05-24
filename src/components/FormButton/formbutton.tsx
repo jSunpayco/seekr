@@ -1,5 +1,6 @@
 import styles from './formbutton.module.scss';
 import {AiOutlineArrowRight} from 'react-icons/ai';
+import { useState } from 'react';
 
 interface Props {
     title: string;
@@ -8,11 +9,10 @@ interface Props {
 }
 
 const FormButton = (props:Props) => {
-
     return (
-        <div className={styles.container} style={props.position}>
-            <span className={styles.innerCircle}><AiOutlineArrowRight className={styles.arrow}/></span>
-            <span className={styles.buttonText} style={{color:props.titleColor?props.titleColor:''}}>{props.title.toUpperCase()}</span>
+        <div className={styles.container + " " + (props.titleColor==='black'?styles.blackContainer:styles.greyContainer)} style={props.position}>
+            <span className={styles.innerCircle} style={{borderColor:props.titleColor==='black'?'white':'black'}}><AiOutlineArrowRight className={styles.arrow} style={{color:props.titleColor==='black'?'white':'black'}}/></span>
+            <span className={styles.buttonText}>{props.title.toUpperCase()}</span>
         </div>
     )
 }
