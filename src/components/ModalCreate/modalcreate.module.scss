@@ -74,4 +74,17 @@
     padding-top: 7px;
     padding-bottom: 7px;
     font-size:x-large;
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.dropdownContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:hover{
+        cursor: pointer;
+    }
 }
