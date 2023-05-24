@@ -8,17 +8,19 @@
 }
 
 .modalContainer{
-    background-color: #ffffff;
+    background-color: #D9D9D9;
     border-radius: 20px;
     border: solid black;
     border-width: 1px;
-    height: 330px;
-    width: 500px;
+    height: auto;
+    width: 75%;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: block;
+    padding-bottom: 20px;
+    position: relative;
 }
 
 .modalHeader{
@@ -44,4 +46,32 @@
     font-weight: 600;
     cursor: pointer;
     user-select: none;
+}
+
+.inputFieldsContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.halfinputFieldsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 83%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.fullInputField{
+    width: 80%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    height: 38px;
+    padding-left: 3%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size:x-large;
 }

@@ -18,6 +18,14 @@ const ModalCreate = (props:Props) => {
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
                 
+                <div className={styles.inputFieldsContainer}>
+                    <input className={styles.fullInputField} placeholder='EMAIL' style={{margin:'auto'}}></input>
+                    <div className={styles.halfinputFieldsContainer}>
+                        <input className={styles.fullInputField} style={{width:'35%'}} placeholder='EMAIL'></input>
+                        <input className={styles.fullInputField} style={{width:'35%'}} placeholder='EMAIL'></input>
+                    </div>
+                </div>
+                
                 <FormButton position={{margin:'auto', marginTop:'15px'}} title='Submit' titleColor='black'></FormButton>
             </form>
         </div>
