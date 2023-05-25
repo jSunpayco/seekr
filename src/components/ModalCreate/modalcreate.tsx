@@ -56,17 +56,17 @@ const ModalCreate = (props:Props) => {
         ))
     }
 
-    const halfDatalists = (title1:string, title2:string) => {
+    const halfDatalists = (title1:string, isFocued1:boolean, focusFunction1:Dispatch<SetStateAction<boolean>>, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, defaultOptions1:string[], options1:string[], setOptions1:Dispatch<SetStateAction<string[]>>, title2:string, isFocued2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
             <div className={styles.halfinputFieldsContainer}>
-                <input placeholder={title1.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>setCategoryFocused(true)} onBlur={()=>handleOptionsVisibility(setCategoryFocused)} value={currentCategory} onChange={(e)=>handleDataListChange(e, categories, setCurrentCategory, setCategoriesSuggestions)}></input>
-                <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isCategoryFocused?'visible':'hidden')}}>
-                    {datalistOptions(categoriesSuggestions, setCurrentCategory)}
+                <input placeholder={title1.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
+                <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocued1?'visible':'hidden')}}>
+                    {datalistOptions(options1, setCurrInput1)}
                 </div>
 
-                <input placeholder={title2.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>setJobTypeFocused(true)} onBlur={()=>handleOptionsVisibility(setJobTypeFocused)} value={currentJobType} onChange={(e)=>handleDataListChange(e, jobTypes, setCurrentJobType, setJobTypeSuggestions)}></input>
-                <div className={styles.datalistContainer} style={{right:'8.4%', width:inputWidth, visibility:(isJobTypeFocused?'visible':'hidden')}}>
-                    {datalistOptions(jobTypeSuggestions, setCurrentJobType)}
+                <input placeholder={title2.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
+                <div className={styles.datalistContainer} style={{right:'8.4%', width:inputWidth, visibility:(isFocued2?'visible':'hidden')}}>
+                    {datalistOptions(options2, setCurrInput2)}
                 </div>
             </div>
         )
@@ -110,7 +110,7 @@ const ModalCreate = (props:Props) => {
                 <div className={styles.inputFieldsContainer}>
                     <input className={styles.fullInputField} placeholder='Title' style={{margin:'auto'}}></input>
                     {halfInputField('company', 'location')}
-                    {halfDatalists('category', 'job type')}
+                    {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
                     {dropDowns('date added', 'status')}
                     <input className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}}></input>
                 </div>
