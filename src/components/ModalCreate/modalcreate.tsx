@@ -56,35 +56,41 @@ const ModalCreate = (props:Props) => {
         ))
     }
 
-    const halfDatalists = (title1:string, isFocued1:boolean, focusFunction1:Dispatch<SetStateAction<boolean>>, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, defaultOptions1:string[], options1:string[], setOptions1:Dispatch<SetStateAction<string[]>>, title2:string, isFocued2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
+    const halfDatalists = (title1:string, isFocused1:boolean, focusFunction1:Dispatch<SetStateAction<boolean>>, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, defaultOptions1:string[], options1:string[], setOptions1:Dispatch<SetStateAction<string[]>>, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
             <div className={styles.halfinputFieldsContainer}>
                 <input placeholder={title1.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
-                <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocued1?'visible':'hidden')}}>
+                <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
                     {datalistOptions(options1, setCurrInput1)}
                 </div>
 
                 <input placeholder={title2.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
-                <div className={styles.datalistContainer} style={{right:'8.4%', width:inputWidth, visibility:(isFocued2?'visible':'hidden')}}>
+                <div className={styles.datalistContainer} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
                     {datalistOptions(options2, setCurrInput2)}
                 </div>
             </div>
         )
     }
 
-    const [isStatusOpen, setStatusOpen] = useState<boolean>(false);
-    const statuses = ["Sent", "Assessing", "Interviewing", "Resume Reject", "Assessment Reject", "Interview Reject", "Verbal Offer", "Written Offer"];
+    const dateInputStyling = {
+        width:'45%', 
+        paddingLeft:'2%', 
+        paddingRight:'1.3%',
+        fontSize:'23px'
+    }
 
-    const dropDowns = (title1:string, title2:string) => {
+    const [isStatusFocused, setStatusFocused] = useState<boolean>(false)
+    const statuses = ["Sent", "Assessing", "Interviewing", "Resume Reject", "Assessment Reject", "Interview Reject", "Verbal Offer", "Written Offer"];
+    const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
+    const [currentStatus, setCurrentStatus] = useState<string>('')
+
+    const dateAndDrop = (title1:string, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
             <div className={styles.halfinputFieldsContainer}>
-                <div className={`${styles.fullInputField} ${styles.dropdownContainer}`} style={{width:'45%'}}>
-                    <p style={{userSelect:'none'}}>{title1.toUpperCase()}</p>
-                    <BiChevronDown className={styles.menuArrow} style={{marginRight:'5%'}}/>
-                </div>
-                <div className={`${styles.fullInputField} ${styles.dropdownContainer}`} style={{width:'45%'}}>
-                    <p style={{userSelect:'none'}}>{title2.toUpperCase()}</p>
-                    <BiChevronDown className={styles.menuArrow} style={{marginRight:'5%'}}/>
+                <input type='date' className={styles.fullInputField} style={dateInputStyling} placeholder={title1.toUpperCase()}></input>
+                <input placeholder={title2.toUpperCase()} className={styles.fullInputField} style={{width:'45%'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
+                <div className={styles.datalistContainer} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
+                    {datalistOptions(options2, setCurrInput2)}
                 </div>
             </div>
         )
@@ -108,10 +114,10 @@ const ModalCreate = (props:Props) => {
                 </div>
                 
                 <div className={styles.inputFieldsContainer}>
-                    <input className={styles.fullInputField} placeholder='Title' style={{margin:'auto'}}></input>
+                    <input className={styles.fullInputField} placeholder='TITLE' style={{margin:'auto'}}></input>
                     {halfInputField('company', 'location')}
                     {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
-                    {dropDowns('date added', 'status')}
+                    {dateAndDrop('date added', 'status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
                     <input className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}}></input>
                 </div>
                 
