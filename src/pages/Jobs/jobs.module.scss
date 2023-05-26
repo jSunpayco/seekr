@@ -17,8 +17,14 @@
 .legendTitle{
     margin-left: 2%;
     font-family: 'Montserrat', sans-serif;
-    font-size: 1.1vw;
+    font-size: 22px;
     color: white;
+
+    @media (max-width: 420px) {
+        margin-left:0;
+        margin-bottom: 10px;
+        text-align: center;
+    }
 }
 
 .legendContainer{
@@ -28,6 +34,10 @@
     margin-left: 2%;
     margin-right: 2%;
     margin-bottom: 40px;
+
+    @media (max-width: 420px) {
+        justify-content: center;
+    }
 }
 
 .legendItem{
