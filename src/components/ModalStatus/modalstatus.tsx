@@ -2,7 +2,7 @@ import styles from './modalstatus.module.scss';
 import { BiChevronDown } from "react-icons/bi";
 import FormButton from '../FormButton/formbutton';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 interface Props {
     isOpen: boolean;
@@ -39,7 +39,7 @@ const ModalStatus = (props:Props) => {
             checkmark:progressCheck,
             checkmarkFunction:setProgressCheck,
             dropdown:progressDrop,
-            dropdownFunction:setProgressDrop  
+            dropdownFunction:setProgressDrop
         },
         {
             name:'Rejected',
@@ -105,7 +105,7 @@ const ModalStatus = (props:Props) => {
     const optionItem = () => {
         return optionsList.map((item, index) =>(
             <div id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
-                <label className={styles.label}>
+                <label className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
                     <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
                     <span className={styles.check}></span>
                 </label>
@@ -120,8 +120,27 @@ const ModalStatus = (props:Props) => {
         ))
     }
 
+    useEffect(() => {
+        const handleKeyDown = (event:KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            props.closeFunction(false)
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
+
+    const greyAreaClickFunction = (event:React.MouseEvent<HTMLDivElement>) => {
+        if (event.target === event.currentTarget)
+            props.closeFunction(false)
+    }
+
     return (
-        <div className={styles.modalGreyScreen}>
+        <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <form className={styles.modalContainer}>
                 <div className={styles.modalHeader}>
                     <h1 className={styles.modalTitle}>Update Status</h1>

@@ -1,6 +1,5 @@
 import styles from './modalcreate.module.scss';
 import FormButton from '../FormButton/formbutton';
-import { BiChevronDown } from "react-icons/bi";
 
 import { Dispatch, SetStateAction, useState, useRef, useEffect, ChangeEvent } from 'react';
 
@@ -19,6 +18,18 @@ const ModalCreate = (props:Props) => {
           const width = inputReference.current.offsetWidth;
           setInputWidth(width);
         }
+        
+        const handleKeyDown = (event:KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            props.closeFunction(false)
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
       }, []);
 
     const [isJobTypeFocused, setJobTypeFocused] = useState<boolean>(false)
@@ -105,8 +116,13 @@ const ModalCreate = (props:Props) => {
         )
     }
 
+    const greyAreaClickFunction = (event:React.MouseEvent<HTMLDivElement>) => {
+        if (event.target === event.currentTarget)
+            props.closeFunction(false)
+    }
+
     return (
-        <div className={styles.modalGreyScreen}>
+        <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <form className={styles.modalContainer}>
                 <div className={styles.modalHeader}>
                     <h1 className={styles.modalTitle}>New Job</h1>
