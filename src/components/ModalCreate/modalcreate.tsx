@@ -1,6 +1,5 @@
 import styles from './modalcreate.module.scss';
 import FormButton from '../FormButton/formbutton';
-import { BiChevronDown } from "react-icons/bi";
 
 import { Dispatch, SetStateAction, useState, useRef, useEffect, ChangeEvent } from 'react';
 

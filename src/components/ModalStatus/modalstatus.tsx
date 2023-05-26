@@ -39,7 +39,7 @@ const ModalStatus = (props:Props) => {
             checkmark:progressCheck,
             checkmarkFunction:setProgressCheck,
             dropdown:progressDrop,
-            dropdownFunction:setProgressDrop  
+            dropdownFunction:setProgressDrop
         },
         {
             name:'Rejected',
@@ -105,7 +105,7 @@ const ModalStatus = (props:Props) => {
     const optionItem = () => {
         return optionsList.map((item, index) =>(
             <div id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
-                <label className={styles.label}>
+                <label className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
                     <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
                     <span className={styles.check}></span>
                 </label>

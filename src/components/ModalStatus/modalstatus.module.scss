@@ -80,9 +80,29 @@
     input{
         visibility: hidden;
         position: absolute;
+    }
+}
 
+.progressOption{
+    input{
         &:checked ~ .check{
-            background-color: black;
+            background-color: orange;
+        }
+    }
+}
+
+.rejectOption{
+    input{
+        &:checked ~ .check{
+            background-color: red;
+        }
+    }
+}
+
+.offerOption{
+    input{
+        &:checked ~ .check{
+            background-color: green;
         }
     }
 }
