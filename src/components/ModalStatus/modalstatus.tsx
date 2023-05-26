@@ -2,7 +2,7 @@ import styles from './modalstatus.module.scss';
 import { BiChevronDown } from "react-icons/bi";
 import FormButton from '../FormButton/formbutton';
 
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 interface Props {
     isOpen: boolean;
@@ -119,6 +119,20 @@ const ModalStatus = (props:Props) => {
             </div>
         ))
     }
+
+    useEffect(() => {
+        const handleKeyDown = (event:KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            props.closeFunction(false)
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     const greyAreaClickFunction = (event:React.MouseEvent<HTMLDivElement>) => {
         if (event.target === event.currentTarget)

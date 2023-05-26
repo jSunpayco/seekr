@@ -18,6 +18,18 @@ const ModalCreate = (props:Props) => {
           const width = inputReference.current.offsetWidth;
           setInputWidth(width);
         }
+        
+        const handleKeyDown = (event:KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            props.closeFunction(false)
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
       }, []);
 
     const [isJobTypeFocused, setJobTypeFocused] = useState<boolean>(false)
