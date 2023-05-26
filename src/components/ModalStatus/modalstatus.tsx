@@ -120,8 +120,13 @@ const ModalStatus = (props:Props) => {
         ))
     }
 
+    const greyAreaClickFunction = (event:React.MouseEvent<HTMLDivElement>) => {
+        if (event.target === event.currentTarget)
+            props.closeFunction(false)
+    }
+
     return (
-        <div className={styles.modalGreyScreen}>
+        <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <form className={styles.modalContainer}>
                 <div className={styles.modalHeader}>
                     <h1 className={styles.modalTitle}>Update Status</h1>
