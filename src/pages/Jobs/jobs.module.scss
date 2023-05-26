@@ -89,7 +89,7 @@
     margin-top: 15px;
     margin-bottom: 15px;
     padding: 20px;
-
+    position: relative;
     background-color: #F6EFE2;
     border-radius: 30px;
 }
@@ -145,4 +145,21 @@
         color: white;
         transition: all 0.4s ease;
     }
+}
+
+.newJobContainer{
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.newJobButton{
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 72px;
+    font-weight: 700;
+    user-select: none;
 }

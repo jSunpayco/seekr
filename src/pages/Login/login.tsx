@@ -5,6 +5,12 @@ import FormButton from '../../components/FormButton/formbutton';
 
 const Login = () => {
 
+    const loginStyle = {
+        marginTop:'40px',
+        marginLeft:'auto',
+        marginRight:'auto'
+    }
+
     return (
         <div className={styles.loginContainer}>
             <div className={styles.loginContentsContainer}>
@@ -12,7 +18,7 @@ const Login = () => {
                 <div className={styles.loginFormContainer}>
                     <FullFormField title="email" type="email"></FullFormField>
                     <FullFormField title="password" type="password"></FullFormField>
-                    <a href='/jobs'><FormButton title='Login'></FormButton></a>
+                    <a href='/jobs'><FormButton title='Login' position={loginStyle}></FormButton></a>
                 </div>
             </div>
         </div>

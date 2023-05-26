@@ -1,0 +1,116 @@
+.modalGreyScreen{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(37, 37, 37, 0.95);
+    position: fixed;
+    top: 0%;
+    left: 0%;
+}
+
+.modalContainer{
+    background-color: #D9D9D9;
+    border-radius: 20px;
+    border: solid black;
+    border-width: 1px;
+    height: auto;
+    width: 75%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    padding-bottom: 20px;
+    position: relative;
+}
+
+.modalHeader{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modalTitle{
+    font-family: 'Montserrat', sans-serif;
+    font-size: 36px;
+    user-select: none;
+    margin-left: 5%;
+}
+
+.modalClose{
+    margin-right: 5%;
+    background-color: transparent;
+    border: none;
+    font-size: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+}
+
+.inputFieldsContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.halfinputFieldsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 83%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.fullInputField{
+    width: 80%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    height: 38px;
+    padding-left: 3%;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    font-size:x-large;
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.dropdownContainer{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &:hover{
+        cursor: pointer;
+    }
+}
+
+.datalistContainer{
+    // width: 39.5%;
+    height: auto;
+    background-color: white;
+    border-radius: 20px;
+    border: solid rgba(0, 0, 0, 0.3) 1px;
+    z-index: 100;
+
+    position: absolute;
+    margin-top: 55px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.datalistOption{
+    margin: 0;
+    padding: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 10px;
+    &:hover{
+        cursor: pointer;
+        background-color: #D9D9D9;
+    }
+}
