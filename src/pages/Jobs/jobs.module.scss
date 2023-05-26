@@ -65,10 +65,11 @@
 }
 
 .jobsGrid{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
+
+    gap: 2em;
 
     border: solid rgba(255, 255, 255, .1);
     border-width: 1px;
@@ -78,8 +79,25 @@
     margin-right: 2%;
     min-height: 60vh;
 
-    @media (max-width: 651px) {
-        justify-content: center;
+    @media (max-width: 1780px) {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    @media (max-width: 1410px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    @media (max-width: 1060px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 730px) {
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media (max-width: 380px) {
+        padding:0;
+        margin: 0;
     }
 }
 
@@ -88,10 +106,16 @@
     height: 200px;
     margin-top: 15px;
     margin-bottom: 15px;
-    padding: 20px;
+    padding: 20px 20px;
     position: relative;
     background-color: #F6EFE2;
     border-radius: 30px;
+    transition: padding 0.3s ease;
+
+    @media (max-width: 330px) {
+        padding: 20px 10px;
+        transition: padding 0.3s ease;
+    }
 }
 
 .jobTitle{
@@ -132,7 +156,7 @@
     height: fit-content;
     font-size: 22px;
     padding: 8px 25px;
-    border-radius: 1.75vw;
+    border-radius: 20px;
     cursor: pointer;
     border: #2E2E2C solid;
     border-width: 2px;
