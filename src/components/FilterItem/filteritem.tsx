@@ -1,6 +1,6 @@
 import styles from './filteritem.module.scss';
 import { BiChevronDown } from "react-icons/bi";
-import ClickAwayListener from '@mui/material/ClickAwayListener';
+import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
 interface Props {
     title: string;
@@ -11,8 +11,16 @@ interface Props {
 }
 
 const FilterItem = (props:Props) => {
+
+    const isScreenSmall = useMediaQuery('(max-width: 720px)');
+
+    const handleClickAway = () => {
+        if(!isScreenSmall)
+            props.toggleSetter(false)
+    }
+
     return (
-        <ClickAwayListener onClickAway={() => props.toggleSetter(false)}>
+        <ClickAwayListener onClickAway={handleClickAway}>
             <div>
                 <p className={styles.filterName} onClick={() => props.clickFunction(props.toggleSetter, props.isClicked)}>{props.title}{<BiChevronDown className={styles.filterIcon} style ={{transform:props.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>}</p>
                 <div className={styles.optionsContainer} style={{visibility: (props.isClicked?'visible':'hidden')}}>

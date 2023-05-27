@@ -1,4 +1,5 @@
 import styles from './navigation.module.scss';
+import { BiMenu, BiChevronDown } from "react-icons/bi";
 
 import FilterItem from '../FilterItem/filteritem';
 
@@ -32,8 +33,49 @@ const Navigation = () => {
             toggleState(false)
     }
 
+    const [isMenuOpened, setMenuOpened] = useState<boolean>(false)
+
+    const filters = [
+        {
+            name:"Category",
+            isClicked:categoryClicked,
+            isClickedFunction:setCategoryClicked,
+            options:categoryOptions
+        },
+        {
+            name:"Location",
+            isClicked:locationClicked,
+            isClickedFunction:setLocationClicked,
+            options:locationOptions
+        },
+        {
+            name:"Month",
+            isClicked:monthClicked,
+            isClickedFunction:setMonthClicked,
+            options:monthOptions
+        },
+        {
+            name:"Position",
+            isClicked:positionClicked,
+            isClickedFunction:setPositionClicked,
+            options:positionOptions
+        },
+        {
+            name:"Status",
+            isClicked:statusClicked,
+            isClickedFunction:setStatusClicked,
+            options:statusOptions
+        }
+    ]
+
+    const mobileFilters = () => {
+        return filters.map((item, index) => (
+            <div id={`mobileFilter${index}`} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)} className={styles.mobileFilterOption}>{item.name}<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/></div>
+        ))
+    }
+
     return (
-        <div className={styles.navigationContainer}>
+        <div className={`${styles.navigationContainer} ${isMenuOpened?styles.mobileMenuOpened:styles.mobileMenuClosed}`}>
             <div className={styles.navigationHeader}>
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
@@ -47,7 +89,13 @@ const Navigation = () => {
 
                     <a href='/' className={styles.logoutButton}>Logout</a>
                 </div>
+
+                <BiMenu className={styles.mobileMenuButton} onClick={()=>setMenuOpened(!isMenuOpened)}/>
                 {/* <button className={styles.navigationCloseButton}>X</button> */}
+            </div>
+
+            <div className={styles.mobileMenuContainer}>
+                {mobileFilters()}
             </div>
         </div>
     )

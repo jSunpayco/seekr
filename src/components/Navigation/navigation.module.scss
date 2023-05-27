@@ -10,7 +10,19 @@
     transform: translateY(0);
 
     @media (max-width: 720px) {
+        overflow: hidden;
+    }
+}
+
+.mobileMenuClosed{
+    @media (max-width: 720px) {
         height: 17vw;
+    }
+}
+
+.mobileMenuOpened{
+    @media (max-width: 720px) {
+        height: auto;
     }
 }
 
@@ -49,15 +61,14 @@
 }
 
 .filtersContainer{
-    display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
     width: 50%;
-    visibility: hidden;
+    display: none;
 
-    @media (min-width: 720px) {
-        visibility: visible;
+    @media (min-width: 721px) {
+        display: flex;
     }
 }
 
@@ -78,5 +89,44 @@
         background-color: #2E2E2C;
         color: white;
         transition: all 0.4s ease;
+    }
+}
+
+.mobileMenuButton{
+    user-select: none;
+    font-size: 12vw;
+    display: none;
+
+    @media (max-width: 720px) {
+        display: inline-block;
+        &:hover{
+            cursor: pointer;
+        }
+    }
+}
+
+.mobileMenuContainer{
+    margin-top: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: none;
+
+    @media (max-width: 720px) {
+        display: flex;
+    }
+}
+
+.mobileFilterOption{
+    margin-bottom: 4vw;
+    font-size: 22px;
+    user-select: none;
+    z-index: 200;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    &:hover{
+        cursor: pointer;
     }
 }
