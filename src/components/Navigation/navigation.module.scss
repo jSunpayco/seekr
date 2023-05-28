@@ -9,19 +9,19 @@
     border-radius: 10px;
     transform: translateY(0);
 
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         overflow: hidden;
     }
 }
 
 .mobileMenuClosed{
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         height: 17vw;
     }
 }
 
 .mobileMenuOpened{
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         height: auto;
     }
 }
@@ -33,6 +33,10 @@
     align-items: center;
     padding: 0 5vw;
     height: 100%;
+
+    @media (max-width: 730px) {
+        height: 17vw;
+    }
 }
 
 .logo{
@@ -41,7 +45,7 @@
     user-select: none;
     font-size: 2.1vw;
 
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         font-size: 9vw;
     }
 }
@@ -67,7 +71,7 @@
     width: 50%;
     display: none;
 
-    @media (min-width: 721px) {
+    @media (min-width: 730px) {
         display: flex;
     }
 }
@@ -97,7 +101,7 @@
     font-size: 12vw;
     display: none;
 
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         display: inline-block;
         &:hover{
             cursor: pointer;
@@ -112,7 +116,7 @@
     align-items: center;
     display: none;
 
-    @media (max-width: 720px) {
+    @media (max-width: 730px) {
         display: flex;
     }
 }

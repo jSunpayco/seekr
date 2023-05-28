@@ -12,7 +12,7 @@ interface Props {
 
 const FilterItem = (props:Props) => {
 
-    const isScreenSmall = useMediaQuery('(max-width: 720px)');
+    const isScreenSmall = useMediaQuery('(max-width: 730px)');
 
     const handleClickAway = () => {
         if(!isScreenSmall)
