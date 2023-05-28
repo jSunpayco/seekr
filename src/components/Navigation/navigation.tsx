@@ -70,7 +70,17 @@ const Navigation = () => {
 
     const mobileFilters = () => {
         return filters.map((item, index) => (
-            <div id={`mobileFilter${index}`} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)} className={styles.mobileFilterOption}>{item.name}<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/></div>
+            <div>
+                <div id={`mobileFilter${index}`} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)} className={styles.mobileFilterOption}>
+                    {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
+                </div>
+                <div className={styles.optionsContainer} style={{maxHeight:(item.isClicked?'500px':'0px')}}>
+                    <p className={styles.option}>Sent</p>
+                    <p className={styles.option}>Ghosted</p>
+                    <p className={styles.option}>Emailed</p>
+                    <p className={styles.option}>Offered</p>
+                </div>
+            </div>
         ))
     }
 
