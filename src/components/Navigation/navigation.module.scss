@@ -24,7 +24,7 @@
 
 .mobileMenuOpened{
     @media (max-width: 730px) {
-        max-height: 600px;
+        max-height: 730px;
     }
 }
 
@@ -112,11 +112,16 @@
 }
 
 .mobileMenuContainer{
+    margin: auto;
     margin-top: 10px;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
     display: none;
+    width: fit-content;
+
+    & > div{
+        width: 100%;
+    }
 
     @media (max-width: 730px) {
         display: flex;
@@ -127,10 +132,13 @@
     font-size: 22px;
     user-select: none;
     z-index: 200;
+    width: 160px;
 
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+
     &:hover{
         cursor: pointer;
     }
@@ -144,4 +152,54 @@
     transform-origin: top;
     transition: max-height 1s ease;
     margin-bottom: 4vw;
+}
+
+.option{
+    width: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin-top: 15%;
+    position: relative;
+
+    & > * {
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-size: 18px;
+        user-select: none;
+    }
+
+    & > label {
+        margin-left: 5%;
+    }
+
+    input[type="checkbox"]{
+        appearance: none;
+        height: 18px;
+        width: 18px;
+        border: 2px solid black;
+        border-radius: 3px;
+
+        &:checked::before,
+        &:checked::after {
+          content: "";
+          position: absolute;
+          height: 2px;
+          background: black;
+        }
+
+        &:checked::before {
+          width: 6px;
+          top: 14px;
+          left: 7px;
+          transform: rotate(44deg);
+        }
+        
+        &:checked::after {
+          width: 12px;
+          top: 11px;
+          left: 9px;
+          transform: rotate(-55deg);
+        }
+    }
 }

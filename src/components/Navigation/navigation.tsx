@@ -68,6 +68,15 @@ const Navigation = () => {
         }
     ]
 
+    const filterOptions = (options:string[]) => {
+        return options.map((item, index) => (
+            <div id={`option${index}`} className={styles.option}>
+                <input id={`optionInput${item}${index}`} type="checkbox" value={item}/>
+                <label htmlFor={`optionInput${item}${index}`}>{item}</label>
+            </div>
+        ))
+    }
+
     const mobileFilters = () => {
         return filters.map((item, index) => (
             <div>
@@ -75,10 +84,7 @@ const Navigation = () => {
                     {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
                 </div>
                 <div className={styles.optionsContainer} style={{maxHeight:(item.isClicked?'500px':'0px')}}>
-                    <p className={styles.option}>Sent</p>
-                    <p className={styles.option}>Ghosted</p>
-                    <p className={styles.option}>Emailed</p>
-                    <p className={styles.option}>Offered</p>
+                    {filterOptions(item.options)}
                 </div>
             </div>
         ))
