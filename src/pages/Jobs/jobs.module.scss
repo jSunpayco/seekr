@@ -13,6 +13,7 @@
     font-size: 48px;
     margin-top: 40px;
     transition: font-size 0.3s ease;
+    user-select: none;
 
     @media (max-width: 460px) {
         font-size: 40px;
@@ -25,6 +26,7 @@
     font-family: 'Montserrat', sans-serif;
     font-size: 22px;
     color: white;
+    user-select: none;
 
     @media (max-width: 730px) {
         margin-left:0;
@@ -51,6 +53,7 @@
     margin-right: 2%;
     display: flex;
     align-items: center;
+    user-select: none;
 
     &::before{
         content: '';
@@ -140,6 +143,7 @@
     line-height: 25px;
     color: black;
     font-size: 19px;
+    user-select: none;
 
     &::before{
         content: '';
@@ -157,10 +161,10 @@
     font-family:Arial, Helvetica, sans-serif;
     font-weight: 500;
     font-size: 15px;
+    user-select: none;
 }
 
 .buttonContainer{
-    // background-color: red;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -179,6 +183,7 @@
     transition: color 0.4s ease, background-color 0.4s ease;
     text-decoration: none;
     color: black;
+    user-select: none;
 
     &:hover{
         background-color: #2E2E2C;
