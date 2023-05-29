@@ -21,6 +21,10 @@
     display: block;
     padding-bottom: 20px;
     position: relative;
+
+    @media (max-width: 560px) {
+        width: 90%;
+    }
 }
 
 .modalHeader{
@@ -62,6 +66,11 @@
     margin-left: auto;
     margin-right: auto;
     margin-top: 20px;
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+        padding-right: 3%;
+    }
 }
 
 .fullInputField{
@@ -80,6 +89,14 @@
     }
 }
 
+.halfInputField{
+    width: 45%;
+    @media (max-width: 560px) {
+        width: 100%;
+        margin-bottom: 5%;
+    }
+}
+
 .dropdownContainer{
     display: flex;
     align-items: center;
@@ -90,17 +107,22 @@
 }
 
 .datalistContainer{
-    // width: 39.5%;
     height: auto;
     background-color: white;
     border-radius: 20px;
     border: solid rgba(0, 0, 0, 0.3) 1px;
     z-index: 100;
+    width: 45%;
 
     position: absolute;
     margin-top: 55px;
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.dataListMobileSecond{
+    margin-top: 120px;
+    width: 80%;
 }
 
 .datalistOption{
