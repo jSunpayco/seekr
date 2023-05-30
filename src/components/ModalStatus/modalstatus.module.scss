@@ -12,7 +12,8 @@
     border-radius: 20px;
     border: solid black;
     border-width: 1px;
-    height: 400px;
+    min-height: 400px;
+    height: auto;
     max-width: 550px;
     width: 90%;
     position: fixed;
@@ -20,6 +21,10 @@
     left: 50%;
     transform: translate(-50%, -50%);
     display: block;
+
+    @media (max-width: 369px) {
+        padding-bottom: 20px;
+    }
 }
 
 .modalHeader{
