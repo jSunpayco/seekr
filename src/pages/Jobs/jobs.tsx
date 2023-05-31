@@ -1,10 +1,12 @@
 import styles from './jobs.module.scss';
+import { BiSync, BiTrash } from "react-icons/bi";
 import Navigation from "../../components/Navigation/navigation";
 
 import { useState } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
+import JobItemButton from '../../components/JobItemButton/jobitembutton';
 
 const Jobs = () => {
 
@@ -87,7 +89,8 @@ const Jobs = () => {
                 <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
                 <p className={styles.jobInfo} style={{marginBottom:'20px'}}>{item.Date}</p>
                 <div className={styles.buttonContainer}>
-                    <button onClick={()=>setModalOpen(true)} className={styles.statusButton}>Update Status</button>
+                    <JobItemButton title='Update' onClickFunction={setModalOpen}/>
+                    <JobItemButton title='Delete' onClickFunction={setModalOpen}/>
                 </div>
             </div>
         ))
