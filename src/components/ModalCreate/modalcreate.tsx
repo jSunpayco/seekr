@@ -65,23 +65,23 @@ const ModalCreate = (props:Props) => {
         }, 100);
     }
 
-    const datalistOptions = (options:string[], currentFunction:Dispatch<SetStateAction<string>>) => {
-        return options.map((item) => (
-            <p className={styles.datalistOption} onClick={()=>currentFunction(item.toUpperCase())}>{item.toUpperCase()}</p>
+    const datalistOptions = (options:string[], currentFunction:Dispatch<SetStateAction<string>>, title:string) => {
+        return options.map((item, index) => (
+            <p key={`datalistOptions${title}${index}`} className={styles.datalistOption} onClick={()=>currentFunction(item.toUpperCase())}>{item.toUpperCase()}</p>
         ))
     }
 
     const halfDatalists = (title1:string, isFocused1:boolean, focusFunction1:Dispatch<SetStateAction<boolean>>, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, defaultOptions1:string[], options1:string[], setOptions1:Dispatch<SetStateAction<string[]>>, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
-            <div className={styles.halfinputFieldsContainer}>
+            <div key={`halfDatalists${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <input placeholder={title1.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
                 <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
-                    {datalistOptions(options1, setCurrInput1)}
+                    {datalistOptions(options1, setCurrInput1, title1)}
                 </div>
 
                 <input placeholder={title2.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
                 <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
-                    {datalistOptions(options2, setCurrInput2)}
+                    {datalistOptions(options2, setCurrInput2, title2)}
                 </div>
             </div>
         )
@@ -100,11 +100,11 @@ const ModalCreate = (props:Props) => {
 
     const dateAndDrop = (title1:string, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
-            <div className={styles.halfinputFieldsContainer}>
+            <div key={`dateAndDrop${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <input type='date' className={`${styles.fullInputField} ${styles.halfInputField}`} style={dateInputStyling} placeholder={title1.toUpperCase()}></input>
                 <input placeholder={title2.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
                 <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
-                    {datalistOptions(options2, setCurrInput2)}
+                    {datalistOptions(options2, setCurrInput2, title2)}
                 </div>
             </div>
         )
@@ -112,7 +112,7 @@ const ModalCreate = (props:Props) => {
 
     const halfInputField = (title1:string, title2:string) => {
         return (
-            <div className={styles.halfinputFieldsContainer}>
+            <div key={`halfInputField${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title1.toUpperCase()}></input>
                 <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title2.toUpperCase()}></input>
             </div>

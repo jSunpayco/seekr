@@ -114,13 +114,13 @@ const ModalStatus = (props:Props) => {
 
     const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>) => {
         return options.map((item, index)=>(
-            <p id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
+            <p key={`statusOption${index}`} id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
         ))
     }
 
     const optionItem = () => {
         return optionsList.map((item, index) =>(
-            <div id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
+            <div key={`radioOption${index}`} id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
                 <label className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
                     <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
                     <span className={styles.check}></span>

@@ -17,7 +17,7 @@ const Jobs = () => {
 
     const legendItems = () => {
         return statusLegend.map((item, index) => (
-            <div id={`status${index}`} className={styles.legendItem + " " + (item==="In Progress"?styles.legendColorProgress:item==="Reject"?styles.legendColorReject:styles.legendColorOffer)}>
+            <div key={`status${index}`} id={`status${index}`} className={styles.legendItem + " " + (item==="In Progress"?styles.legendColorProgress:item==="Reject"?styles.legendColorReject:styles.legendColorOffer)}>
                 {item}
             </div>
         ))
@@ -101,7 +101,7 @@ const Jobs = () => {
 
     const jobsContainer = () => {
         return myJobs.map((item) => (
-            <div id={`job${item.JobID}`} className={styles.jobContainer}>
+            <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
                 <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
                 <ReactTooltip id="status-tip" />
                 <p className={styles.jobInfo}>{item.Company}</p>
