@@ -108,6 +108,7 @@
 
 .datalistContainer{
     height: auto;
+    max-height: 200px;
     background-color: white;
     border-radius: 20px;
     border: solid rgba(0, 0, 0, 0.3) 1px;
@@ -118,6 +119,14 @@
     margin-top: 55px;
     padding-top: 10px;
     padding-bottom: 10px;
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.datalistContainer::-webkit-scrollbar {
+    width: 0;
 }
 
 .dataListMobileSecond{
