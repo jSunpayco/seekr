@@ -10,6 +10,18 @@ import JobItemButton from '../../components/JobItemButton/jobitembutton';
 
 const Jobs = () => {
 
+    interface Job {
+        JobID: number;
+        Date: string;
+        Category: string;
+        Company: string;
+        Location: string;
+        Status: string;
+        Title: string;
+        Type: string;
+        URL: string;
+    }
+
     const statusLegend = ["In Progress", "Reject", "Offer"]
     const progressList = ['Sent', 'Assessment', 'Interviewing']
     const rejectedList = ['Resume Reject', 'Assessment Reject', 'Interview Reject']
@@ -86,6 +98,7 @@ const Jobs = () => {
 
     useEffect(() => {
         setModalOpen(false);
+        setModalCreateOpen(false)
     }, [myJobs]);
 
     const updateJobItem = (jobID:number, jobStatus:string) => {
@@ -97,6 +110,10 @@ const Jobs = () => {
         })
 
         setMyJobs(updatedJobs);
+    }
+
+    const createJobItem = (jobItem:Job) => {
+        setMyJobs(myJobs => [...myJobs, jobItem])
     }
 
     const jobsContainer = () => {
@@ -140,7 +157,7 @@ const Jobs = () => {
             </div>
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A' jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
-            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen}></ModalCreate>}
+            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem}></ModalCreate>}
         </div>
     )
 }

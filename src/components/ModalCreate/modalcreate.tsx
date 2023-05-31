@@ -5,9 +5,23 @@ import { Dispatch, SetStateAction, useState, useRef, useEffect, ChangeEvent } fr
 
 import {useMediaQuery} from '@mui/material';
 
+interface Job {
+    JobID: number;
+    Date: string;
+    Category: string;
+    Company: string;
+    Location: string;
+    Status: string;
+    Title: string;
+    Type: string;
+    URL: string;
+}
+
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
+    currNumberOfJobs:number;
+    createJobFunction:(jobItem: Job) => void;
 }
 
 const ModalCreate = (props:Props) => {
@@ -140,7 +154,9 @@ const ModalCreate = (props:Props) => {
                     <input className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}}></input>
                 </div>
                 
-                <FormButton position={{margin:'auto', marginTop:'20px'}} title='Submit' titleColor='black'></FormButton>
+                <div onClick={()=>props.createJobFunction({JobID: props.currNumberOfJobs,Date: "04/25/2023",Category: 'SWE',Company: 'Fangs Corp',Location: 'Suisun, CA',Status: 'Interviewing',Title: 'Jr. QA',Type: 'Full Time',URL: "https://www.google.com/",})}>
+                    <FormButton position={{margin:'auto', marginTop:'20px'}} title='Submit' titleColor='black'></FormButton>
+                </div>
             </form>
         </div>
     )
