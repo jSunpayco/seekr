@@ -1,16 +1,29 @@
 import styles from './navigation.module.scss';
+import { BiMenu, BiChevronDown } from "react-icons/bi";
 
-import FilterItem from '../FilterItem/filteritem';
+import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
 import { useState } from 'react';
 
 const Navigation = () => {
 
+    const isScreenSmall = useMediaQuery('(max-width: 730px)');
+
+    const handleDesktopClickAway = (toggleFunction:React.Dispatch<React.SetStateAction<boolean>>) => {
+        if(!isScreenSmall)
+            toggleFunction(false)
+    }
+
+    const handleMobileClickAway = (toggleFunction:React.Dispatch<React.SetStateAction<boolean>>) => {
+        if(isScreenSmall)
+            toggleFunction(false)
+    }
+
     const locationOptions = ['Remote', 'Sacramento', 'Boston', 'San Francisco']
     const categoryOptions = ['SWE', 'SDET', 'Cybersecurity']
     const monthOptions = ['February', 'March', 'April', 'May']
     const positionOptions = ['Full Time', 'Intern', 'Temporary']
-    const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview', 'Saved']
+    const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
 
     const [categoryClicked, setCategoryClicked] = useState(false)
     const [locationClicked, setLocationClicked] = useState(false)
@@ -32,22 +45,105 @@ const Navigation = () => {
             toggleState(false)
     }
 
+    const [isMenuOpened, setMenuOpened] = useState<boolean>(false)
+
+    const filters = [
+        {
+            name:"Category",
+            isClicked:categoryClicked,
+            isClickedFunction:setCategoryClicked,
+            options:categoryOptions
+        },
+        {
+            name:"Location",
+            isClicked:locationClicked,
+            isClickedFunction:setLocationClicked,
+            options:locationOptions
+        },
+        {
+            name:"Month",
+            isClicked:monthClicked,
+            isClickedFunction:setMonthClicked,
+            options:monthOptions
+        },
+        {
+            name:"Position",
+            isClicked:positionClicked,
+            isClickedFunction:setPositionClicked,
+            options:positionOptions
+        },
+        {
+            name:"Status",
+            isClicked:statusClicked,
+            isClickedFunction:setStatusClicked,
+            options:statusOptions
+        }
+    ]
+
+    const filterOptions = (options:string[]) => {
+        return options.map((item, index) => (
+            <div id={`option${item}${index}`} className={styles.mobileOption}>
+                <label htmlFor={`mobileOptionInput${item}${index}`} className={styles.mobileOptionLabel}>
+                    <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput}/>
+                    {item}
+                </label>
+            </div>
+        ))
+    }
+
+    const desktopFilterOptions = (options:string[]) => {
+        return options.map((item, index) => (
+            <label htmlFor={`optionInput${item}${index}`} className={styles.desktopOptionLabel} style={{marginBottom:(index===options.length-1?'5%':'0')}}>
+                <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput}/>
+                {item}
+            </label>
+        ))
+    }
+
+    const desktopFilters = () => {
+        return filters.map((item, index) => (
+            <ClickAwayListener onClickAway={()=>handleDesktopClickAway(item.isClickedFunction)}>
+                <div id={`desktopFilter${index}`}>
+                    <p className={styles.desktopFilterName} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)}>
+                        {item.name}{<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>}
+                    </p>
+                    <div className={styles.desktopOptionsContainer} style={{maxHeight:(item.isClicked?'1000px':'0px')}}>
+                        {desktopFilterOptions(item.options)}
+                    </div>
+                </div>
+            </ClickAwayListener>
+        ))
+    }
+
+    const mobileFilters = () => {
+        return filters.map((item, index) => (
+            <ClickAwayListener onClickAway={()=>handleMobileClickAway(item.isClickedFunction)}>
+                <div>
+                    <div id={`mobileFilter${index}`} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)} className={styles.mobileFilterOption}>
+                        {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
+                    </div>
+                    <div className={styles.optionsContainer} style={{maxHeight:(item.isClicked?'500px':'0px')}}>
+                        {filterOptions(item.options)}
+                    </div>
+                </div>
+            </ClickAwayListener>
+        ))
+    }
+
     return (
-        <div className={styles.navigationContainer}>
+        <div className={`${styles.navigationContainer} ${isMenuOpened?styles.mobileMenuOpened:styles.mobileMenuClosed}`}>
             <div className={styles.navigationHeader}>
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
-                    <FilterItem title='Category' isClicked={categoryClicked} toggleSetter={setCategoryClicked} clickFunction={clickFilterButton} options={locationOptions}></FilterItem>
-                    <FilterItem title='Location' isClicked={locationClicked} toggleSetter={setLocationClicked} clickFunction={clickFilterButton} options={categoryOptions}></FilterItem>
-
-                    <FilterItem title='Month' isClicked={monthClicked} toggleSetter={setMonthClicked} clickFunction={clickFilterButton} options={monthOptions}></FilterItem>
-                    <FilterItem title='Position' isClicked={positionClicked} toggleSetter={setPositionClicked} clickFunction={clickFilterButton} options={positionOptions}></FilterItem>
-
-                    <FilterItem title='Status' isClicked={statusClicked} toggleSetter={setStatusClicked} clickFunction={clickFilterButton} options={statusOptions}></FilterItem>
-
+                    {desktopFilters()}
                     <a href='/' className={styles.logoutButton}>Logout</a>
                 </div>
-                {/* <button className={styles.navigationCloseButton}>X</button> */}
+
+                <BiMenu className={styles.mobileMenuButton} onClick={()=>setMenuOpened(!isMenuOpened)}/>
+            </div>
+
+            <div className={styles.mobileMenuContainer} style={{opacity:(isMenuOpened?'100':'0'), transition:'opacity 1s'}}>
+                {mobileFilters()}
             </div>
         </div>
     )

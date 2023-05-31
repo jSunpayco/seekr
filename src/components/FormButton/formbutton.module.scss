@@ -1,12 +1,17 @@
 .container{
-    width: 10vw;
     position: relative;
+    width: 10vw;
     height: 3vw;
     padding: 0 2vw 0 2.5vw;
     text-align: center;
-    &:hover {
-        cursor: pointer;
+    cursor: pointer;
+
+    @media (max-width: 1060px) {
+        width: 100px;
+        height: 36px;
+        padding: 0 25px 0 27px;
     }
+
     &::before{
         content: "";
         color: white;
@@ -18,15 +23,29 @@
         display: block;
         transition: border-radius 0.4s ease, width 0.4s ease;
         overflow: hidden;
+
+        @media (max-width: 1060px) {
+            height: 40px;
+            border-radius: 100px;
+            width: 120px;
+        }
     }
     &:hover::before{
         border-radius: 100px;
         width: 10vw;
         transition: border-radius 0.4s ease, width 0.4s ease-out;
+
+        @media (max-width: 1060px) {
+            width: 120px;
+        }
     }
     &:hover .innerCircle{
-        transform: scale(0.6) translate(150%, -80%);
-        transition: all 0.5s ease;
+        transform: scale(0.6) translate(150%, -90%);
+        transition: transform 0.5s ease;
+
+        @media (max-width: 1060px) {
+            transform: scale(0.6) translate(190%, -67%);
+        }
     }
     &:hover .arrow{
         opacity: 0;
@@ -41,10 +60,16 @@
     &:hover .buttonText{
         color: black;
         transform: translate(-40%, -50%);
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
+        @media (max-width: 1060px) {
+            transform: translate(-20%, -30%);
+        }
     }
     .buttonText{
         color: white;
+        @media (max-width: 1060px) {
+            color: black;
+        }
     }
     &:hover .innerCircle{
         background-color: black;
@@ -58,10 +83,16 @@
     &:hover .buttonText{
         color: white;
         transform: translate(-40%, -50%);
-        transition: all 0.3s ease;
+        transition: transform 0.3s ease;
+        @media (max-width: 1060px) {
+            transform: translate(-20%, -30%);
+        }
     }
     .buttonText{
         color: black;
+        @media (max-width: 1060px) {
+            color: white;
+        }
     }
     &:hover .innerCircle{
         background-color: white;
@@ -76,11 +107,19 @@
     width: 2vw;
     height: 2vw;
     transform: translate(91%, -50%);
-    transition: all .7s ease;
+    transition: transform .7s ease;
     display: inline-block;
     border-radius: 100%;
     border: solid;
     border-width: 1px;
+
+    @media (max-width: 1060px) {
+        left: 7%;
+        top: 50%;
+        width: 20px;
+        height: 20px;
+        transform: translate(110%, -40%);
+    }
 }
 
 .arrow{
@@ -105,4 +144,9 @@
     letter-spacing: 1px;
     transition: all 0.3s ease;
     user-select: none;
+
+    @media (max-width: 1060px) {
+        top: 50%;
+        transform: translate(-20%, -30%);
+    }
 }
