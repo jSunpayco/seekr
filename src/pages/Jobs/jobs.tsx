@@ -119,7 +119,7 @@ const Jobs = () => {
     const jobsContainer = () => {
         return myJobs.map((item) => (
             <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
-                <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
+                <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title.substring(0, 39) + (item.Title.length>39 ? '...' : '')}</a>
                 <ReactTooltip id="status-tip" />
                 <p className={styles.jobInfo}>{item.Company}</p>
                 <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
