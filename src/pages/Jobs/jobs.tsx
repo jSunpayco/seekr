@@ -115,6 +115,12 @@ const Jobs = () => {
         setMyJobs(myJobs => [...myJobs, jobItem])
     }
 
+    const deleteJobItem = (jobId:number) => {
+        const updatedJobs = myJobs.filter(item => item.JobID !== jobId);
+        setMyJobs(updatedJobs);
+        console.log(jobId, updatedJobs)
+    }
+
     const jobsContainer = () => {
         return myJobs.map((item) => (
             <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
@@ -127,7 +133,7 @@ const Jobs = () => {
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
-                    <JobItemButton title='Delete' onClickFunction={setModalOpen}/>
+                    <JobItemButton title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
                 </div>
             </div>
         ))

@@ -16,6 +16,7 @@ interface Props {
         Type: string;
         URL: string;
     }
+    jobId?:number;
 }
 
 const JobItemButton = (props:Props) => {
@@ -37,7 +38,7 @@ const JobItemButton = (props:Props) => {
         if(props.jobInfo)
             props.onClickFunction(props.jobInfo)
         else
-            props.onClickFunction(true)
+            props.onClickFunction(props.jobId)
     }
 
     return (
