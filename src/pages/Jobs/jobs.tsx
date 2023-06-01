@@ -1,5 +1,4 @@
 import styles from './jobs.module.scss';
-import { BiSync, BiTrash } from "react-icons/bi";
 import Navigation from "../../components/Navigation/navigation";
 
 import { useState, useEffect } from 'react';

@@ -50,6 +50,17 @@ const ModalCreate = (props:Props) => {
         };
       }, []);
 
+    const [currentTitle, setCurrentTitle] = useState('')
+    const [currentCompany, setCurrentCompany] = useState('')
+    const [currentLocation, setCurrentLocation] = useState('')
+    const [currentDate, setCurrentDate] = useState('')
+    const [currentUrl, setCurrentUrl] = useState('')
+
+    const handleDateChange = (currDate:string) => {
+        let parts = currDate.split('-');
+        setCurrentDate(`${parts[1]}/${parts[2]}/${parts[0]}`)
+    }
+
     const [isJobTypeFocused, setJobTypeFocused] = useState<boolean>(false)
     const [isCategoryFocused, setCategoryFocused] = useState<boolean>(false)
     
@@ -88,7 +99,7 @@ const ModalCreate = (props:Props) => {
     const halfDatalists = (title1:string, isFocused1:boolean, focusFunction1:Dispatch<SetStateAction<boolean>>, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, defaultOptions1:string[], options1:string[], setOptions1:Dispatch<SetStateAction<string[]>>, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
         return (
             <div key={`halfDatalists${title1}${title2}`} className={styles.halfinputFieldsContainer}>
-                <input placeholder={title1.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
+                <input id='dateInput' placeholder={title1.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
                 <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
                     {datalistOptions(options1, setCurrInput1, title1)}
                 </div>
@@ -104,7 +115,8 @@ const ModalCreate = (props:Props) => {
     const dateInputStyling = {
         paddingLeft:'2%', 
         paddingRight:'1.3%',
-        fontSize:'23px'
+        fontSize:'23px',
+        cursor:'pointer'
     }
 
     const [isStatusFocused, setStatusFocused] = useState<boolean>(false)
@@ -112,23 +124,23 @@ const ModalCreate = (props:Props) => {
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('')
 
-    const dateAndDrop = (title1:string, title2:string, isFocused2:boolean, focusFunction2:Dispatch<SetStateAction<boolean>>, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>, defaultOptions2:string[], options2:string[], setOptions2:Dispatch<SetStateAction<string[]>>) => {
+    const dateAndDrop = (title:string, isFocused:boolean, focusFunction:Dispatch<SetStateAction<boolean>>, currInput:string, setCurrInput:Dispatch<SetStateAction<string>>, defaultOptions:string[], options:string[], setOptions:Dispatch<SetStateAction<string[]>>) => {
         return (
-            <div key={`dateAndDrop${title1}${title2}`} className={styles.halfinputFieldsContainer}>
-                <input type='date' className={`${styles.fullInputField} ${styles.halfInputField}`} style={dateInputStyling} placeholder={title1.toUpperCase()}></input>
-                <input placeholder={title2.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
-                <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
-                    {datalistOptions(options2, setCurrInput2, title2)}
+            <div key={`dateAndDrop${title}`} className={styles.halfinputFieldsContainer}>
+                <input type='date' id='dateInput' max={new Date().toISOString().split('T')[0]} className={`${styles.fullInputField} ${styles.halfInputField}`} style={dateInputStyling} onChange={(e)=>handleDateChange(e.target.value)}></input>
+                <input placeholder={title.toUpperCase()} className={`${styles.fullInputField} ${styles.halfInputField}`} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
+                <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
+                    {datalistOptions(options, setCurrInput, title)}
                 </div>
             </div>
         )
     }
 
-    const halfInputField = (title1:string, title2:string) => {
+    const halfInputField = (title1:string, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, title2:string, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>) => {
         return (
             <div key={`halfInputField${title1}${title2}`} className={styles.halfinputFieldsContainer}>
-                <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title1.toUpperCase()}></input>
-                <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title2.toUpperCase()}></input>
+                <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title1.toUpperCase()} value={currInput1} onChange={(e)=>setCurrInput1(e.target.value)}></input>
+                <input className={`${styles.fullInputField} ${styles.halfInputField}`} placeholder={title2.toUpperCase()} value={currInput2} onChange={(e)=>setCurrInput2(e.target.value)}></input>
             </div>
         )
     }
@@ -147,14 +159,14 @@ const ModalCreate = (props:Props) => {
                 </div>
                 
                 <div className={styles.inputFieldsContainer}>
-                    <input className={styles.fullInputField} placeholder='TITLE' style={{margin:'auto'}}></input>
-                    {halfInputField('company', 'location')}
+                    <input className={styles.fullInputField} placeholder='TITLE' style={{margin:'auto'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
+                    {halfInputField('company', currentCompany, setCurrentCompany, 'location', currentLocation, setCurrentLocation)}
                     {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
-                    {dateAndDrop('date added', 'status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
-                    <input className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}}></input>
+                    {dateAndDrop('status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
+                    <input className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
                 </div>
                 
-                <div onClick={()=>props.createJobFunction({JobID: props.currNumberOfJobs,Date: "04/25/2023",Category: 'SWE',Company: 'Fangs Corp',Location: 'Suisun, CA',Status: 'Interviewing',Title: 'Jr. QA',Type: 'Full Time',URL: "https://www.google.com/",})}>
+                <div onClick={()=>props.createJobFunction({JobID: props.currNumberOfJobs,Date: currentDate,Category: currentCategory,Company: currentCompany,Location: currentLocation,Status: currentStatus,Title: currentTitle,Type: currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),URL: "https://www.google.com/",})}>
                     <FormButton position={{margin:'auto', marginTop:'20px'}} title='Submit' titleColor='black'></FormButton>
                 </div>
             </form>
