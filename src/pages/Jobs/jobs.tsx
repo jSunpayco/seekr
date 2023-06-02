@@ -118,7 +118,6 @@ const Jobs = () => {
     const deleteJobItem = (jobId:number) => {
         const updatedJobs = myJobs.filter(item => item.JobID !== jobId);
         setMyJobs(updatedJobs);
-        console.log(jobId, updatedJobs)
     }
 
     const jobsContainer = () => {
