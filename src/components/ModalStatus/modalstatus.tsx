@@ -8,27 +8,41 @@ interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     currStatus: string;
+    jobInfo: {
+        JobID: number;
+        Date: string;
+        Category: string;
+        Company: string;
+        Location: string;
+        Status: string;
+        Title: string;
+        Type: string;
+        URL: string;
+    };
+    updateJobsFunction:(jobID: number, jobStatus: string) => void;
 }
 
 const ModalStatus = (props:Props) => {
     
     const progressList = ['Sent', 'Assessment', 'Interviewing']
-    const [currProgress, setCurrProgress] = useState('Sent')
+    const [currProgress, setCurrProgress] = useState(progressList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Sent')
     
-    const rejectedList = ['Resume', 'Assessment', 'Interview']
-    const [currRejected, setCurrRejected] = useState('Resume')
+    const rejectedList = ['Resume Reject', 'Assessment Reject', 'Interview Reject']
+    const [currRejected, setCurrRejected] = useState(rejectedList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Resume Reject')
     
-    const offerList = ['Verbal', 'Written']
-    const [currOffer, setCurrOffer] = useState('Written')
+    const offerList = ['Verbal Offer', 'Written Offer']
+    const [currOffer, setCurrOffer] = useState(offerList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Verbal Offer')
 
-    const [progressCheck, setProgressCheck] = useState(false)
+    const [progressCheck, setProgressCheck] = useState(progressList.includes(props.jobInfo.Status))
     const [progressDrop, setProgressDrop] = useState(false)
 
-    const [rejectedCheck, setRejectedCheck] = useState(false)
+    const [rejectedCheck, setRejectedCheck] = useState(rejectedList.includes(props.jobInfo.Status))
     const [rejectedDrop, setRejectedDrop] = useState(false)
 
-    const [offerCheck, setOfferCheck] = useState(false)
+    const [offerCheck, setOfferCheck] = useState(offerList.includes(props.jobInfo.Status))
     const [offerDrop, setOfferDrop] = useState(false)
+
+    const [currentStatus, setCurrentStatus] = useState<string>(props.jobInfo.Status)
 
     const optionsList = [
         {
@@ -91,20 +105,22 @@ const ModalStatus = (props:Props) => {
         }
     };
 
-    const handleDataListOptionClick = (event:React.MouseEvent<HTMLDivElement>, newString:string, optionFunction:Dispatch<SetStateAction<string>>) => {
+    const handleDataListOptionClick = (event:React.MouseEvent<HTMLDivElement>, newString:string, optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>) => {
             optionFunction(newString)
+            dropDown(false)
+            setCurrentStatus(newString)
             event.stopPropagation();
     };
 
-    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>) => {
+    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>) => {
         return options.map((item, index)=>(
-            <p id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction)}>{item}</p>
+            <p key={`statusOption${index}`} id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
         ))
     }
 
     const optionItem = () => {
         return optionsList.map((item, index) =>(
-            <div id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
+            <div key={`radioOption${index}`} id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
                 <label className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
                     <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
                     <span className={styles.check}></span>
@@ -114,7 +130,7 @@ const ModalStatus = (props:Props) => {
                     <BiChevronDown className={styles.menuArrow} style ={{transform:item.dropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 0.7s ease'}}/>
                 </div>
                 <div className={styles.datalistOptions} style={{visibility:(item.dropdown?'visible':'hidden')}}>
-                    {datalistOption(item.optionList, item.optionFunction)}
+                    {datalistOption(item.optionList, item.optionFunction, item.dropdownFunction)}
                 </div>
             </div>
         ))
@@ -141,7 +157,7 @@ const ModalStatus = (props:Props) => {
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
-            <form className={styles.modalContainer}>
+            <div className={styles.modalContainer}>
                 <div className={styles.modalHeader}>
                     <h1 className={styles.modalTitle}>Update Status</h1>
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
@@ -151,8 +167,8 @@ const ModalStatus = (props:Props) => {
                     {optionItem()}
                 </div>
                 
-                <FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton>
-            </form>
+                <div onClick={()=>props.updateJobsFunction(props.jobInfo.JobID, currentStatus)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+            </div>
         </div>
     )
 }

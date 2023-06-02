@@ -4,7 +4,19 @@ import { useState } from 'react';
 
 interface Props {
     title: string;
-    onClickFunction: React.Dispatch<React.SetStateAction<boolean>>;
+    onClickFunction:any;
+    jobInfo?: {
+        JobID: number;
+        Date: string;
+        Category: string;
+        Company: string;
+        Location: string;
+        Status: string;
+        Title: string;
+        Type: string;
+        URL: string;
+    }
+    jobId?:number;
 }
 
 const JobItemButton = (props:Props) => {
@@ -22,8 +34,15 @@ const JobItemButton = (props:Props) => {
             )
     }
 
+    const handleClick = () => {
+        if(props.jobInfo)
+            props.onClickFunction(props.jobInfo)
+        else
+            props.onClickFunction(props.jobId)
+    }
+
     return (
-        <button onMouseEnter={()=>setHovering(true)} onMouseLeave={()=>setHovering(false)} onClick={()=>props.onClickFunction(true)} className={styles.statusButton}>
+        <button onMouseEnter={()=>setHovering(true)} onMouseLeave={()=>setHovering(false)} onClick={handleClick} className={styles.statusButton}>
             {!isHovering ? props.title : hoverIcon()}
         </button>
     )

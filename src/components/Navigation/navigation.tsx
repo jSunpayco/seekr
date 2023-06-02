@@ -82,7 +82,7 @@ const Navigation = () => {
 
     const filterOptions = (options:string[]) => {
         return options.map((item, index) => (
-            <div id={`option${item}${index}`} className={styles.mobileOption}>
+            <div key={`option${item}${index}`} id={`option${item}${index}`} className={styles.mobileOption}>
                 <label htmlFor={`mobileOptionInput${item}${index}`} className={styles.mobileOptionLabel}>
                     <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput}/>
                     {item}
@@ -93,7 +93,7 @@ const Navigation = () => {
 
     const desktopFilterOptions = (options:string[]) => {
         return options.map((item, index) => (
-            <label htmlFor={`optionInput${item}${index}`} className={styles.desktopOptionLabel} style={{marginBottom:(index===options.length-1?'5%':'0')}}>
+            <label key={`optionInput${item}${index}`} htmlFor={`optionInput${item}${index}`} className={styles.desktopOptionLabel} style={{marginBottom:(index===options.length-1?'5%':'0')}}>
                 <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput}/>
                 {item}
             </label>
@@ -102,7 +102,7 @@ const Navigation = () => {
 
     const desktopFilters = () => {
         return filters.map((item, index) => (
-            <ClickAwayListener onClickAway={()=>handleDesktopClickAway(item.isClickedFunction)}>
+            <ClickAwayListener onClickAway={()=>handleDesktopClickAway(item.isClickedFunction)} key={`desktopFilter${index}`}>
                 <div id={`desktopFilter${index}`}>
                     <p className={styles.desktopFilterName} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)}>
                         {item.name}{<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>}
@@ -117,7 +117,7 @@ const Navigation = () => {
 
     const mobileFilters = () => {
         return filters.map((item, index) => (
-            <ClickAwayListener onClickAway={()=>handleMobileClickAway(item.isClickedFunction)}>
+            <ClickAwayListener onClickAway={()=>handleMobileClickAway(item.isClickedFunction)} key={`mobileFilter${index}`}>
                 <div>
                     <div id={`mobileFilter${index}`} onClick={() => clickFilterButton(item.isClickedFunction, item.isClicked)} className={styles.mobileFilterOption}>
                         {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
