@@ -116,14 +116,14 @@ const ModalCreate = (props:Props) => {
         return (
             <div key={`halfDatalists${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <div className={styles.halfInputField}>
-                    <input {...register('Category', { required: true })} id='dateInput' placeholder={title1.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
+                    <input {...register('Category', { validate: validateCategory })} id='dateInput' placeholder={title1.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
                     <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
                         {datalistOptions(options1, setCurrInput1, title1)}
                     </div>
                     {errors.Category && <span className={styles.error}>Error</span>}
                 </div>
                 <div className={styles.halfInputField}>
-                    <input {...register('Type', { required: true })} placeholder={title2.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
+                    <input {...register('Type', { validate: validateType })} placeholder={title2.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
                         {datalistOptions(options2, setCurrInput2, title2)}
                     </div>
@@ -142,7 +142,7 @@ const ModalCreate = (props:Props) => {
     }
 
     const [isStatusFocused, setStatusFocused] = useState<boolean>(false)
-    const statuses = ["Sent", "Assessing", "Interviewing", "Resume Reject", "Assessment Reject", "Interview Reject", "Verbal Offer", "Written Offer"];
+    const statuses = ["sent", "assessment", "interviewing", "resume reject", "assessment reject", "interview reject", "verbal offer", "written offer"];
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('')
 
@@ -154,7 +154,7 @@ const ModalCreate = (props:Props) => {
                     {errors.Date && <span className={styles.error}>Error</span>}
                 </div>
                 <div className={styles.halfInputField}>
-                    <input {...register('Status', { required: true })} placeholder={title.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
+                    <input {...register('Status', { validate: validateStatus })} placeholder={title.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
                         {datalistOptions(options, setCurrInput, title)}
                     </div>
@@ -184,6 +184,18 @@ const ModalCreate = (props:Props) => {
             props.closeFunction(false)
     }
 
+    const validateCategory = () => {
+        return categories.includes(currentCategory.toLowerCase())
+    };
+
+    const validateType = () => {
+        return jobTypes.includes(currentJobType.toLowerCase())
+    };
+
+    const validateStatus = () => {
+        return statuses.includes(currentStatus.toLowerCase())
+    };
+
     const createJob = () => {
         props.createJobFunction({
             JobID: props.currNumberOfJobs,
@@ -198,7 +210,7 @@ const ModalCreate = (props:Props) => {
         })
     }
 
-    const onSubmit: SubmitHandler<FormInputs> = data => console.log(data);
+    const onSubmit: SubmitHandler<FormInputs> = () => createJob();
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
