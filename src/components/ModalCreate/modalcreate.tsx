@@ -196,6 +196,11 @@ const ModalCreate = (props:Props) => {
         return statuses.includes(currentStatus.toLowerCase())
     };
 
+    const validateUrl = (value:string) => {
+        let regex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/;
+        return regex.test(value)
+    };
+
     const createJob = () => {
         props.createJobFunction({
             JobID: props.currNumberOfJobs,
@@ -206,7 +211,7 @@ const ModalCreate = (props:Props) => {
             Status: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             Title: currentTitle,
             Type: currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-            URL: "https://www.google.com/"
+            URL: currentUrl
         })
     }
 
@@ -229,7 +234,7 @@ const ModalCreate = (props:Props) => {
                     {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
                     {dateAndDrop('status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
                     <div className={styles.singleInputContainer}>
-                        <input {...register('URL', { required: true })} className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
+                        <input {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
                         {errors.URL && <span className={styles.error} style={{marginLeft:'12%'}}>Please enter a URL</span>}
                     </div>
                     
