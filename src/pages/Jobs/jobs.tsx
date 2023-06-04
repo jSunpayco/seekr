@@ -39,54 +39,10 @@ const Jobs = () => {
             JobID:0,
             Date:"04/25/2023",
             Category:"SWE",
-            Company:"Techie inc",
-            Location:"Davis, CA",
+            Company:"Sample Company",
+            Location:"City, State",
             Status:"Sent",
-            Title:"Junior Software Engineer",
-            Type:"Full Time",
-            URL:"https://www.google.com/"
-        },
-        {
-            JobID:1,
-            Date:"03/14/2023",
-            Category:"SDET",
-            Company:"Hip Sofwares",
-            Location:"Boston, MA",
-            Status:"Interviewing",
-            Title:"Entry Level Automation Test Engineer",
-            Type:"Full Time",
-            URL:"https://www.google.com/"
-        },
-        {
-            JobID:2,
-            Date:"03/14/2023",
-            Category:"SDET",
-            Company:"Hip Sofwares",
-            Location:"Boston, MA",
-            Status:"Resume Reject",
-            Title:"Entry Level Automation Test Engineer",
-            Type:"Full Time",
-            URL:"https://www.google.com/"
-        },
-        {
-            JobID:3,
-            Date:"03/14/2023",
-            Category:"SDET",
-            Company:"Hip Sofwares",
-            Location:"Boston, MA",
-            Status:"Interviewing",
-            Title:"Entry Level Automation Test Engineer",
-            Type:"Full Time",
-            URL:"https://www.google.com/"
-        },
-        {
-            JobID:4,
-            Date:"03/14/2023",
-            Category:"SDET",
-            Company:"Hip Sofwares",
-            Location:"Boston, MA",
-            Status:"Interviewing",
-            Title:"Entry Level Automation Test Engineer",
+            Title:"Sample Job Title",
             Type:"Full Time",
             URL:"https://www.google.com/"
         }
