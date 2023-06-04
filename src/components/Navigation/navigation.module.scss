@@ -8,6 +8,7 @@
     background-color: #D9D9D9;
     border-radius: 10px;
     transform: translateY(0);
+    word-break: break-all;
 
     @media (max-width: 730px) {
         overflow: hidden;
@@ -22,7 +23,6 @@
     font-weight: 500;
     font-size: 1.3vw;
     user-select: none;
-    display: flex;
     align-items: center;
 }
 

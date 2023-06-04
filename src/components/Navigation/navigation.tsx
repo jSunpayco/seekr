@@ -52,31 +52,31 @@ const Navigation = () => {
             name:"Category",
             isClicked:categoryClicked,
             isClickedFunction:setCategoryClicked,
-            options:categoryOptions
+            options:categoryOptions.sort()
         },
         {
             name:"Location",
             isClicked:locationClicked,
             isClickedFunction:setLocationClicked,
-            options:locationOptions
+            options:locationOptions.sort()
         },
         {
             name:"Month",
             isClicked:monthClicked,
             isClickedFunction:setMonthClicked,
-            options:monthOptions
+            options:monthOptions.sort()
         },
         {
             name:"Position",
             isClicked:positionClicked,
             isClickedFunction:setPositionClicked,
-            options:positionOptions
+            options:positionOptions.sort()
         },
         {
             name:"Status",
             isClicked:statusClicked,
             isClickedFunction:setStatusClicked,
-            options:statusOptions
+            options:statusOptions.sort()
         }
     ]
 
