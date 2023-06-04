@@ -144,6 +144,7 @@ const Navigation = () => {
 
             <div className={styles.mobileMenuContainer} style={{opacity:(isMenuOpened?'100':'0'), transition:'opacity 1s'}}>
                 {mobileFilters()}
+                <a href='/' className={`${styles.logoutButton} ${styles.mobileLogoutButton}`}>Logout</a>
             </div>
         </div>
     )
