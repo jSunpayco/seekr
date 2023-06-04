@@ -34,13 +34,15 @@ const Navigation = () => {
     const filterButtons = [setCategoryClicked, setLocationClicked, setMonthClicked, setPositionClicked, setStatusClicked]
 
     function clickFilterButton(toggleState:any, currState:boolean){
-        if(currState === false)
+        if(currState === false){
             for(let i = 0; i < filterButtons.length; i++){
                 if(filterButtons[i] !== toggleState)
                     filterButtons[i](false)
-                else
-                    toggleState(true)
             }
+            setTimeout(() => {
+                toggleState(true)
+            }, 500);
+        }
         else
             toggleState(false)
     }
