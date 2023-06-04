@@ -104,7 +104,7 @@ const Jobs = () => {
 
     return (
         <div className={styles.jobsContainer}>
-            <Navigation></Navigation>
+            <Navigation data={myJobs}></Navigation>
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 

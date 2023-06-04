@@ -5,7 +5,23 @@ import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
 import { useState } from 'react';
 
-const Navigation = () => {
+interface Job {
+    JobID: number;
+    Date: string;
+    Category: string;
+    Company: string;
+    Location: string;
+    Status: string;
+    Title: string;
+    Type: string;
+    URL: string;
+}
+
+interface Props {
+    data: Job[];
+}
+
+const Navigation = (props:Props) => {
 
     const isScreenSmall = useMediaQuery('(max-width: 730px)');
 
@@ -19,9 +35,27 @@ const Navigation = () => {
             toggleFunction(false)
     }
 
-    const locationOptions = ['Remote', 'Sacramento', 'Boston', 'San Francisco']
-    const categoryOptions = ['SWE', 'SDET', 'Cybersecurity']
-    const monthOptions = ['February', 'March', 'April', 'May']
+    const monthMapping: { [key: string]: string } = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+    };
+
+    const locationOptions = props.data.map(job => job.Location);
+    const categoryOptions = props.data.map(job => job.Category)
+    const monthOptions = props.data.map(obj => {
+                            const month = obj.Date.split("/")[0];
+                            return monthMapping[month];
+                        });
     const positionOptions = ['Full Time', 'Intern', 'Temporary']
     const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
 
