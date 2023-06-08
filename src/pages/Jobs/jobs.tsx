@@ -12,6 +12,7 @@ const Jobs = () => {
     interface Job {
         JobID: number;
         Date: string;
+        Month: string;
         Category: string;
         Company: string;
         Location: string;
@@ -38,6 +39,7 @@ const Jobs = () => {
         {
             JobID:0,
             Date:"04/25/2023",
+            Month:"April",
             Category:"SWE",
             Company:"Sample Company",
             Location:"City, State",
@@ -45,11 +47,104 @@ const Jobs = () => {
             Title:"Sample Job Title",
             Type:"Full Time",
             URL:"https://www.google.com/"
+        },
+        {
+            JobID:1,
+            Date:"03/25/2023",
+            Month:"March",
+            Category:"Intern",
+            Company:"Samples Companies",
+            Location:"Quezon City, Metro ManilaManilaManila",
+            Status:"Resume Reject",
+            Title:"Another Samples Jobs Titles",
+            Type:"Full Time",
+            URL:"https://www.google.com/"
         }
     ]
 
+    const [myInitialJobs, setMyInitialJobs] = useState(jobsSample)
     const [myJobs, setMyJobs] = useState(jobsSample)
     const [jobSelected, setJobSelected] = useState(jobsSample[0])
+
+    const [currCategoryFilters, setCurrCategoryFilters] = useState<string[]>([])
+    const [currLocationFilters, setCurrLocationFilters] = useState<string[]>([])
+    const [currMonthFilters, setCurrMonthFilters] = useState<string[]>([])
+
+    const [currTypeFilters, setCurrTypeFilters] = useState<string[]>([])
+    const [currStatusFilters, setCurrStatusFilters] = useState<string[]>([])
+
+    const handleCheckboxCick = (value:string, filter:string, checked:boolean) => {
+        if(checked){
+            switch(filter){
+                case "Category":
+                    setCurrCategoryFilters(currCategoryFilters => [...currCategoryFilters, value]);
+                    console.log(value, filter, checked)
+                    break;
+                case "Location":
+                    setCurrLocationFilters(currLocationFilters => [...currLocationFilters, value]);
+                    console.log(value, filter, checked)
+                    break;
+                case "Month":
+                    setCurrMonthFilters(currMonthFilters => [...currMonthFilters, value]);
+                    console.log(value, filter, checked)
+                    break;
+                case "Position":
+                    setCurrTypeFilters(currTypeFilters => [...currTypeFilters, value]);
+                    console.log(value, filter, checked)
+                    break;
+                case "Status":
+                    setCurrStatusFilters(currStatusFilters => [...currStatusFilters, value]);
+                    console.log(value, filter, checked)
+                    break;
+            }
+        }else{
+            switch(filter){
+                case "Category":
+                    setCurrCategoryFilters(currCategoryFilters => currCategoryFilters.filter(cat => cat !== value));
+                    console.log(value, filter, checked)
+                    break;
+                case "Location":
+                    setCurrLocationFilters(currLocationFilters => currLocationFilters.filter(loc => loc !== value));
+                    console.log(value, filter, checked)
+                    break;
+                case "Month":
+                    setCurrMonthFilters(currMonthFilters => currMonthFilters.filter(mon => mon !== value));
+                    console.log(value, filter, checked)
+                    break;
+                case "Position":
+                    setCurrTypeFilters(currTypeFilters => currTypeFilters.filter(type => type !== value));
+                    console.log(value, filter, checked)
+                    break;
+                case "Status":
+                    setCurrStatusFilters(currStatusFilters => currStatusFilters.filter(stat => stat !== value));
+                    console.log(value, filter, checked)
+                    break;
+            }
+        }
+    }
+
+    useEffect(() => {
+        let filtered = myInitialJobs.filter((item) => {
+            if (currCategoryFilters.length > 0 && !currCategoryFilters.includes(item.Category))
+              return false;
+        
+            if (currLocationFilters.length > 0 && !currLocationFilters.includes(item.Location))
+              return false;
+        
+            if (currMonthFilters.length > 0 && !currMonthFilters.includes(item.Month))
+              return false;
+        
+            if (currTypeFilters.length > 0 && !currTypeFilters.includes(item.Type))
+              return false;
+        
+            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Status))
+              return false;
+        
+            return true;
+        });
+
+        setMyJobs(filtered)
+    }, [currCategoryFilters, currLocationFilters, currMonthFilters, currTypeFilters, currStatusFilters]);
 
     useEffect(() => {
         setModalOpen(false);
@@ -65,15 +160,18 @@ const Jobs = () => {
         })
 
         setMyJobs(updatedJobs);
+        setMyInitialJobs(updatedJobs);
     }
 
     const createJobItem = (jobItem:Job) => {
         setMyJobs(myJobs => [...myJobs, jobItem])
+        setMyInitialJobs(myJobs => [...myJobs, jobItem]);
     }
 
     const deleteJobItem = (jobId:number) => {
         const updatedJobs = myJobs.filter(item => item.JobID !== jobId);
         setMyJobs(updatedJobs);
+        setMyInitialJobs(updatedJobs);
     }
 
     const jobsContainer = () => {
@@ -104,7 +202,7 @@ const Jobs = () => {
 
     return (
         <div className={styles.jobsContainer}>
-            <Navigation data={myJobs}></Navigation>
+            <Navigation data={myInitialJobs} boxClick={handleCheckboxCick}></Navigation>
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 

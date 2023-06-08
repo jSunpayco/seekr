@@ -8,6 +8,7 @@ import { useState } from 'react';
 interface Job {
     JobID: number;
     Date: string;
+    Month: string;
     Category: string;
     Company: string;
     Location: string;
@@ -19,6 +20,7 @@ interface Job {
 
 interface Props {
     data: Job[];
+    boxClick: (value: string, filter: string, checked: boolean) => void;
 }
 
 const Navigation = (props:Props) => {
@@ -35,27 +37,9 @@ const Navigation = (props:Props) => {
             toggleFunction(false)
     }
 
-    const monthMapping: { [key: string]: string } = {
-        "01": "January",
-        "02": "February",
-        "03": "March",
-        "04": "April",
-        "05": "May",
-        "06": "June",
-        "07": "July",
-        "08": "August",
-        "09": "September",
-        "10": "October",
-        "11": "November",
-        "12": "December"
-    };
-
     const locationOptions = props.data.map(job => job.Location);
     const categoryOptions = props.data.map(job => job.Category)
-    const monthOptions = props.data.map(obj => {
-                            const month = obj.Date.split("/")[0];
-                            return monthMapping[month];
-                        });
+    const monthOptions = props.data.map(job => job.Month);
     const positionOptions = ['Full Time', 'Intern', 'Temporary']
     const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
 
@@ -127,10 +111,10 @@ const Navigation = (props:Props) => {
         ))
     }
 
-    const desktopFilterOptions = (options:string[]) => {
+    const desktopFilterOptions = (options:string[], name:string) => {
         return options.map((item, index) => (
             <label key={`optionInput${item}${index}`} htmlFor={`optionInput${item}${index}`} className={styles.desktopOptionLabel} style={{marginBottom:(index===options.length-1?'5%':'0')}}>
-                <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput}/>
+                <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput} onChange={(e)=>props.boxClick(item, name, e.target.checked)}/>
                 {item}
             </label>
         ))
@@ -144,7 +128,7 @@ const Navigation = (props:Props) => {
                         {item.name}{<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>}
                     </p>
                     <div className={styles.desktopOptionsContainer} style={{maxHeight:(item.isClicked?'1000px':'0px')}}>
-                        {desktopFilterOptions(item.options)}
+                        {desktopFilterOptions(item.options, item.name)}
                     </div>
                 </div>
             </ClickAwayListener>
