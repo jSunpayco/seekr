@@ -100,11 +100,11 @@ const Navigation = (props:Props) => {
         }
     ]
 
-    const filterOptions = (options:string[]) => {
+    const filterOptions = (options:string[], name:string) => {
         return options.map((item, index) => (
             <div key={`option${item}${index}`} id={`option${item}${index}`} className={styles.mobileOption}>
                 <label htmlFor={`mobileOptionInput${item}${index}`} className={styles.mobileOptionLabel}>
-                    <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput}/>
+                    <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput} onChange={(e)=>props.boxClick(item, name, e.target.checked)}/>
                     {item}
                 </label>
             </div>
@@ -143,7 +143,7 @@ const Navigation = (props:Props) => {
                         {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
                     </div>
                     <div className={styles.optionsContainer} style={{maxHeight:(item.isClicked?'500px':'0px')}}>
-                        {filterOptions(item.options)}
+                        {filterOptions(item.options, item.name)}
                     </div>
                 </div>
             </ClickAwayListener>
