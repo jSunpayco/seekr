@@ -49,20 +49,29 @@ const Navigation = (props:Props) => {
     const [positionClicked, setPositionClicked] = useState(false)
     const [statusClicked, setStatusClicked] = useState(false)
 
+    const [hasActiveFilter, setHasActiveFilter] = useState<boolean>(false)
+
     const filterButtons = [setCategoryClicked, setLocationClicked, setMonthClicked, setPositionClicked, setStatusClicked]
 
     function clickFilterButton(toggleState:any, currState:boolean){
         if(currState === false){
-            for(let i = 0; i < filterButtons.length; i++){
-                if(filterButtons[i] !== toggleState)
-                    filterButtons[i](false)
-            }
-            setTimeout(() => {
+            setHasActiveFilter(true)
+            if(hasActiveFilter){
+                for(let i = 0; i < filterButtons.length; i++){
+                    if(filterButtons[i] !== toggleState)
+                        filterButtons[i](false)
+                }
+                setTimeout(() => {
+                    toggleState(true)
+                }, 500);
+            }else{
                 toggleState(true)
-            }, 500);
+            }
         }
-        else
+        else{
+            setHasActiveFilter(false)
             toggleState(false)
+        }
     }
 
     const [isMenuOpened, setMenuOpened] = useState<boolean>(false)
