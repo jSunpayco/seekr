@@ -121,7 +121,7 @@
 }
 
 .jobContainer{
-    width: 265px;
+    width: 285px;
     height: 200px;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -134,7 +134,8 @@
     flex-direction: column;
     justify-content: space-between;
 
-    @media (max-width: 330px) {
+    @media (max-width: 347px) {
+        width: 90%;
         padding: 20px 10px;
         transition: padding 0.3s ease;
     }
@@ -147,6 +148,15 @@
     color: black;
     font-size: 19px;
     user-select: none;
+    display: block;
+    width: 285px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    @media (max-width: 347px) {
+        width: 99%;
+    }
 
     &::before{
         content: '';
@@ -165,6 +175,10 @@
     font-weight: 500;
     font-size: 15px;
     user-select: none;
+    width: 275px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .buttonContainer{

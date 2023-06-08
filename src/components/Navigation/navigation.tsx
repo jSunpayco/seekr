@@ -5,7 +5,25 @@ import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
 import { useState } from 'react';
 
-const Navigation = () => {
+interface Job {
+    JobID: number;
+    Date: string;
+    Month: string;
+    Category: string;
+    Company: string;
+    Location: string;
+    Status: string;
+    Title: string;
+    Type: string;
+    URL: string;
+}
+
+interface Props {
+    data: Job[];
+    boxClick: (value: string, filter: string, checked: boolean) => void;
+}
+
+const Navigation = (props:Props) => {
 
     const isScreenSmall = useMediaQuery('(max-width: 730px)');
 
@@ -19,9 +37,9 @@ const Navigation = () => {
             toggleFunction(false)
     }
 
-    const locationOptions = ['Remote', 'Sacramento', 'Boston', 'San Francisco']
-    const categoryOptions = ['SWE', 'SDET', 'Cybersecurity']
-    const monthOptions = ['February', 'March', 'April', 'May']
+    const locationOptions = props.data.map(job => job.Location);
+    const categoryOptions = props.data.map(job => job.Category)
+    const monthOptions = props.data.map(job => job.Month);
     const positionOptions = ['Full Time', 'Intern', 'Temporary']
     const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
 
@@ -31,18 +49,29 @@ const Navigation = () => {
     const [positionClicked, setPositionClicked] = useState(false)
     const [statusClicked, setStatusClicked] = useState(false)
 
+    const [hasActiveFilter, setHasActiveFilter] = useState<boolean>(false)
+
     const filterButtons = [setCategoryClicked, setLocationClicked, setMonthClicked, setPositionClicked, setStatusClicked]
 
     function clickFilterButton(toggleState:any, currState:boolean){
-        if(currState === false)
-            for(let i = 0; i < filterButtons.length; i++){
-                if(filterButtons[i] !== toggleState)
-                    filterButtons[i](false)
-                else
+        if(currState === false){
+            setHasActiveFilter(true)
+            if(hasActiveFilter){
+                for(let i = 0; i < filterButtons.length; i++){
+                    if(filterButtons[i] !== toggleState)
+                        filterButtons[i](false)
+                }
+                setTimeout(() => {
                     toggleState(true)
+                }, 500);
+            }else{
+                toggleState(true)
             }
-        else
+        }
+        else{
+            setHasActiveFilter(false)
             toggleState(false)
+        }
     }
 
     const [isMenuOpened, setMenuOpened] = useState<boolean>(false)
@@ -52,49 +81,49 @@ const Navigation = () => {
             name:"Category",
             isClicked:categoryClicked,
             isClickedFunction:setCategoryClicked,
-            options:categoryOptions
+            options:categoryOptions.sort()
         },
         {
             name:"Location",
             isClicked:locationClicked,
             isClickedFunction:setLocationClicked,
-            options:locationOptions
+            options:locationOptions.sort()
         },
         {
             name:"Month",
             isClicked:monthClicked,
             isClickedFunction:setMonthClicked,
-            options:monthOptions
+            options:monthOptions.sort()
         },
         {
             name:"Position",
             isClicked:positionClicked,
             isClickedFunction:setPositionClicked,
-            options:positionOptions
+            options:positionOptions.sort()
         },
         {
             name:"Status",
             isClicked:statusClicked,
             isClickedFunction:setStatusClicked,
-            options:statusOptions
+            options:statusOptions.sort()
         }
     ]
 
-    const filterOptions = (options:string[]) => {
+    const filterOptions = (options:string[], name:string) => {
         return options.map((item, index) => (
             <div key={`option${item}${index}`} id={`option${item}${index}`} className={styles.mobileOption}>
                 <label htmlFor={`mobileOptionInput${item}${index}`} className={styles.mobileOptionLabel}>
-                    <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput}/>
+                    <input id={`mobileOptionInput${item}${index}`} type="checkbox" value={item} className={styles.mobileOptionInput} onChange={(e)=>props.boxClick(item, name, e.target.checked)}/>
                     {item}
                 </label>
             </div>
         ))
     }
 
-    const desktopFilterOptions = (options:string[]) => {
+    const desktopFilterOptions = (options:string[], name:string) => {
         return options.map((item, index) => (
             <label key={`optionInput${item}${index}`} htmlFor={`optionInput${item}${index}`} className={styles.desktopOptionLabel} style={{marginBottom:(index===options.length-1?'5%':'0')}}>
-                <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput}/>
+                <input id={`optionInput${item}${index}`} type="checkbox" value={item} className={styles.desktopOptionInput} onChange={(e)=>props.boxClick(item, name, e.target.checked)}/>
                 {item}
             </label>
         ))
@@ -108,7 +137,7 @@ const Navigation = () => {
                         {item.name}{<BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>}
                     </p>
                     <div className={styles.desktopOptionsContainer} style={{maxHeight:(item.isClicked?'1000px':'0px')}}>
-                        {desktopFilterOptions(item.options)}
+                        {desktopFilterOptions(item.options, item.name)}
                     </div>
                 </div>
             </ClickAwayListener>
@@ -123,7 +152,7 @@ const Navigation = () => {
                         {item.name} <BiChevronDown style ={{transform:item.isClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}}/>
                     </div>
                     <div className={styles.optionsContainer} style={{maxHeight:(item.isClicked?'500px':'0px')}}>
-                        {filterOptions(item.options)}
+                        {filterOptions(item.options, item.name)}
                     </div>
                 </div>
             </ClickAwayListener>
@@ -144,6 +173,7 @@ const Navigation = () => {
 
             <div className={styles.mobileMenuContainer} style={{opacity:(isMenuOpened?'100':'0'), transition:'opacity 1s'}}>
                 {mobileFilters()}
+                <a href='/' className={`${styles.logoutButton} ${styles.mobileLogoutButton}`}>Logout</a>
             </div>
         </div>
     )

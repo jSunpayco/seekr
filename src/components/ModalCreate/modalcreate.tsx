@@ -22,6 +22,7 @@ type FormInputs = {
 interface Job {
     JobID: number;
     Date: string;
+    Month: string;
     Category: string;
     Company: string;
     Location: string;
@@ -202,10 +203,26 @@ const ModalCreate = (props:Props) => {
         return regex.test(value)
     };
 
+    const monthMapping: { [key: string]: string } = {
+        "01": "January",
+        "02": "February",
+        "03": "March",
+        "04": "April",
+        "05": "May",
+        "06": "June",
+        "07": "July",
+        "08": "August",
+        "09": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+    };
+
     const createJob = () => {
         props.createJobFunction({
             JobID: props.currNumberOfJobs,
             Date: currentDate,
+            Month: monthMapping[currentDate.split("/")[0]],
             Category: currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             Company: currentCompany,
             Location: currentLocation,
