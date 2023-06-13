@@ -27,11 +27,11 @@ const JobItemButton = (props:Props) => {
     const hoverIcon = () =>{
         if(props.title === 'Update')
             return(
-                <BiSync className={styles.statusIcon}/>
+                <BiSync/>
             )
         else
             return(
-                <BiTrash className={styles.statusIcon}/>
+                <BiTrash/>
             )
     }
 
