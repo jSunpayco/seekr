@@ -186,8 +186,8 @@ const Jobs = () => {
                     <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Status}</p>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <JobItemButton title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
-                    <JobItemButton title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
+                    <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
+                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
                 </div>
             </div>
         ))
@@ -212,7 +212,7 @@ const Jobs = () => {
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
-                <div className={styles.jobContainer + " " + styles.newJobContainer} onClick={()=>setModalCreateOpen(true)}>
+                <div id="newJobContainer" className={styles.jobContainer} onClick={()=>setModalCreateOpen(true)} style={{cursor:"pointer"}}>
                     <p className={styles.newJobButton}>+</p>
                 </div>
             </div>
