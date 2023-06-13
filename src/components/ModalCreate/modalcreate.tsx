@@ -125,7 +125,7 @@ const ModalCreate = (props:Props) => {
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='type' {...register('Type', { validate: validateType })} placeholder={title2.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Type?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
                         {datalistOptions(options2, setCurrInput2, title2)}
                     </div>
                     {errors.Type && <span className={styles.error}>Please choose a Job Type</span>}
@@ -157,7 +157,7 @@ const ModalCreate = (props:Props) => {
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='status' {...register('Status', { validate: validateStatus })} placeholder={title.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{right:'8.4%', width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
                         {datalistOptions(options, setCurrInput, title)}
                     </div>
                     {errors.Status && <span className={styles.error}>Please choose a status</span>}
