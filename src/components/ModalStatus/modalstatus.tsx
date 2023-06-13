@@ -112,9 +112,9 @@ const ModalStatus = (props:Props) => {
             event.stopPropagation();
     };
 
-    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>) => {
+    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>, optionIndex:number) => {
         return options.map((item, index)=>(
-            <p key={`statusOption${index}`} id={`statusOption${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
+            <p key={`statusOption${index}`} id={`statusOption${optionIndex}${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
         ))
     }
 
@@ -125,12 +125,12 @@ const ModalStatus = (props:Props) => {
                     <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
                     <span className={styles.check}></span>
                 </label>
-                <div className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, item.checkmark, item.dropdown, item.dropdownFunction)} style={{color:(item.checkmark?'black':'#a4a3a4'), border:(item.checkmark?'solid 1px black':'solid 1px #a4a3a4')}}>
+                <div id={`datalistContainer${index}`} className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, item.checkmark, item.dropdown, item.dropdownFunction)} style={{color:(item.checkmark?'black':'#a4a3a4'), border:(item.checkmark?'solid 1px black':'solid 1px #a4a3a4')}}>
                     {item.currOption}
                     <BiChevronDown className={styles.menuArrow} style ={{transform:item.dropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 0.7s ease'}}/>
                 </div>
                 <div className={styles.datalistOptions} style={{visibility:(item.dropdown?'visible':'hidden')}}>
-                    {datalistOption(item.optionList, item.optionFunction, item.dropdownFunction)}
+                    {datalistOption(item.optionList, item.optionFunction, item.dropdownFunction, index)}
                 </div>
             </div>
         ))
@@ -167,7 +167,7 @@ const ModalStatus = (props:Props) => {
                     {optionItem()}
                 </div>
                 
-                <div onClick={()=>props.updateJobsFunction(props.jobInfo.JobID, currentStatus)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' onClick={()=>props.updateJobsFunction(props.jobInfo.JobID, currentStatus)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )

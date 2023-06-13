@@ -4,6 +4,7 @@ import { useState } from 'react';
 
 interface Props {
     title: string;
+    id:string;
     onClickFunction:any;
     jobInfo?: {
         JobID: number;
@@ -42,7 +43,7 @@ const JobItemButton = (props:Props) => {
     }
 
     return (
-        <button onMouseEnter={()=>setHovering(true)} onMouseLeave={()=>setHovering(false)} onClick={handleClick} className={styles.statusButton}>
+        <button id={props.id} onMouseEnter={()=>setHovering(true)} onMouseLeave={()=>setHovering(false)} onClick={handleClick} className={styles.statusButton}>
             {!isHovering ? props.title : hoverIcon()}
         </button>
     )

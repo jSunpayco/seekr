@@ -186,8 +186,8 @@ const Jobs = () => {
                     <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Status}</p>
                 </div>
                 <div className={styles.buttonContainer}>
-                    <JobItemButton title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
-                    <JobItemButton title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
+                    <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
+                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
                 </div>
             </div>
         ))

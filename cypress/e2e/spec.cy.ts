@@ -29,4 +29,23 @@ describe('Performing CRUD operations with job applications', () => {
 
         cy.end();
     });
+
+    it('should update job status', () => {
+        // Open modal
+        cy.get('#update0').click()
+
+        // Click status option
+        cy.get('#radioOption2').click()
+
+        // Open options
+        cy.get('#datalistContainer2').click()
+
+        // Click option
+        cy.get('#statusOption20').click()
+
+        // Click update button
+        cy.get('#updateStatusButton').click()
+
+        cy.end();
+    });
 })
