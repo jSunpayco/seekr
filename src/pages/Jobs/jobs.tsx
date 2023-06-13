@@ -212,7 +212,7 @@ const Jobs = () => {
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
-                <div className={styles.jobContainer + " " + styles.newJobContainer} onClick={()=>setModalCreateOpen(true)}>
+                <div id="newJobContainer" className={styles.jobContainer + " " + styles.newJobContainer} onClick={()=>setModalCreateOpen(true)}>
                     <p className={styles.newJobButton}>+</p>
                 </div>
             </div>
