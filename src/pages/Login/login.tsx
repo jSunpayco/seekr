@@ -18,6 +18,10 @@ const Login = () => {
                 <div className={styles.loginFormContainer}>
                     <FullFormField title="email" type="email"></FullFormField>
                     <FullFormField title="password" type="password"></FullFormField>
+                    <div className={styles.othersContainer}>
+                        <a className={styles.othersAnchor}>Register Here</a>
+                        <a className={styles.othersAnchor}>Forgot your password?</a>
+                    </div>
                     <a href='/jobs'><FormButton title='Login' position={loginStyle}></FormButton></a>
                 </div>
             </div>
