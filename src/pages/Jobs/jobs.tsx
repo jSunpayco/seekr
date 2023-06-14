@@ -6,6 +6,7 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import JobItemButton from '../../components/JobItemButton/jobitembutton';
+import ModalDelete from '../../components/ModalDelete/modaldelete';
 
 const Jobs = () => {
 
@@ -172,6 +173,7 @@ const Jobs = () => {
         const updatedJobs = myJobs.filter(item => item.JobID !== jobId);
         setMyJobs(updatedJobs);
         setMyInitialJobs(updatedJobs);
+        setModalDeleteOpen(false);
     }
 
     const jobsContainer = () => {
@@ -187,7 +189,7 @@ const Jobs = () => {
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
-                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
+                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={handleDeleteClick} jobId={item.JobID}/>
                 </div>
             </div>
         ))
@@ -195,10 +197,18 @@ const Jobs = () => {
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
     const [isModalCreateOpen, setModalCreateOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false)
 
     const handleUpdateClick = (jobItem:any) => {
         setJobSelected(jobItem)
         setModalOpen(true)
+    }
+
+    const [deleteIndex, setDeleteIndex] = useState<number>(0)
+
+    const handleDeleteClick = (index:number) => {
+        setDeleteIndex(index)
+        setModalDeleteOpen(true)
     }
 
     return (
@@ -219,6 +229,7 @@ const Jobs = () => {
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A' jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem}></ModalCreate>}
+            {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
         </div>
     )
 }

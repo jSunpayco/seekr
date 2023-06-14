@@ -1,0 +1,44 @@
+.modalGreyScreen{
+    width: 100%;
+    height: 100%;
+    background-color: rgba(37, 37, 37, 0.95);
+    position: fixed;
+    top: 0%;
+    left: 0%;
+}
+
+.modalContainer{
+    background-color: #ffffff;
+    border-radius: 20px;
+    border: solid black;
+    border-width: 1px;
+    height: auto;
+    max-width: 600px;
+    width: 90%;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    text-align: center;
+    padding: 0 10px;
+
+    @media (max-width: 369px) {
+        padding-bottom: 20px;
+    }
+}
+
+.modalTitle{
+    font-family: 'Montserrat', sans-serif;
+    font-size: max(20px + 1vw);
+}
+
+.buttonsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    @media (max-width: 460px) {
+        flex-direction: column;
+    }
+}
