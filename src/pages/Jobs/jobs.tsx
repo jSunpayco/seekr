@@ -7,6 +7,7 @@ import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import ModalDelete from '../../components/ModalDelete/modaldelete';
+import SearchBar from '../../components/SearchBar/searchbar';
 
 const Jobs = () => {
 
@@ -217,8 +218,13 @@ const Jobs = () => {
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 
-            <h2 className={styles.legendTitle}>Legend</h2>
-            <div className={styles.legendContainer}>{legendItems()}</div>
+            <div className={styles.jobsMenu}>
+                <div>
+                    <h2 className={styles.legendTitle}>Legend</h2>
+                    <div className={styles.legendContainer}>{legendItems()}</div>
+                </div>
+                <SearchBar/>
+            </div>
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}

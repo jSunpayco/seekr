@@ -1,0 +1,39 @@
+.searchBarContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: end;
+    height: 50px;
+    margin: auto 0;
+
+    @media (max-width: 730px) {
+        margin-top: 20px;
+        align-items: center;
+    }
+}
+
+.searchBarLabel{
+    margin-bottom: 5px;
+    margin-right: 5px;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 22px;
+    user-select: none;
+
+    @media (max-width: 730px) {
+        margin-bottom: 10px;
+    }
+}
+
+.searchBar{
+    padding: 10px;
+    border-radius: 25px;
+    border-color: transparent;
+    font-family: Lato, Arial, sans-serif;
+    font-size: 100%;
+    width: 230px;
+
+    &:focus{
+        outline: none;
+    }
+}
