@@ -47,7 +47,7 @@
         transition: transform 0.5s ease;
 
         @media (max-width: 1060px) {
-            transform: scale(0.6) translate(190%, -67%);
+            transform: scale(0.6) translate(80%, -75%);
         }
     }
     &:hover .arrow{
@@ -65,7 +65,7 @@
         transform: translate(-40%, -50%);
         transition: transform 0.3s ease;
         @media (max-width: 1060px) {
-            transform: translate(-20%, -30%);
+            transform: translate(-35%, -40%);
         }
     }
     .buttonText{
@@ -88,7 +88,7 @@
         transform: translate(-40%, -50%);
         transition: transform 0.3s ease;
         @media (max-width: 1060px) {
-            transform: translate(-20%, -30%);
+            transform: translate(-35%, -40%);
         }
     }
     .buttonText{
