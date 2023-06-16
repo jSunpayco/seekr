@@ -6,6 +6,8 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import JobItemButton from '../../components/JobItemButton/jobitembutton';
+import ModalDelete from '../../components/ModalDelete/modaldelete';
+import SearchBar from '../../components/SearchBar/searchbar';
 
 const Jobs = () => {
 
@@ -62,8 +64,9 @@ const Jobs = () => {
         }
     ]
 
-    const [myInitialJobs, setMyInitialJobs] = useState(jobsSample)
-    const [myJobs, setMyJobs] = useState(jobsSample)
+    const [myInitialJobs, setMyInitialJobs] = useState<Job[]>(jobsSample)
+    const [myJobs, setMyJobs] = useState<Job[]>(jobsSample)
+    const [myJobsFiltered, setMyJobsFiltered] = useState<Job[]>(jobsSample)
     const [jobSelected, setJobSelected] = useState(jobsSample[0])
 
     const [currCategoryFilters, setCurrCategoryFilters] = useState<string[]>([])
@@ -78,52 +81,42 @@ const Jobs = () => {
             switch(filter){
                 case "Category":
                     setCurrCategoryFilters(currCategoryFilters => [...currCategoryFilters, value]);
-                    console.log(value, filter, checked)
                     break;
                 case "Location":
                     setCurrLocationFilters(currLocationFilters => [...currLocationFilters, value]);
-                    console.log(value, filter, checked)
                     break;
                 case "Month":
                     setCurrMonthFilters(currMonthFilters => [...currMonthFilters, value]);
-                    console.log(value, filter, checked)
                     break;
                 case "Position":
                     setCurrTypeFilters(currTypeFilters => [...currTypeFilters, value]);
-                    console.log(value, filter, checked)
                     break;
                 case "Status":
                     setCurrStatusFilters(currStatusFilters => [...currStatusFilters, value]);
-                    console.log(value, filter, checked)
                     break;
             }
         }else{
             switch(filter){
                 case "Category":
                     setCurrCategoryFilters(currCategoryFilters => currCategoryFilters.filter(cat => cat !== value));
-                    console.log(value, filter, checked)
                     break;
                 case "Location":
                     setCurrLocationFilters(currLocationFilters => currLocationFilters.filter(loc => loc !== value));
-                    console.log(value, filter, checked)
                     break;
                 case "Month":
                     setCurrMonthFilters(currMonthFilters => currMonthFilters.filter(mon => mon !== value));
-                    console.log(value, filter, checked)
                     break;
                 case "Position":
                     setCurrTypeFilters(currTypeFilters => currTypeFilters.filter(type => type !== value));
-                    console.log(value, filter, checked)
                     break;
                 case "Status":
                     setCurrStatusFilters(currStatusFilters => currStatusFilters.filter(stat => stat !== value));
-                    console.log(value, filter, checked)
                     break;
             }
         }
     }
 
-    useEffect(() => {
+    const applyNavigationFilter = () => {
         let filtered = myInitialJobs.filter((item) => {
             if (currCategoryFilters.length > 0 && !currCategoryFilters.includes(item.Category))
               return false;
@@ -142,40 +135,64 @@ const Jobs = () => {
         
             return true;
         });
-
+        
         setMyJobs(filtered)
-    }, [currCategoryFilters, currLocationFilters, currMonthFilters, currTypeFilters, currStatusFilters]);
+        applySearchFilter(filtered);
+    }
 
     useEffect(() => {
-        setModalOpen(false);
-        setModalCreateOpen(false)
-    }, [myJobs]);
+        applyNavigationFilter();
+    }, [currCategoryFilters, currLocationFilters, currMonthFilters, currTypeFilters, currStatusFilters]);
+
+    const [searchValue, setSearchValue] = useState<string>('')
+
+    const applySearchFilter = (jobs:Job[]) => {
+        let filtered = jobs.filter((item) => item.Company.toLowerCase().includes(searchValue) || item.Title.toLowerCase().includes(searchValue));
+        setMyJobsFiltered(filtered);
+    }
+
+    useEffect(() => {
+        applySearchFilter(myJobs);
+    }, [searchValue]);
 
     const updateJobItem = (jobID:number, jobStatus:string) => {
-        const updatedJobs = myJobs.map(item => {
+        let updatedJobs = myInitialJobs.map(item => {
             if(item.JobID===jobID){
                 return{...item, Status:jobStatus};
             }
             return item;
         })
 
-        setMyJobs(updatedJobs);
         setMyInitialJobs(updatedJobs);
+        setMyJobs(updatedJobs);
+
+        updatedJobs = myJobsFiltered.map(item => {
+            if(item.JobID===jobID){
+                return{...item, Status:jobStatus};
+            }
+            return item;
+        })
+        setMyJobsFiltered(updatedJobs);
+
+        setModalOpen(false);
     }
 
     const createJobItem = (jobItem:Job) => {
-        setMyJobs(myJobs => [...myJobs, jobItem])
-        setMyInitialJobs(myJobs => [...myJobs, jobItem]);
+        setMyInitialJobs(myInitialJobs => [...myInitialJobs, jobItem]);
+        setMyJobs(myInitialJobs => [...myInitialJobs, jobItem]);
+        setMyJobsFiltered(myJobsFiltered => [...myJobsFiltered, jobItem]);
+        setModalCreateOpen(false);
     }
 
     const deleteJobItem = (jobId:number) => {
-        const updatedJobs = myJobs.filter(item => item.JobID !== jobId);
-        setMyJobs(updatedJobs);
-        setMyInitialJobs(updatedJobs);
+        setMyInitialJobs(myInitialJobs.filter(item => item.JobID !== jobId));
+        setMyJobs(myInitialJobs.filter(item => item.JobID !== jobId));
+        setMyJobsFiltered(myJobsFiltered.filter(item => item.JobID !== jobId));
+        setModalDeleteOpen(false);
     }
 
     const jobsContainer = () => {
-        return myJobs.map((item) => (
+        return myJobsFiltered.map((item) => (
             <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
                 <div>
                     <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
@@ -187,7 +204,7 @@ const Jobs = () => {
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
-                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={deleteJobItem} jobId={item.JobID}/>
+                    <JobItemButton id={`delete${item.JobID}`} title='Delete' onClickFunction={handleDeleteClick} jobId={item.JobID}/>
                 </div>
             </div>
         ))
@@ -195,11 +212,19 @@ const Jobs = () => {
 
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
     const [isModalCreateOpen, setModalCreateOpen] = useState<boolean>(false)
+    const [isModalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false)
 
     const handleUpdateClick = (jobItem:any) => {
         setJobSelected(jobItem)
         setModalOpen(true)
     }
+
+    const [deleteIndex, setDeleteIndex] = useState<number>(0)
+
+    const handleDeleteClick = (index:number) => {
+        setDeleteIndex(index)
+        setModalDeleteOpen(true)
+    }    
 
     return (
         <div className={styles.jobsContainer}>
@@ -207,8 +232,13 @@ const Jobs = () => {
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 
-            <h2 className={styles.legendTitle}>Legend</h2>
-            <div className={styles.legendContainer}>{legendItems()}</div>
+            <div className={styles.jobsMenu}>
+                <div>
+                    <h2 className={styles.legendTitle}>Legend</h2>
+                    <div className={styles.legendContainer}>{legendItems()}</div>
+                </div>
+                <SearchBar valueFunction={setSearchValue}/>
+            </div>
 
             <div className={styles.jobsGrid}>
                 {jobsContainer()}
@@ -219,6 +249,7 @@ const Jobs = () => {
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A' jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem}></ModalCreate>}
+            {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
         </div>
     )
 }

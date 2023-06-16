@@ -23,12 +23,12 @@
     font-weight: 500;
     font-size: 1.3vw;
     user-select: none;
+    display: flex;
+    justify-content: flex-end;
     align-items: center;
 }
 
 .desktopFilterIcon{
-    margin-left: 3px;
-    vertical-align: middle;
     user-select: none;
 }
 
@@ -233,6 +233,7 @@
     overflow: hidden;
     transform-origin: top;
     transition: max-height 1s ease;
+    width: 160px;
     margin-bottom: 4vw;
 }
 
