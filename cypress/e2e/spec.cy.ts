@@ -1,4 +1,4 @@
-describe('Performing CRUD operations with job applications', () => {
+describe('Creating job applications', () => {
     beforeEach(() => {
         cy.visit('/jobs')
     });
@@ -28,7 +28,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#titleError').should('be.visible').should('contain', 'Please enter a title');
+        // Look for error message
+        cy.get('#titleError').should('be.visible').should('contain', 'Please enter a valid title');
 
         cy.end();
     });
@@ -46,7 +47,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#dateError').should('be.visible').should('contain', 'Please choose a date');
+        // Look for error message
+        cy.get('#dateError').should('be.visible').should('contain', 'Please choose a valid date');
 
         cy.end();
     });
@@ -64,7 +66,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#categoryError').should('be.visible').should('contain', 'Please choose a category');
+        // Look for error message
+        cy.get('#categoryError').should('be.visible').should('contain', 'Please choose a valid category');
 
         cy.end();
     });
@@ -82,7 +85,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#companyError').should('be.visible').should('contain', 'Please enter a company');
+        // Look for error message
+        cy.get('#companyError').should('be.visible').should('contain', 'Please enter a valid company');
 
         cy.end();
     });
@@ -100,7 +104,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#locationError').should('be.visible').should('contain', 'Please enter a location');
+        // Look for error message
+        cy.get('#locationError').should('be.visible').should('contain', 'Please enter a valid location');
 
         cy.end();
     });
@@ -118,7 +123,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#statusError').should('be.visible').should('contain', 'Please choose a status');
+        // Look for error message
+        cy.get('#statusError').should('be.visible').should('contain', 'Please choose a valid status');
 
         cy.end();
     });
@@ -136,7 +142,8 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#typeError').should('be.visible').should('contain', 'Please choose a Job Type');
+        // Look for error message
+        cy.get('#typeError').should('be.visible').should('contain', 'Please choose a valid Job Type');
 
         cy.end();
     });
@@ -154,7 +161,74 @@ describe('Performing CRUD operations with job applications', () => {
         // Click submit button
         cy.get('#submitJobButton').click();
 
-        cy.get('#urlError').should('be.visible').should('contain', 'Please enter a URL');
+        // Look for error message
+        cy.get('#urlError').should('be.visible').should('contain', 'Please enter a valid URL');
+
+        cy.end();
+    });
+
+    it('should add a new job with an invalid url', () => {
+        // Open modal
+        cy.get('#newJobContainer').click()
+
+        newJob[7].value = 'invalidURL'
+
+        // Input values on all fields
+        newJob.forEach((input) => {
+            cy.get(`${input.id}`).type(input.value, { force: true });
+        });
+
+        // Click submit button
+        cy.get('#submitJobButton').click();
+
+        // Look for error message
+        cy.get('#urlError').should('be.visible').should('contain', 'Please enter a valid URL');
+
+        newJob[7].value = 'https://www.google.com/'
+
+        cy.end();
+    });
+
+    it('should add a new job with an invalid status', () => {
+        // Open modal
+        cy.get('#newJobContainer').click()
+
+        newJob[4].value = 'invalidStat'
+
+        // Input values on all fields
+        newJob.forEach((input) => {
+            cy.get(`${input.id}`).type(input.value, { force: true });
+        });
+
+        // Click submit button
+        cy.get('#submitJobButton').click();
+
+        // Look for error message
+        cy.get('#statusError').should('be.visible').should('contain', 'Please choose a valid status');
+
+        newJob[4].value = 'Sent'
+
+        cy.end();
+    });
+
+    it('should add a new job with an invalid date', () => {
+        // Open modal
+        cy.get('#newJobContainer').click()
+
+        newJob[0].value = '3333-02-02'
+
+        // Input values on all fields
+        newJob.forEach((input) => {
+            cy.get(`${input.id}`).type(input.value, { force: true });
+        });
+
+        // Click submit button
+        cy.get('#submitJobButton').click();
+
+        // Look for error message
+        cy.get('#dateError').should('be.visible').should('contain', 'Please choose a valid date');
+
+        newJob[0].value = '2023-06-06'
 
         cy.end();
     });
@@ -172,6 +246,12 @@ describe('Performing CRUD operations with job applications', () => {
         cy.get('#submitJobButton').click();
 
         cy.end();
+    });
+});
+
+describe('Updating a job item', () => {
+    beforeEach(() => {
+        cy.visit('/jobs')
     });
 
     it('should update job status', () => {
@@ -192,4 +272,4 @@ describe('Performing CRUD operations with job applications', () => {
 
         cy.end();
     });
-})
+});
