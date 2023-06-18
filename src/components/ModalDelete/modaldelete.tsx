@@ -34,7 +34,7 @@ const ModalDelete = (props:Props) => {
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <div className={styles.modalContainer}>
-                <h1 className={styles.modalTitle}>Delete {props.jobName}?</h1>
+                <h1 id='deleteTitle' className={styles.modalTitle}>Delete {props.jobName}?</h1>
                 <div className={styles.buttonsContainer}>
                     <div id='cancelDeleteButton' onClick={()=>props.closeFunction(false)} style={{marginBottom:'20px'}}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Cancel' titleColor='black'></FormButton></div>
                     <div id='confirmDeleteButton' onClick={()=>props.deleteFunction(props.jobId)} style={{marginBottom:'20px'}}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Delete' titleColor='black'></FormButton></div>

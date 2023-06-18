@@ -273,3 +273,41 @@ describe('Updating a job item', () => {
         cy.end();
     });
 });
+
+describe('Deleting a job item', () => {
+    beforeEach(() => {
+        cy.visit('/jobs')
+    });
+
+    it('should cancel deleting the first job', () => {
+        // Open modal
+        cy.get('#delete0').click()
+
+        // Check if correct job clicked
+        cy.get('#deleteTitle').should('be.visible').should('contain', 'Delete Junior Software Engineer');
+
+        // Click cancel button
+        cy.get('#cancelDeleteButton').click()
+
+        // Check if job still present
+        cy.get('#job0').should('be.visible');
+
+        cy.end();
+    });
+
+    it('should successfully delete the first job', () => {
+        // Open modal
+        cy.get('#delete0').click()
+
+        // Check if correct job clicked
+        cy.get('#deleteTitle').should('be.visible').should('contain', 'Delete Junior Software Engineer');
+
+        // Click cancel button
+        cy.get('#confirmDeleteButton').click()
+
+        // Check if job is deleted
+        cy.get('#job0').should('not.exist');
+
+        cy.end();
+    });
+});
