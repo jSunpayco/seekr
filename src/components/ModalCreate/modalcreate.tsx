@@ -121,14 +121,14 @@ const ModalCreate = (props:Props) => {
                     <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
                         {datalistOptions(options1, setCurrInput1, title1)}
                     </div>
-                    {errors.Category && <span className={styles.error}>Please choose a category</span>}
+                    {errors.Category && <span id='categoryError' className={styles.error}>Please choose a valid category</span>}
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='type' {...register('Type', { validate: validateType })} placeholder={title2.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Type?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
                         {datalistOptions(options2, setCurrInput2, title2)}
                     </div>
-                    {errors.Type && <span className={styles.error}>Please choose a Job Type</span>}
+                    {errors.Type && <span id='typeError' className={styles.error}>Please choose a valid Job Type</span>}
                 </div>
             </div>
         )
@@ -152,15 +152,15 @@ const ModalCreate = (props:Props) => {
         return (
             <div key={`dateAndDrop${title}`} className={styles.halfinputFieldsContainer}>
                 <div className={styles.halfInputField}>
-                    <input id='date' {...register('Date', { required: true })} type='date' max={new Date().toISOString().split('T')[0]} className={`${styles.fullInputField}`} style={dateInputStyling} onChange={(e)=>handleDateChange(e.target.value)}></input>
-                    {errors.Date && <span className={styles.error}>Please choose a date</span>}
+                    <input id='date' {...register('Date', { max: new Date().toISOString().split('T')[0], required: true})} type='date' max={new Date().toISOString().split('T')[0]} className={`${styles.fullInputField}`} style={dateInputStyling} onChange={(e)=>handleDateChange(e.target.value)}></input>
+                    {errors.Date && <span id='dateError' className={styles.error}>Please choose a valid date</span>}
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='status' {...register('Status', { validate: validateStatus })} placeholder={title.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
                         {datalistOptions(options, setCurrInput, title)}
                     </div>
-                    {errors.Status && <span className={styles.error}>Please choose a status</span>}
+                    {errors.Status && <span id='statusError' className={styles.error}>Please choose a valid status</span>}
                 </div>
             </div>
         )
@@ -171,11 +171,11 @@ const ModalCreate = (props:Props) => {
             <div key={`halfInputField${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <div className={styles.halfInputField}>
                     <input id='company' {...register('Company', { required: true })} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Company?'#d30000 solid 1px':'transparent'}} placeholder={title1.toUpperCase()} value={currInput1} onChange={(e)=>setCurrInput1(e.target.value)}></input>
-                    {errors.Company && <span className={styles.error}>Please enter a company</span>}
+                    {errors.Company && <span id='companyError' className={styles.error}>Please enter a valid company</span>}
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='location' {...register('Location', { required: true })} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Location?'#d30000 solid 1px':'transparent'}} placeholder={title2.toUpperCase()} value={currInput2} onChange={(e)=>setCurrInput2(e.target.value)}></input>
-                    {errors.Location && <span className={styles.error}>Please enter a location</span>}
+                    {errors.Location && <span id='locationError' className={styles.error}>Please enter a valid location</span>}
                 </div>
             </div>
         )
@@ -246,14 +246,14 @@ const ModalCreate = (props:Props) => {
                 <div className={styles.inputFieldsContainer}>
                     <div className={styles.singleInputContainer}>
                         <input id='title' {...register('Title', { required: true })} className={styles.fullInputField} placeholder='TITLE' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
-                        {errors.Title && <span className={styles.error} style={{marginLeft:'12%'}}>Please enter a title</span>}
+                        {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>}
                     </div>
                     {halfInputField('company', currentCompany, setCurrentCompany, 'location', currentLocation, setCurrentLocation)}
                     {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
                     {dateAndDrop('status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
                     <div className={styles.singleInputContainer}>
                         <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px', border:errors.URL?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
-                        {errors.URL && <span className={styles.error} style={{marginLeft:'12%'}}>Please enter a URL</span>}
+                        {errors.URL && <span id='urlError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid URL</span>}
                     </div>
                     
                 </div>
