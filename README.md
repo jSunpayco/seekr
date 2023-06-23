@@ -23,7 +23,7 @@ $ npm run dev
 Currently, the application's client side has not been connected to the server side. This means that features such as logging in/out, and managing job applications are only available locally, and will not save.
 
 ### Landing page
-![Landing](https://res.cloudinary.com/ddx0aorm7/image/upload/v1685695263/seekr_landing.png)
+![Landing](https://res.cloudinary.com/ddx0aorm7/image/upload/v1687496032/seekr_landing.png)
 This page contains the navigation bar where users will be able to filter what job items would be displayed.
 The page also includes a legend to indicate the status of the job applications.
 Job applications can also be deleted as well.
@@ -33,9 +33,9 @@ Job applications can also be deleted as well.
 This modal lets users update the status of the job application
 
 ### Create job
-![Create](https://res.cloudinary.com/ddx0aorm7/image/upload/v1685695263/seekr_create.png)
+![Create](https://res.cloudinary.com/ddx0aorm7/image/upload/v1687496032/seekr_create.png)
 This modal lets users create a new job application. Form validation is included.
 
 ### Mobile view
-![mobile](https://res.cloudinary.com/ddx0aorm7/image/upload/v1685695482/seekr_mobile.png)
-This web app is developed to be responsive in order to be accessed using various devices
+This web app is developed to have a responsive design in order for it to be accessible using various devices
+![mobile](https://res.cloudinary.com/ddx0aorm7/image/upload/v1687496032/seekr_mobile.png)
