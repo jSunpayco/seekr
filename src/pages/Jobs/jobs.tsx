@@ -253,7 +253,7 @@ const Jobs = () => {
                 </div>
             </div>
             
-            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A' jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={[...new Set(myInitialJobs.map(job => job.Status))]} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
         </div>
