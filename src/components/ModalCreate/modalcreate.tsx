@@ -7,6 +7,8 @@ import {useMediaQuery} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
+import { Job } from '../../interfaces/Job';
+
 
 type FormInputs = {
     Date: string;
@@ -18,26 +20,6 @@ type FormInputs = {
     Type: string;
     URL: string;
 };
-
-interface Statuses{
-    name: string,
-    date: string,
-    type: string
-}
-
-interface Job {
-    JobID: number;
-    Date: string;
-    Month: string;
-    Category: string;
-    Company: string;
-    Location: string;
-    Status: string;
-    Statuses: Statuses[];
-    Title: string;
-    Type: string;
-    URL: string;
-}
 
 interface Props {
     isOpen: boolean;

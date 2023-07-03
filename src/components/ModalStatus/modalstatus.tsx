@@ -2,23 +2,15 @@ import styles from './modalstatus.module.scss';
 import { BiChevronDown } from "react-icons/bi";
 import FormButton from '../FormButton/formbutton';
 
+import { Job } from '../../interfaces/Job';
+
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
 
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     currStatus: string;
-    jobInfo: {
-        JobID: number;
-        Date: string;
-        Category: string;
-        Company: string;
-        Location: string;
-        Status: string;
-        Title: string;
-        Type: string;
-        URL: string;
-    };
+    jobInfo: Job;
     updateJobsFunction:(jobID: number, jobStatus: string) => void;
 }
 

@@ -3,34 +3,17 @@ import Navigation from "../../components/Navigation/navigation";
 
 import { useState, useEffect } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import ModalDelete from '../../components/ModalDelete/modaldelete';
 import SearchBar from '../../components/SearchBar/searchbar';
 
+import { Job } from '../../interfaces/Job';
+
 const Jobs = () => {
-
-    interface Statuses{
-        name: string,
-        date: string,
-        type: string
-    }
-
-    interface Job {
-        JobID: number;
-        Date: string;
-        Month: string;
-        Category: string;
-        Company: string;
-        Location: string;
-        Status: string;
-        Statuses: Statuses[];
-        Title: string;
-        Type: string;
-        URL: string;
-    }
-
+    
     const statusLegend = ["In Progress", "Reject", "Offer"];
 
     const legendItems = () => {
