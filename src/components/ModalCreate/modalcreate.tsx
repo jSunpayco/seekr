@@ -37,6 +37,9 @@ interface Props {
     closeFunction: Dispatch<SetStateAction<boolean>>;
     currNumberOfJobs:number;
     createJobFunction:(jobItem: Job) => void;
+    categories: string[],
+    statuses: string[],
+    jobtypes: string[]
 }
 
 const ModalCreate = (props:Props) => {
@@ -81,13 +84,18 @@ const ModalCreate = (props:Props) => {
     const [isJobTypeFocused, setJobTypeFocused] = useState<boolean>(false)
     const [isCategoryFocused, setCategoryFocused] = useState<boolean>(false)
     
-    const jobTypes = ['full time', 'internship', 'temporary'];
+    const jobTypes = props.jobtypes;
     const [jobTypeSuggestions, setJobTypeSuggestions] = useState<string[]>(jobTypes);
-    const [currentJobType, setCurrentJobType] = useState<string>('')
+    const [currentJobType, setCurrentJobType] = useState<string>('');
 
-    const categories = ['swe', 'sdet', 'qa', 'support']
+    const categories = props.categories;
     const [categoriesSuggestions, setCategoriesSuggestions] = useState<string[]>(categories);
-    const [currentCategory, setCurrentCategory] = useState<string>('')
+    const [currentCategory, setCurrentCategory] = useState<string>('');
+
+    const [isStatusFocused, setStatusFocused] = useState<boolean>(false);
+    const statuses = ["sent", "assessment", "interviewing", "resume reject", "assessment reject", "interview reject", "verbal offer", "written offer"];
+    const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
+    const [currentStatus, setCurrentStatus] = useState<string>('');
 
     const handleDataListChange = (event: ChangeEvent<HTMLInputElement>, defaultOptions:string[], currentItemFunction:Dispatch<SetStateAction<string>>, optionsFunction:Dispatch<SetStateAction<string[]>>) => {
         currentItemFunction(event.target.value)
@@ -143,11 +151,6 @@ const ModalCreate = (props:Props) => {
         border:errors.Date?'#d30000 solid 1px':'transparent'
     }
 
-    const [isStatusFocused, setStatusFocused] = useState<boolean>(false)
-    const statuses = ["sent", "assessment", "interviewing", "resume reject", "assessment reject", "interview reject", "verbal offer", "written offer"];
-    const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
-    const [currentStatus, setCurrentStatus] = useState<string>('')
-
     const dateAndDrop = (title:string, isFocused:boolean, focusFunction:Dispatch<SetStateAction<boolean>>, currInput:string, setCurrInput:Dispatch<SetStateAction<string>>, defaultOptions:string[], options:string[], setOptions:Dispatch<SetStateAction<string[]>>) => {
         return (
             <div key={`dateAndDrop${title}`} className={styles.halfinputFieldsContainer}>
@@ -187,11 +190,11 @@ const ModalCreate = (props:Props) => {
     }
 
     const validateCategory = () => {
-        return categories.includes(currentCategory.toLowerCase())
+        return currentCategory.length > 0;
     };
 
     const validateType = () => {
-        return jobTypes.includes(currentJobType.toLowerCase())
+        return currentJobType.length > 0;
     };
 
     const validateStatus = () => {
@@ -255,7 +258,6 @@ const ModalCreate = (props:Props) => {
                         <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px', border:errors.URL?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
                         {errors.URL && <span id='urlError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid URL</span>}
                     </div>
-                    
                 </div>
                 
                 <div id='submitJobButton' onClick={handleSubmit(onSubmit)}>
