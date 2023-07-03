@@ -97,6 +97,13 @@ const ModalCreate = (props:Props) => {
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('');
 
+    function datalistHasMatches(suggestions:string[], userInput:string){
+        if(suggestions.filter((item) => item.toLowerCase().startsWith(userInput)).length > 0 || userInput === '')
+            return true
+        else
+            return false
+    }
+
     const handleDataListChange = (event: ChangeEvent<HTMLInputElement>, defaultOptions:string[], currentItemFunction:Dispatch<SetStateAction<string>>, optionsFunction:Dispatch<SetStateAction<string[]>>) => {
         currentItemFunction(event.target.value)
         if(event.target.value !== ''){
@@ -126,14 +133,14 @@ const ModalCreate = (props:Props) => {
             <div key={`halfDatalists${title1}${title2}`} className={styles.halfinputFieldsContainer}>
                 <div className={styles.halfInputField}>
                     <input id='category' {...register('Category', { validate: validateCategory })} placeholder={title1.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Category?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction1(true)} onBlur={()=>handleOptionsVisibility(focusFunction1)} value={currInput1} onChange={(e)=>handleDataListChange(e, defaultOptions1, setCurrInput1, setOptions1)}></input>
-                    <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1?'visible':'hidden')}}>
+                    <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isFocused1&&datalistHasMatches(options1, currInput1)?'visible':'hidden')}}>
                         {datalistOptions(options1, setCurrInput1, title1)}
                     </div>
                     {errors.Category && <span id='categoryError' className={styles.error}>Please choose a valid category</span>}
                 </div>
                 <div className={styles.halfInputField}>
                     <input id='type' {...register('Type', { validate: validateType })} placeholder={title2.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Type?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction2(true)} onBlur={()=>handleOptionsVisibility(focusFunction2)} value={currInput2} onChange={(e)=>handleDataListChange(e, defaultOptions2, setCurrInput2, setOptions2)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused2?'visible':'hidden')}}>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused2&&datalistHasMatches(options2, currInput2)?'visible':'hidden')}}>
                         {datalistOptions(options2, setCurrInput2, title2)}
                     </div>
                     {errors.Type && <span id='typeError' className={styles.error}>Please choose a valid Job Type</span>}
