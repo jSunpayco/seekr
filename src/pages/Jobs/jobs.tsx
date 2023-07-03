@@ -231,7 +231,19 @@ const Jobs = () => {
     const handleDeleteClick = (index:number) => {
         setDeleteIndex(index)
         setModalDeleteOpen(true)
-    }    
+    }
+    
+    const getStatuses = (): string[] => {
+        const statusList = new Set<string>();
+
+        myInitialJobs.forEach((job) => {
+            job.Statuses.forEach((status) => {
+                statusList.add(status.name)
+            })
+        })
+
+        return Array.from(statusList);
+    }
 
     return (
         <div className={styles.jobsContainer}>
@@ -254,8 +266,8 @@ const Jobs = () => {
                 </div>
             </div>
             
-            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(myInitialJobs.map(job => job.Status))]}></Modal>}
-            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={[...new Set(myInitialJobs.map(job => job.Status))]} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]}></Modal>}
+            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
         </div>
     )
