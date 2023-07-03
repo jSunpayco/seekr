@@ -11,6 +11,7 @@ import ModalDelete from '../../components/ModalDelete/modaldelete';
 import SearchBar from '../../components/SearchBar/searchbar';
 
 import { Job } from '../../interfaces/Job';
+import { Statuses } from '../../interfaces/Statuses';
 
 const Jobs = () => {
     
@@ -161,10 +162,10 @@ const Jobs = () => {
         applySearchFilter(myJobs);
     }, [searchValue]);
 
-    const updateJobItem = (jobID:number, jobStatus:string) => {
+    const updateJobItem = (jobID:number, jobStatus:Statuses[]) => {
         let updatedJobs = myInitialJobs.map(item => {
             if(item.JobID===jobID){
-                return{...item, Status:jobStatus};
+                return{...item, Statuses:jobStatus};
             }
             return item;
         })
@@ -174,7 +175,7 @@ const Jobs = () => {
 
         updatedJobs = myJobsFiltered.map(item => {
             if(item.JobID===jobID){
-                return{...item, Status:jobStatus};
+                return{...item, Statuses:jobStatus};
             }
             return item;
         })

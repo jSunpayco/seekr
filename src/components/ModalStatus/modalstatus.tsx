@@ -11,7 +11,7 @@ interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     jobInfo: Job;
-    updateJobsFunction:(jobID: number, jobStatus: string) => void;
+    updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
     statusSuggestions: string[];
 }
 
@@ -46,7 +46,10 @@ const ModalStatus = (props:Props) => {
             props.closeFunction(false)
     }
 
-    const [currStatus, setCurrStatus] = useState<Statuses>(props.jobInfo.Statuses[props.jobInfo.Statuses.length-1])
+    const currentDate = new Date();
+
+    const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
+        , date:`${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getFullYear())}`})
 
     const [progressChecked, setProgressChecked] = useState<boolean>(currStatus.type === 'In Progress')
 
@@ -75,7 +78,7 @@ const ModalStatus = (props:Props) => {
         }
     ]
 
-    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean) => {
+    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, statusName:string) => {
         if(radioState === false){
             for(let i = 0 ; i<3; i++){
                 if(optionMap[i].setChecked != radioButton){
@@ -83,6 +86,8 @@ const ModalStatus = (props:Props) => {
                 }
                 else{
                     optionMap[i].setChecked(true)
+                    let newStatus = {...currStatus,type:statusName}
+                    setCurrStatus(newStatus)
                 }
             }
         }
@@ -90,9 +95,9 @@ const ModalStatus = (props:Props) => {
 
     const optionItem = () => {
         return optionMap.map((item, index) =>(
-            <div className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked)}>
+            <div className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
                 <label key={`option${index}`} className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
-                    <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked)}/>
+                    <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked, item.name)}/>
                     <span className={styles.check}></span>
                 </label>
                 <p className={styles.statusTypeName}>{item.name}</p>
@@ -129,6 +134,11 @@ const ModalStatus = (props:Props) => {
         ))
     }
 
+    function updateStatus(){
+        if(currStatus.name !== '')
+            props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus])
+    }
+
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <div className={styles.modalContainer}>
@@ -148,7 +158,7 @@ const ModalStatus = (props:Props) => {
                     </div>
                 </div>
                 
-                <div id='updateStatusButton' style={{marginBottom:'10px'}}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={()=>updateStatus()}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )
