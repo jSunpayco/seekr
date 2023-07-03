@@ -148,7 +148,8 @@
 
 .singleInputContainer{
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    // align-items: center;
     margin-top: 20px;
     margin-bottom: 10px;
 }
@@ -163,6 +164,7 @@
     height: 54px;
     font-size:x-large;
     box-sizing: border-box;
+    margin: auto;
 
     &:focus{
         outline: none;
@@ -180,6 +182,7 @@
 
     position: absolute;
     margin-top: 55px;
+    margin-left: 10%;
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -202,4 +205,10 @@
         cursor: pointer;
         background-color: $gray;
     }
+}
+
+.error{
+    color: $dark-red;
+    margin-top: 10px;
+    margin-left: 12%;
 }

@@ -7,6 +7,12 @@ import { Statuses } from '../../interfaces/Statuses';
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
 import {useMediaQuery} from '@mui/material';
 
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type FormInputs = {
+    StatusName: string;
+};
+
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
@@ -45,6 +51,8 @@ const ModalStatus = (props:Props) => {
         if (event.target === event.currentTarget)
             props.closeFunction(false)
     }
+
+    const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
     const currentDate = new Date();
 
@@ -134,10 +142,12 @@ const ModalStatus = (props:Props) => {
         ))
     }
 
-    function updateStatus(){
-        if(currStatus.name !== '')
-            props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus])
+    const validateStatus = () =>{
+        return currStatus.name !== ''
     }
+
+    const onSubmit: SubmitHandler<FormInputs> = () => 
+        props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]);
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
@@ -151,14 +161,15 @@ const ModalStatus = (props:Props) => {
                     {optionItem()}
                 </div>
 
-                <div className={styles.singleInputContainer}>
-                    <input id='status' placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
+                <form className={styles.singleInputContainer}>
+                    <input id='status' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
                         {datalistOptions()}
                     </div>
-                </div>
+                    {errors.StatusName && <span id='statusNameError' className={styles.error}>Please enter a status name</span>}
+                </form>
                 
-                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={()=>updateStatus()}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )

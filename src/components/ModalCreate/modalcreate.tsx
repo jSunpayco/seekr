@@ -9,7 +9,6 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 import { Job } from '../../interfaces/Job';
 
-
 type FormInputs = {
     Date: string;
     Category: string;
