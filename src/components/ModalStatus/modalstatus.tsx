@@ -1,23 +1,34 @@
 import styles from './modalstatus.module.scss';
-import { BiChevronDown } from "react-icons/bi";
 import FormButton from '../FormButton/formbutton';
 
 import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
 
-import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
+import {useMediaQuery} from '@mui/material';
 
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     jobInfo: Job;
     updateJobsFunction:(jobID: number, jobStatus: string) => void;
+    statusSuggestions: string[];
 }
 
 const ModalStatus = (props:Props) => {
 
+    const isScreenSmall = useMediaQuery('(max-width: 560px)');
+
+    const inputReference = useRef<HTMLInputElement>(null);
+    const [inputWidth, setInputWidth] = useState<string | number>('auto');
+
     useEffect(() => {
-        const handleKeyDown = (event:KeyboardEvent) => {
+        if (inputReference.current) {
+            const width = inputReference.current.offsetWidth;
+            setInputWidth(width);
+        }
+          
+          const handleKeyDown = (event:KeyboardEvent) => {
           if (event.key === 'Escape') {
             props.closeFunction(false)
           }
@@ -37,11 +48,11 @@ const ModalStatus = (props:Props) => {
 
     const [currStatus, setCurrStatus] = useState<Statuses>(props.jobInfo.Statuses[props.jobInfo.Statuses.length-1])
 
-    const [progressChecked, setProgressChecked] = useState<boolean>(false)
+    const [progressChecked, setProgressChecked] = useState<boolean>(currStatus.type === 'In Progress')
 
-    const [rejectedChecked, setRejectedChecked] = useState<boolean>(false)
+    const [rejectedChecked, setRejectedChecked] = useState<boolean>(currStatus.type === 'Rejected')
 
-    const [offerChecked, setOfferChecked] = useState<boolean>(false)
+    const [offerChecked, setOfferChecked] = useState<boolean>(currStatus.type === 'Offer')
 
     const optionMap = [
         {
@@ -84,8 +95,37 @@ const ModalStatus = (props:Props) => {
                     <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked)}/>
                     <span className={styles.check}></span>
                 </label>
-                <p style={{margin: 'auto'}}>{item.name}</p>
+                <p className={styles.statusTypeName}>{item.name}</p>
             </div>
+        ))
+    }
+
+    const [isFocused, setFocused] = useState<boolean>(false);
+    const [displayedSuggestions, setDisplayedSuggestions] = useState<string[]>(props.statusSuggestions)
+
+    const handleOptionsVisibility = () => {
+        setTimeout(() => {
+            setFocused(false);
+        }, 100);
+    }
+
+    const handleDataListChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let newStatus = {...currStatus,name:event.target.value}
+        setCurrStatus(newStatus)
+
+        if(event.target.value !== ''){
+            let input = event.target.value;
+
+            let newSuggestions = displayedSuggestions.filter((item) => item.toLowerCase().startsWith(input.toLowerCase()))
+            setDisplayedSuggestions(newSuggestions)
+        }
+        else
+            setDisplayedSuggestions(displayedSuggestions)
+    }
+
+    const datalistOptions = () => {
+        return displayedSuggestions.map((item, index) => (
+            <p key={`datalistOptions${index}`} className={styles.datalistOption} onClick={()=>setCurrStatus({...currStatus,name:item})}>{item}</p>
         ))
     }
 
@@ -100,8 +140,15 @@ const ModalStatus = (props:Props) => {
                 <div className={styles.optionsGrid}>
                     {optionItem()}
                 </div>
+
+                <div className={styles.singleInputContainer}>
+                    <input id='status' placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
+                        {datalistOptions()}
+                    </div>
+                </div>
                 
-                <div id='updateStatusButton'><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' style={{marginBottom:'10px'}}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )

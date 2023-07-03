@@ -10,13 +10,13 @@
 }
 
 .modalContainer{
-    background-color: white;
+    background-color: $gray;
     border-radius: 20px;
     border: solid black;
     border-width: 1px;
-    min-height: 400px;
+    min-height: 320px;
     height: auto;
-    max-width: 550px;
+    max-width: 700px;
     width: 90%;
     position: fixed;
     top: 50%;
@@ -58,8 +58,13 @@
     width: 90%;
     position: relative;
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
     margin: auto;
+
+    @media (max-width: 470px) {
+        flex-direction: column;
+    }
 }
 
 .optionContainer{
@@ -133,5 +138,68 @@
     border-radius: 50%;
     &:hover{
         cursor: pointer;
+    }
+}
+
+.statusTypeName{
+    margin: auto;
+    user-select: none;
+}
+
+.singleInputContainer{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.fullInputField{
+    width: 80%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    height: 38px;
+    padding-left: 15px;
+    height: 54px;
+    font-size:x-large;
+    box-sizing: border-box;
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.datalistContainer{
+    height: auto;
+    max-height: 200px;
+    background-color: white;
+    border-radius: 20px;
+    border: solid rgba(0, 0, 0, 0.3) 1px;
+    z-index: 100;
+    width: 45%;
+
+    position: absolute;
+    margin-top: 55px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+}
+
+.datalistContainer::-webkit-scrollbar {
+    width: 0;
+}
+
+.datalistOption{
+    margin: 0;
+    padding: 10px;
+    margin-left: 5%;
+    margin-right: 5%;
+    border-radius: 10px;
+    &:hover{
+        cursor: pointer;
+        background-color: $gray;
     }
 }
