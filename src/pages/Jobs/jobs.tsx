@@ -46,18 +46,36 @@ const Jobs = () => {
             Company:"Sample Company",
             Location:"City, State",
             Status:"Sent",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent'
+                }
+            ],
             Title:"Junior Software Engineer",
             Type:"Full Time",
             URL:"https://www.google.com/"
         },
         {
             JobID:1,
-            Date:"03/25/2023",
+            Date:"03/05/2023",
             Month:"March",
             Category:"Intern",
             Company:"Samples Companies",
             Location:"Quezon City, MetroMetroMetro",
             Status:"Resume Reject",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '03/05/2023'
+                },
+                {
+                    type: 'Rejected',
+                    name: 'Resume Reject',
+                    date: '03/25/2023'
+                }
+            ],
             Title:"Another Samples Jobs Titles",
             Type:"Full Time",
             URL:"https://www.google.com/"
