@@ -122,6 +122,13 @@ const ModalStatus = (props:Props) => {
         }, 100);
     }
 
+    function datalistHasMatches(){
+        if(displayedSuggestions.filter((item) => item.toLowerCase().startsWith(currStatus.name)).length > 0 || currStatus.name === '')
+            return true
+        else
+            return false
+    }
+
     const handleDataListChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         let newStatus = {...currStatus,name:event.target.value}
         setCurrStatus(newStatus)
@@ -163,7 +170,7 @@ const ModalStatus = (props:Props) => {
 
                 <form className={styles.singleInputContainer}>
                     <input id='status' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused&&datalistHasMatches()?'visible':'hidden')}}>
                         {datalistOptions()}
                     </div>
                     {errors.StatusName && <span id='statusNameError' className={styles.error}>Please enter a status name</span>}
