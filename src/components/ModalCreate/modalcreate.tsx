@@ -19,6 +19,12 @@ type FormInputs = {
     URL: string;
 };
 
+interface Statuses{
+    name: string,
+    date: string,
+    type: string
+}
+
 interface Job {
     JobID: number;
     Date: string;
@@ -27,6 +33,7 @@ interface Job {
     Company: string;
     Location: string;
     Status: string;
+    Statuses: Statuses[];
     Title: string;
     Type: string;
     URL: string;
@@ -237,6 +244,13 @@ const ModalCreate = (props:Props) => {
             Company: currentCompany,
             Location: currentLocation,
             Status: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '04/25/2023'
+                }
+            ],
             Title: currentTitle,
             Type: currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             URL: currentUrl

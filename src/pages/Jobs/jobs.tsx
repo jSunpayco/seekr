@@ -11,6 +11,12 @@ import SearchBar from '../../components/SearchBar/searchbar';
 
 const Jobs = () => {
 
+    interface Statuses{
+        name: string,
+        date: string,
+        type: string
+    }
+
     interface Job {
         JobID: number;
         Date: string;
@@ -19,15 +25,13 @@ const Jobs = () => {
         Company: string;
         Location: string;
         Status: string;
+        Statuses: Statuses[];
         Title: string;
         Type: string;
         URL: string;
     }
 
-    const statusLegend = ["In Progress", "Reject", "Offer"]
-    const progressList = ['Sent', 'Assessment', 'Interviewing']
-    const rejectedList = ['Resume Reject', 'Assessment Reject', 'Interview Reject']
-    const offerList = ['Verbal Offer', 'Written Offer']
+    const statusLegend = ["In Progress", "Reject", "Offer"];
 
     const legendItems = () => {
         return statusLegend.map((item, index) => (
@@ -49,7 +53,8 @@ const Jobs = () => {
             Statuses:[
                 {
                     type: 'In Progress',
-                    name: 'Sent'
+                    name: 'Sent',
+                    date: '04/25/2023'
                 }
             ],
             Title:"Junior Software Engineer",
@@ -148,7 +153,7 @@ const Jobs = () => {
             if (currTypeFilters.length > 0 && !currTypeFilters.includes(item.Type))
               return false;
         
-            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Status))
+            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Statuses[item.Statuses.length].name))
               return false;
         
             return true;
@@ -213,12 +218,12 @@ const Jobs = () => {
         return myJobsFiltered.map((item) => (
             <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
                 <div>
-                    <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
+                    <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (item.Statuses[item.Statuses.length-1].type === 'Offer'?styles.legendColorOffer:item.Statuses[item.Statuses.length-1].type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
                     <ReactTooltip id="status-tip" />
                     <p className={styles.jobInfo}>{item.Company}</p>
                     <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
                     <p className={styles.jobInfo}>{item.Date}</p>
-                    <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Status}</p>
+                    <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Statuses[item.Statuses.length-1].name}</p>
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
