@@ -217,7 +217,6 @@ const ModalCreate = (props:Props) => {
             Category: currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             Company: currentCompany,
             Location: currentLocation,
-            Status: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             Statuses:[
                 {
                     type: currentStatusType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),

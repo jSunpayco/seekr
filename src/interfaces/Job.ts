@@ -7,7 +7,6 @@ export interface Job {
     Category: string;
     Company: string;
     Location: string;
-    Status: string;
     Statuses: Statuses[];
     Title: string;
     Type: string;

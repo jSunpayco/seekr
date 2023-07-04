@@ -33,7 +33,6 @@ const Jobs = () => {
             Category:"SWE",
             Company:"Sample Company",
             Location:"City, State",
-            Status:"Sent",
             Statuses:[
                 {
                     type: 'In Progress',
@@ -52,7 +51,6 @@ const Jobs = () => {
             Category:"Intern",
             Company:"Samples Companies",
             Location:"Quezon City, MetroMetroMetro",
-            Status:"Resume Reject",
             Statuses:[
                 {
                     type: 'In Progress',
