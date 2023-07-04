@@ -154,7 +154,7 @@ const ModalStatus = (props:Props) => {
     }
 
     const onSubmit: SubmitHandler<FormInputs> = () => 
-        props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]);
+        props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
