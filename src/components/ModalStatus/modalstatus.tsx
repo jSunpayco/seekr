@@ -140,7 +140,7 @@ const ModalStatus = (props:Props) => {
             setDisplayedSuggestions(newSuggestions)
         }
         else
-            setDisplayedSuggestions(displayedSuggestions)
+            setDisplayedSuggestions(props.statusSuggestions)
     }
 
     const datalistOptions = () => {
