@@ -83,7 +83,7 @@ const ModalCreate = (props:Props) => {
     const [currentCategory, setCurrentCategory] = useState<string>('');
 
     const [isStatusFocused, setStatusFocused] = useState<boolean>(false);
-    const statuses = ["sent", "assessment", "interviewing", "resume reject", "assessment reject", "interview reject", "verbal offer", "written offer"];
+    const statuses = props.statuses;
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('');
 
@@ -272,8 +272,8 @@ const ModalCreate = (props:Props) => {
                             {errors.StatusType && <span id='urlError' className={styles.error}>Please choose a status type</span>}
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, statusSuggestions, setCurrentStatus, setStatusSuggestions)}></input>
-                            <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusFocused?'visible':'hidden')}}>
+                            <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, props.statuses, setCurrentStatus, setStatusSuggestions)}></input>
+                            <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusFocused&&datalistHasMatches(statusSuggestions, currentStatus)?'visible':'hidden')}}>
                                 {datalistOptions(statusSuggestions, setCurrentStatus, 'status')}
                             </div>
                             {errors.Status && <span id='statusError' className={styles.error}>Please choose a valid status</span>}
