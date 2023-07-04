@@ -1,9 +1,10 @@
 import styles from './modalcreate.module.scss';
 import FormButton from '../FormButton/formbutton';
+import { BiChevronDown } from "react-icons/bi";
 
 import { Dispatch, SetStateAction, useState, useRef, useEffect, ChangeEvent } from 'react';
 
-import {useMediaQuery} from '@mui/material';
+import {useMediaQuery, ClickAwayListener} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -15,6 +16,7 @@ type FormInputs = {
     Company: string;
     Location: string;
     Status: string;
+    StatusType:string;
     Title: string;
     Type: string;
     URL: string;
@@ -85,6 +87,10 @@ const ModalCreate = (props:Props) => {
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('');
 
+    const statusTypes = ["In Progress", "Rejected", "Offer"];
+    const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE');
+    const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
+
     function datalistHasMatches(suggestions:string[], userInput:string){
         if(suggestions.filter((item) => item.toLowerCase().startsWith(userInput)).length > 0 || userInput === '')
             return true
@@ -146,24 +152,6 @@ const ModalCreate = (props:Props) => {
         border:errors.Date?'#d30000 solid 1px':'transparent'
     }
 
-    const dateAndDrop = (title:string, isFocused:boolean, focusFunction:Dispatch<SetStateAction<boolean>>, currInput:string, setCurrInput:Dispatch<SetStateAction<string>>, defaultOptions:string[], options:string[], setOptions:Dispatch<SetStateAction<string[]>>) => {
-        return (
-            <div key={`dateAndDrop${title}`} className={styles.halfinputFieldsContainer}>
-                <div className={styles.halfInputField}>
-                    <input id='date' {...register('Date', { max: new Date().toISOString().split('T')[0], required: true})} type='date' max={new Date().toISOString().split('T')[0]} className={`${styles.fullInputField}`} style={dateInputStyling} onChange={(e)=>handleDateChange(e.target.value)}></input>
-                    {errors.Date && <span id='dateError' className={styles.error}>Please choose a valid date</span>}
-                </div>
-                <div className={styles.halfInputField}>
-                    <input id='status' {...register('Status', { validate: validateStatus })} placeholder={title.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>focusFunction(true)} onBlur={()=>handleOptionsVisibility(focusFunction)} value={currInput} onChange={(e)=>handleDataListChange(e, defaultOptions, setCurrInput, setOptions)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused?'visible':'hidden')}}>
-                        {datalistOptions(options, setCurrInput, title)}
-                    </div>
-                    {errors.Status && <span id='statusError' className={styles.error}>Please choose a valid status</span>}
-                </div>
-            </div>
-        )
-    }
-
     const halfInputField = (title1:string, currInput1:string, setCurrInput1:Dispatch<SetStateAction<string>>, title2:string, currInput2:string, setCurrInput2:Dispatch<SetStateAction<string>>) => {
         return (
             <div key={`halfInputField${title1}${title2}`} className={styles.halfinputFieldsContainer}>
@@ -194,6 +182,11 @@ const ModalCreate = (props:Props) => {
 
     const validateStatus = () => {
         return statuses.includes(currentStatus.toLowerCase())
+    };
+
+    const validateStatusType = () => {
+        console.log(currentStatusType === 'status type'.toUpperCase())
+        return currentStatusType !== 'status type'.toUpperCase();
     };
 
     const validateUrl = (value:string) => {
@@ -227,8 +220,8 @@ const ModalCreate = (props:Props) => {
             Status: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
             Statuses:[
                 {
-                    type: 'In Progress',
-                    name: 'Sent',
+                    type: currentStatusType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                    name: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
                     date: '04/25/2023'
                 }
             ],
@@ -255,10 +248,37 @@ const ModalCreate = (props:Props) => {
                     </div>
                     {halfInputField('company', currentCompany, setCurrentCompany, 'location', currentLocation, setCurrentLocation)}
                     {halfDatalists('category', isCategoryFocused, setCategoryFocused, currentCategory, setCurrentCategory, categories, categoriesSuggestions, setCategoriesSuggestions, 'Job type', isJobTypeFocused, setJobTypeFocused, currentJobType, setCurrentJobType, jobTypes, jobTypeSuggestions, setJobTypeSuggestions)}
-                    {dateAndDrop('status', isStatusFocused, setStatusFocused, currentStatus, setCurrentStatus, statuses, statusSuggestions, setStatusSuggestions)}
-                    <div className={styles.singleInputContainer}>
-                        <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{margin:'auto', marginTop:'20px', border:errors.URL?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
-                        {errors.URL && <span id='urlError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid URL</span>}
+                    
+                    <div className={styles.halfinputFieldsContainer}>
+                        <div className={styles.halfInputField}>
+                            <input id='date' {...register('Date', { max: new Date().toISOString().split('T')[0], required: true})} type='date' max={new Date().toISOString().split('T')[0]} className={`${styles.fullInputField}`} style={dateInputStyling} onChange={(e)=>handleDateChange(e.target.value)}></input>
+                            {errors.Date && <span id='dateError' className={styles.error}>Please choose a valid date</span>}
+                        </div>
+                        <div className={styles.halfInputField}>
+                            <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
+                            {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>}
+                        </div>
+                    </div>
+
+                    <div className={styles.halfinputFieldsContainer}>
+                        <div className={styles.halfInputField} onClick={()=>setStatusTypeClicked(!isStatusTypeClicked)}>
+                            <ClickAwayListener onClickAway={()=>setStatusTypeClicked(false)}>
+                                <p id='statusType' {...register('StatusType', { validate: validateStatusType })} className={`${styles.fullInputField} ${styles.dropdownField}`} style={{width:'100%', border:errors.StatusType?'#d30000 solid 1px':'transparent'}}>
+                                    {currentStatusType}{<BiChevronDown style ={{transform:isStatusTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
+                                </p>
+                            </ClickAwayListener>
+                            <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusTypeClicked?'visible':'hidden')}}>
+                                {datalistOptions(statusTypes, setCurrentStatusType, 'statustype')}
+                            </div>
+                            {errors.StatusType && <span id='urlError' className={styles.error}>Please choose a status type</span>}
+                        </div>
+                        <div className={styles.halfInputField}>
+                            <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, statusSuggestions, setCurrentStatus, setStatusSuggestions)}></input>
+                            <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusFocused?'visible':'hidden')}}>
+                                {datalistOptions(statusSuggestions, setCurrentStatus, 'status')}
+                            </div>
+                            {errors.Status && <span id='statusError' className={styles.error}>Please choose a valid status</span>}
+                        </div>
                     </div>
                 </div>
                 
