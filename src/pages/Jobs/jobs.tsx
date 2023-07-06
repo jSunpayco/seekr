@@ -3,31 +3,19 @@ import Navigation from "../../components/Navigation/navigation";
 
 import { useState, useEffect } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import ModalDelete from '../../components/ModalDelete/modaldelete';
 import SearchBar from '../../components/SearchBar/searchbar';
 
+import { Job } from '../../interfaces/Job';
+import { Statuses } from '../../interfaces/Statuses';
+
 const Jobs = () => {
-
-    interface Job {
-        JobID: number;
-        Date: string;
-        Month: string;
-        Category: string;
-        Company: string;
-        Location: string;
-        Status: string;
-        Title: string;
-        Type: string;
-        URL: string;
-    }
-
-    const statusLegend = ["In Progress", "Reject", "Offer"]
-    const progressList = ['Sent', 'Assessment', 'Interviewing']
-    const rejectedList = ['Resume Reject', 'Assessment Reject', 'Interview Reject']
-    const offerList = ['Verbal Offer', 'Written Offer']
+    
+    const statusLegend = ["In Progress", "Rejected", "Offer"];
 
     const legendItems = () => {
         return statusLegend.map((item, index) => (
@@ -45,19 +33,36 @@ const Jobs = () => {
             Category:"SWE",
             Company:"Sample Company",
             Location:"City, State",
-            Status:"Sent",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '04/25/2023'
+                }
+            ],
             Title:"Junior Software Engineer",
             Type:"Full Time",
             URL:"https://www.google.com/"
         },
         {
             JobID:1,
-            Date:"03/25/2023",
+            Date:"03/05/2023",
             Month:"March",
             Category:"Intern",
             Company:"Samples Companies",
             Location:"Quezon City, MetroMetroMetro",
-            Status:"Resume Reject",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '03/05/2023'
+                },
+                {
+                    type: 'Rejected',
+                    name: 'Resume Reject',
+                    date: '03/25/2023'
+                }
+            ],
             Title:"Another Samples Jobs Titles",
             Type:"Full Time",
             URL:"https://www.google.com/"
@@ -130,7 +135,7 @@ const Jobs = () => {
             if (currTypeFilters.length > 0 && !currTypeFilters.includes(item.Type))
               return false;
         
-            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Status))
+            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Statuses[item.Statuses.length].name))
               return false;
         
             return true;
@@ -155,10 +160,10 @@ const Jobs = () => {
         applySearchFilter(myJobs);
     }, [searchValue]);
 
-    const updateJobItem = (jobID:number, jobStatus:string) => {
+    const updateJobItem = (jobID:number, jobStatus:Statuses[]) => {
         let updatedJobs = myInitialJobs.map(item => {
             if(item.JobID===jobID){
-                return{...item, Status:jobStatus};
+                return{...item, Statuses:jobStatus};
             }
             return item;
         })
@@ -168,7 +173,7 @@ const Jobs = () => {
 
         updatedJobs = myJobsFiltered.map(item => {
             if(item.JobID===jobID){
-                return{...item, Status:jobStatus};
+                return{...item, Statuses:jobStatus};
             }
             return item;
         })
@@ -195,12 +200,12 @@ const Jobs = () => {
         return myJobsFiltered.map((item) => (
             <div key={`job${item.JobID}`} id={`job${item.JobID}`} className={styles.jobContainer}>
                 <div>
-                    <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (offerList.includes(item.Status)?styles.legendColorOffer:rejectedList.includes(item.Status)?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
+                    <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (item.Statuses[item.Statuses.length-1].type === 'Offer'?styles.legendColorOffer:item.Statuses[item.Statuses.length-1].type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
                     <ReactTooltip id="status-tip" />
                     <p className={styles.jobInfo}>{item.Company}</p>
                     <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
                     <p className={styles.jobInfo}>{item.Date}</p>
-                    <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Status}</p>
+                    <p className={styles.jobInfo} style={{marginBottom:'7px'}} id={`job${item.JobID}statusName`}>{item.Statuses[item.Statuses.length-1].name}</p>
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>
@@ -224,7 +229,19 @@ const Jobs = () => {
     const handleDeleteClick = (index:number) => {
         setDeleteIndex(index)
         setModalDeleteOpen(true)
-    }    
+    }
+    
+    const getStatuses = (): string[] => {
+        const statusList = new Set<string>();
+
+        myInitialJobs.forEach((job) => {
+            job.Statuses.forEach((status) => {
+                statusList.add(status.name)
+            })
+        })
+
+        return Array.from(statusList);
+    }
 
     return (
         <div className={styles.jobsContainer}>
@@ -247,8 +264,8 @@ const Jobs = () => {
                 </div>
             </div>
             
-            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} currStatus='A' jobInfo={jobSelected} updateJobsFunction={updateJobItem}></Modal>}
-            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem}></ModalCreate>}
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]}></Modal>}
+            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
         </div>
     )

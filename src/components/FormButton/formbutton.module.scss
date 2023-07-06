@@ -1,3 +1,5 @@
+@import 'src/styles/variables';
+
 .container{
     position: relative;
     width: 10vw;
@@ -58,7 +60,7 @@
 
 .greyContainer{
     &::before{
-        background-color: #D9D9D9;
+        background-color: $gray;
     }
     &:hover .buttonText{
         color: black;

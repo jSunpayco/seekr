@@ -1,3 +1,5 @@
+@import 'src/styles/variables';
+
 .fieldContainer{
     display: block;
     width: 80%;
@@ -23,7 +25,7 @@
     width: 90%;
     border-radius: 15px;
     border: none;
-    background-color: #D9D9D9;
+    background-color: $gray;
     font-family: Lato, Arial, sans-serif;
 }
 

@@ -1,3 +1,5 @@
+@import 'src/styles/variables';
+
 .loginContainer{
     display: flex;
     justify-content: center;
@@ -19,7 +21,7 @@
 }
 
 .loginFormContainer{
-    background-color: #2E2E2C;
+    background-color: $light-black;
     border-radius: 10px;
     box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.5);
     height: 90%;

@@ -1,22 +1,13 @@
 import styles from './jobitembutton.module.scss';
 import { BiSync, BiTrash } from "react-icons/bi";
 import { useState } from 'react';
+import { Job } from '../../interfaces/Job';
 
 interface Props {
     title: string;
     id:string;
     onClickFunction:any;
-    jobInfo?: {
-        JobID: number;
-        Date: string;
-        Category: string;
-        Company: string;
-        Location: string;
-        Status: string;
-        Title: string;
-        Type: string;
-        URL: string;
-    }
+    jobInfo?: Job;
     jobId?:number;
 }
 

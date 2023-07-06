@@ -1,3 +1,5 @@
+@import 'src/styles/variables';
+
 .statusButton{
     background-color: transparent;
     height: fit-content;
@@ -6,7 +8,7 @@
     padding: 8px 0px;
     border-radius: 20px;
     cursor: pointer;
-    border: #2E2E2C solid;
+    border: $light-black solid;
     border-width: 2px;
     transition: color 0.4s ease, background-color 0.4s ease;
     text-decoration: none;
@@ -17,7 +19,7 @@
     justify-content: center;
 
     &:hover{
-        background-color: #2E2E2C;
+        background-color: $light-black;
         color: white;
         transition: all 0.4s ease;
     }
