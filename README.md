@@ -28,13 +28,13 @@ This page contains the navigation bar where users will be able to filter what jo
 The page also includes a legend to indicate the status of the job applications.
 Job applications can also be deleted as well.
 
-### Update status
-![update](https://res.cloudinary.com/ddx0aorm7/image/upload/v1685695263/seekr_update.png)
-This modal lets users update the status of the job application
-
 ### Create job
-![Create](https://res.cloudinary.com/ddx0aorm7/image/upload/v1687496032/seekr_create.png)
+![Create](https://res.cloudinary.com/ddx0aorm7/image/upload/v1688628315/seekr_create.png)
 This modal lets users create a new job application. Form validation is included.
+
+### Update status
+![update](https://res.cloudinary.com/ddx0aorm7/image/upload/v1688628316/seekr_update.png)
+This modal lets users update the status of the job application including the type of the status, and its name. This will be stored in chronological order.
 
 ### Mobile view
 This web app is developed to have a responsive design in order for it to be accessible using various devices
