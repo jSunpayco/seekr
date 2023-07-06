@@ -253,21 +253,40 @@ describe('Updating a job item', () => {
         cy.visit('/jobs')
     });
 
+    it('should leave status name empty', () => {
+        // Open modal
+        cy.get('#update0').click()
+
+        // Click Rejected status radio option
+        cy.get('#statusOption1').click()
+
+        // Change status name to resume reject
+        cy.get('#statusNameField').clear().blur();
+
+        // Click update button
+        cy.get('#updateStatusButton').click()
+
+        // Look for status name
+        cy.get('#statusNameError').should('be.visible').should('have.text', 'Please enter a status name');
+
+        cy.end();
+    });
+
     it('should update job status', () => {
         // Open modal
         cy.get('#update0').click()
 
-        // Click status option
-        cy.get('#radioOption2').click()
+        // Click Rejected status radio option
+        cy.get('#statusOption1').click()
 
-        // Open options
-        cy.get('#datalistContainer2').click()
-
-        // Click option
-        cy.get('#statusOption20').click()
+        // Change status name to resume reject
+        cy.get('#statusNameField').clear().type('Resume Reject', { force: true });
 
         // Click update button
         cy.get('#updateStatusButton').click()
+
+        // Look for status name
+        cy.get('#job0statusName').should('be.visible').should('have.text', 'Resume Reject');
 
         cy.end();
     });

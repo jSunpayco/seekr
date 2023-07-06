@@ -205,7 +205,7 @@ const Jobs = () => {
                     <p className={styles.jobInfo}>{item.Company}</p>
                     <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
                     <p className={styles.jobInfo}>{item.Date}</p>
-                    <p className={styles.jobInfo} style={{marginBottom:'7px'}}>{item.Statuses[item.Statuses.length-1].name}</p>
+                    <p className={styles.jobInfo} style={{marginBottom:'7px'}} id={`job${item.JobID}statusName`}>{item.Statuses[item.Statuses.length-1].name}</p>
                 </div>
                 <div className={styles.buttonContainer}>
                     <JobItemButton id={`update${item.JobID}`} title='Update' onClickFunction={handleUpdateClick} jobInfo={item}/>

@@ -103,7 +103,7 @@ const ModalStatus = (props:Props) => {
 
     const optionItem = () => {
         return optionMap.map((item, index) =>(
-            <div className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
+            <div id={`statusOption${index}`} className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
                 <label key={`option${index}`} className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
                     <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked, item.name)}/>
                     <span className={styles.check}></span>
@@ -169,7 +169,7 @@ const ModalStatus = (props:Props) => {
                 </div>
 
                 <form className={styles.singleInputContainer}>
-                    <input id='status' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
+                    <input id='statusNameField' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
                     <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused&&datalistHasMatches()?'visible':'hidden')}}>
                         {datalistOptions()}
                     </div>
