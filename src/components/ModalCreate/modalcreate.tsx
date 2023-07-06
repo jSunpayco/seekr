@@ -118,7 +118,7 @@ const ModalCreate = (props:Props) => {
 
     const datalistOptions = (options:string[], currentFunction:Dispatch<SetStateAction<string>>, title:string) => {
         return options.map((item, index) => (
-            <p key={`datalistOptions${title}${index}`} className={styles.datalistOption} onClick={()=>currentFunction(item.toUpperCase())}>{item.toUpperCase()}</p>
+            <p key={`datalistOptions${title}${index}`} id={`datalistOptions${title}${index}`} className={styles.datalistOption} onClick={()=>currentFunction(item.toUpperCase())}>{item.toUpperCase()}</p>
         ))
     }
 
@@ -259,14 +259,14 @@ const ModalCreate = (props:Props) => {
                             <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusTypeClicked?'visible':'hidden')}}>
                                 {datalistOptions(statusTypes, setCurrentStatusType, 'statustype')}
                             </div>
-                            {errors.StatusType && <span id='urlError' className={styles.error}>Please choose a status type</span>}
+                            {errors.StatusType && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>}
                         </div>
                         <div className={styles.halfInputField}>
                             <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, props.statuses, setCurrentStatus, setStatusSuggestions)}></input>
                             <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusFocused&&datalistHasMatches(statusSuggestions, currentStatus)?'visible':'hidden')}}>
                                 {datalistOptions(statusSuggestions, setCurrentStatus, 'status')}
                             </div>
-                            {errors.Status && <span id='statusError' className={styles.error}>Please choose a valid status</span>}
+                            {errors.Status && <span id='statusError' className={styles.error}>Please enter a valid status</span>}
                         </div>
                     </div>
                 </div>
