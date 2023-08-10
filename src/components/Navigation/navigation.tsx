@@ -5,18 +5,7 @@ import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
 import { useState } from 'react';
 
-interface Job {
-    JobID: number;
-    Date: string;
-    Month: string;
-    Category: string;
-    Company: string;
-    Location: string;
-    Status: string;
-    Title: string;
-    Type: string;
-    URL: string;
-}
+import { Job } from '../../interfaces/Job';
 
 interface Props {
     data: Job[];

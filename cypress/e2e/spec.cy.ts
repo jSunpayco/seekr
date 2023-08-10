@@ -1,6 +1,7 @@
 describe('Creating job applications', () => {
     beforeEach(() => {
         cy.visit('/jobs')
+        cy.get('#newJobContainer').click()
     });
 
     // Details for new job item
@@ -15,15 +16,20 @@ describe('Creating job applications', () => {
         { id: '#url', value: 'https://www.google.com/' }
     ];
 
-    it('should add a new job with empty title', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
+    function chooseStatusType(){
+        cy.get('#statusType').click();
+        cy.get('#datalistOptionsstatustype0').click();
+    }
 
+    it('should add a new job with empty title', () => {
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#title')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -35,14 +41,14 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with empty date', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#date')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -54,14 +60,14 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with empty category', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#category')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -73,14 +79,14 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with empty company', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#company')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -92,14 +98,14 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with empty location', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#location')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -110,34 +116,49 @@ describe('Creating job applications', () => {
         cy.end();
     });
 
-    it('should add a new job with empty status', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
+    it('should add a new job with empty status name', () => {
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#status')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
 
+        // Choose a status type 
+        chooseStatusType()
+
         // Click submit button
         cy.get('#submitJobButton').click();
 
         // Look for error message
-        cy.get('#statusError').should('be.visible').should('contain', 'Please choose a valid status');
+        cy.get('#statusError').should('be.visible').should('contain', 'Please enter a valid status');
+
+        cy.end();
+    });
+
+    it('should add a new job with empty status type', () => {
+        // Input values on all fields
+        newJob.forEach((input) => {
+            cy.get(`${input.id}`).type(input.value, { force: true });
+        });
+
+        // Click submit button
+        cy.get('#submitJobButton').click();
+
+        // Look for error message
+        cy.get('#statusTypeError').should('be.visible').should('contain', 'Please choose a status type');
 
         cy.end();
     });
 
     it('should add a new job with empty type', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#type')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -149,14 +170,14 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with empty url', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             if(input.id !== '#url')
                 cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -168,15 +189,15 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new job with an invalid url', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         newJob[7].value = 'invalidURL'
 
         // Input values on all fields
         newJob.forEach((input) => {
             cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -189,38 +210,16 @@ describe('Creating job applications', () => {
         cy.end();
     });
 
-    it('should add a new job with an invalid status', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
-        newJob[4].value = 'invalidStat'
-
-        // Input values on all fields
-        newJob.forEach((input) => {
-            cy.get(`${input.id}`).type(input.value, { force: true });
-        });
-
-        // Click submit button
-        cy.get('#submitJobButton').click();
-
-        // Look for error message
-        cy.get('#statusError').should('be.visible').should('contain', 'Please choose a valid status');
-
-        newJob[4].value = 'Sent'
-
-        cy.end();
-    });
-
     it('should add a new job with an invalid date', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         newJob[0].value = '3333-02-02'
 
         // Input values on all fields
         newJob.forEach((input) => {
             cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -234,13 +233,13 @@ describe('Creating job applications', () => {
     });
 
     it('should add a new valid job', () => {
-        // Open modal
-        cy.get('#newJobContainer').click()
-
         // Input values on all fields
         newJob.forEach((input) => {
             cy.get(`${input.id}`).type(input.value, { force: true });
         });
+
+        // Choose a status type 
+        chooseStatusType()
 
         // Click submit button
         cy.get('#submitJobButton').click();
@@ -254,21 +253,40 @@ describe('Updating a job item', () => {
         cy.visit('/jobs')
     });
 
+    it('should leave status name empty', () => {
+        // Open modal
+        cy.get('#update0').click()
+
+        // Click Rejected status radio option
+        cy.get('#statusOption1').click()
+
+        // Change status name to resume reject
+        cy.get('#statusNameField').clear().blur();
+
+        // Click update button
+        cy.get('#updateStatusButton').click()
+
+        // Look for status name
+        cy.get('#statusNameError').should('be.visible').should('have.text', 'Please enter a status name');
+
+        cy.end();
+    });
+
     it('should update job status', () => {
         // Open modal
         cy.get('#update0').click()
 
-        // Click status option
-        cy.get('#radioOption2').click()
+        // Click Rejected status radio option
+        cy.get('#statusOption1').click()
 
-        // Open options
-        cy.get('#datalistContainer2').click()
-
-        // Click option
-        cy.get('#statusOption20').click()
+        // Change status name to resume reject
+        cy.get('#statusNameField').clear().type('Resume Reject', { force: true });
 
         // Click update button
         cy.get('#updateStatusButton').click()
+
+        // Look for status name
+        cy.get('#job0statusName').should('be.visible').should('have.text', 'Resume Reject');
 
         cy.end();
     });

@@ -1,143 +1,40 @@
 import styles from './modalstatus.module.scss';
-import { BiChevronDown } from "react-icons/bi";
 import FormButton from '../FormButton/formbutton';
 
-import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { Job } from '../../interfaces/Job';
+import { Statuses } from '../../interfaces/Statuses';
+
+import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
+import {useMediaQuery} from '@mui/material';
+
+import { useForm, SubmitHandler } from 'react-hook-form';
+
+type FormInputs = {
+    StatusName: string;
+};
 
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
-    currStatus: string;
-    jobInfo: {
-        JobID: number;
-        Date: string;
-        Category: string;
-        Company: string;
-        Location: string;
-        Status: string;
-        Title: string;
-        Type: string;
-        URL: string;
-    };
-    updateJobsFunction:(jobID: number, jobStatus: string) => void;
+    jobInfo: Job;
+    updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
+    statusSuggestions: string[];
 }
 
 const ModalStatus = (props:Props) => {
-    
-    const progressList = ['Sent', 'Assessment', 'Interviewing']
-    const [currProgress, setCurrProgress] = useState(progressList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Sent')
-    
-    const rejectedList = ['Resume Reject', 'Assessment Reject', 'Interview Reject']
-    const [currRejected, setCurrRejected] = useState(rejectedList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Resume Reject')
-    
-    const offerList = ['Verbal Offer', 'Written Offer']
-    const [currOffer, setCurrOffer] = useState(offerList.includes(props.jobInfo.Status) ? props.jobInfo.Status : 'Verbal Offer')
 
-    const [progressCheck, setProgressCheck] = useState(progressList.includes(props.jobInfo.Status))
-    const [progressDrop, setProgressDrop] = useState(false)
+    const isScreenSmall = useMediaQuery('(max-width: 560px)');
 
-    const [rejectedCheck, setRejectedCheck] = useState(rejectedList.includes(props.jobInfo.Status))
-    const [rejectedDrop, setRejectedDrop] = useState(false)
-
-    const [offerCheck, setOfferCheck] = useState(offerList.includes(props.jobInfo.Status))
-    const [offerDrop, setOfferDrop] = useState(false)
-
-    const [currentStatus, setCurrentStatus] = useState<string>(props.jobInfo.Status)
-
-    const optionsList = [
-        {
-            name:'In Progress',
-            optionList:progressList,
-            currOption:currProgress,
-            optionFunction:setCurrProgress,
-            checkmark:progressCheck,
-            checkmarkFunction:setProgressCheck,
-            dropdown:progressDrop,
-            dropdownFunction:setProgressDrop
-        },
-        {
-            name:'Rejected',
-            optionList:rejectedList,
-            currOption:currRejected,
-            optionFunction:setCurrRejected,
-            checkmark:rejectedCheck,
-            checkmarkFunction:setRejectedCheck,
-            dropdown:rejectedDrop,
-            dropdownFunction:setRejectedDrop  
-        },
-        {
-            name:'Offer',
-            optionList:offerList,
-            currOption:currOffer,
-            optionFunction:setCurrOffer,
-            checkmark:offerCheck,
-            checkmarkFunction:setOfferCheck,
-            dropdown:offerDrop,
-            dropdownFunction:setOfferDrop
-        }
-    ]
-
-    const radioButtonList = [setProgressCheck, setRejectedCheck, setOfferCheck]
-    const dropDownList = [setProgressDrop, setRejectedDrop, setOfferDrop]
-
-    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, dropdownState:boolean, dropDown:Dispatch<SetStateAction<boolean>>) => {
-        if(radioState === false){
-            for(let i = 0 ; i<3; i++){
-                if(radioButtonList[i] != radioButton){
-                    radioButtonList[i](false)
-                    dropDownList[i](false)
-                }
-                else{
-                    radioButtonList[i](true)
-                }
-            }
-        }
-
-        if(dropdownState){
-            dropDown(false)
-        }
-    }
-
-    const handleDataListClick = (event:React.MouseEvent<HTMLDivElement>, state:boolean, dropdownState:boolean, dropDown:Dispatch<SetStateAction<boolean>>) => {
-        if(state){
-            dropDown(!dropdownState)
-            event.stopPropagation();
-        }
-    };
-
-    const handleDataListOptionClick = (event:React.MouseEvent<HTMLDivElement>, newString:string, optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>) => {
-            optionFunction(newString)
-            dropDown(false)
-            setCurrentStatus(newString)
-            event.stopPropagation();
-    };
-
-    const datalistOption = (options:string[], optionFunction:Dispatch<SetStateAction<string>>, dropDown:Dispatch<SetStateAction<boolean>>, optionIndex:number) => {
-        return options.map((item, index)=>(
-            <p key={`statusOption${index}`} id={`statusOption${optionIndex}${index}`} className={styles.datalistItem} onClick={(e)=>handleDataListOptionClick(e, item, optionFunction, dropDown)}>{item}</p>
-        ))
-    }
-
-    const optionItem = () => {
-        return optionsList.map((item, index) =>(
-            <div key={`radioOption${index}`} id={`radioOption${index}`} className={styles.optionContainer} onClick={()=>unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)} style={{backgroundColor:(item.checkmark?'#e6e6e6':'transparent')}}>
-                <label className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
-                    <input type="radio" name="radio" checked={item.checkmark} onChange={() => unCheck(item.checkmarkFunction, item.checkmark, item.dropdown, item.dropdownFunction)}/>
-                    <span className={styles.check}></span>
-                </label>
-                <div id={`datalistContainer${index}`} className={styles.datalistContainer} onClick={(e) => handleDataListClick(e, item.checkmark, item.dropdown, item.dropdownFunction)} style={{color:(item.checkmark?'black':'#a4a3a4'), border:(item.checkmark?'solid 1px black':'solid 1px #a4a3a4')}}>
-                    {item.currOption}
-                    <BiChevronDown className={styles.menuArrow} style ={{transform:item.dropdown ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 0.7s ease'}}/>
-                </div>
-                <div className={styles.datalistOptions} style={{visibility:(item.dropdown?'visible':'hidden')}}>
-                    {datalistOption(item.optionList, item.optionFunction, item.dropdownFunction, index)}
-                </div>
-            </div>
-        ))
-    }
+    const inputReference = useRef<HTMLInputElement>(null);
+    const [inputWidth, setInputWidth] = useState<string | number>('auto');
 
     useEffect(() => {
-        const handleKeyDown = (event:KeyboardEvent) => {
+        if (inputReference.current) {
+            const width = inputReference.current.offsetWidth;
+            setInputWidth(width);
+        }
+          
+          const handleKeyDown = (event:KeyboardEvent) => {
           if (event.key === 'Escape') {
             props.closeFunction(false)
           }
@@ -155,6 +52,110 @@ const ModalStatus = (props:Props) => {
             props.closeFunction(false)
     }
 
+    const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
+
+    const currentDate = new Date();
+
+    const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
+        , date:`${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getFullYear())}`})
+
+    const [progressChecked, setProgressChecked] = useState<boolean>(currStatus.type === 'In Progress')
+
+    const [rejectedChecked, setRejectedChecked] = useState<boolean>(currStatus.type === 'Rejected')
+
+    const [offerChecked, setOfferChecked] = useState<boolean>(currStatus.type === 'Offer')
+
+    const optionMap = [
+        {
+            name: "In Progress",
+            checked: progressChecked,
+            setChecked: setProgressChecked
+
+        },
+        {
+            name: "Rejected",
+            checked: rejectedChecked,
+            setChecked: setRejectedChecked
+
+        },
+        {
+            name: "Offer",
+            checked: offerChecked,
+            setChecked: setOfferChecked
+
+        }
+    ]
+
+    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, statusName:string) => {
+        if(radioState === false){
+            for(let i = 0 ; i<3; i++){
+                if(optionMap[i].setChecked != radioButton){
+                    optionMap[i].setChecked(false)
+                }
+                else{
+                    optionMap[i].setChecked(true)
+                    let newStatus = {...currStatus,type:statusName}
+                    setCurrStatus(newStatus)
+                }
+            }
+        }
+    }
+
+    const optionItem = () => {
+        return optionMap.map((item, index) =>(
+            <div id={`statusOption${index}`} className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
+                <label key={`option${index}`} className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
+                    <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked, item.name)}/>
+                    <span className={styles.check}></span>
+                </label>
+                <p className={styles.statusTypeName}>{item.name}</p>
+            </div>
+        ))
+    }
+
+    const [isFocused, setFocused] = useState<boolean>(false);
+    const [displayedSuggestions, setDisplayedSuggestions] = useState<string[]>(props.statusSuggestions)
+
+    const handleOptionsVisibility = () => {
+        setTimeout(() => {
+            setFocused(false);
+        }, 100);
+    }
+
+    function datalistHasMatches(){
+        if(displayedSuggestions.filter((item) => item.toLowerCase().startsWith(currStatus.name)).length > 0 || currStatus.name === '')
+            return true
+        else
+            return false
+    }
+
+    const handleDataListChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let newStatus = {...currStatus,name:event.target.value}
+        setCurrStatus(newStatus)
+
+        if(event.target.value !== ''){
+            let input = event.target.value;
+
+            let newSuggestions = displayedSuggestions.filter((item) => item.toLowerCase().startsWith(input.toLowerCase()))
+            setDisplayedSuggestions(newSuggestions)
+        }
+        else
+            setDisplayedSuggestions(props.statusSuggestions)
+    }
+
+    const datalistOptions = () => {
+        return displayedSuggestions.map((item, index) => (
+            <p key={`datalistOptions${index}`} className={styles.datalistOption} onClick={()=>setCurrStatus({...currStatus,name:item})}>{item}</p>
+        ))
+    }
+
+    const validateStatus = () =>{
+        return currStatus.name !== ''
+    }
+
+    const onSubmit: SubmitHandler<FormInputs> = () => 
+        props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
+
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <div className={styles.modalContainer}>
@@ -166,8 +167,16 @@ const ModalStatus = (props:Props) => {
                 <div className={styles.optionsGrid}>
                     {optionItem()}
                 </div>
+
+                <form className={styles.singleInputContainer}>
+                    <input id='statusNameField' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
+                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused&&datalistHasMatches()?'visible':'hidden')}}>
+                        {datalistOptions()}
+                    </div>
+                    {errors.StatusName && <span id='statusNameError' className={styles.error}>Please enter a status name</span>}
+                </form>
                 
-                <div id='updateStatusButton' onClick={()=>props.updateJobsFunction(props.jobInfo.JobID, currentStatus)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )
