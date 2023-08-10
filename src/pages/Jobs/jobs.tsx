@@ -6,8 +6,10 @@ import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 import Modal from '../../components/ModalStatus/modalstatus';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
-import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import ModalDelete from '../../components/ModalDelete/modaldelete';
+import ModalSankey from '../../components/Sankey/sankey';
+
+import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import SearchBar from '../../components/SearchBar/searchbar';
 
 import { Job } from '../../interfaces/Job';
@@ -218,6 +220,7 @@ const Jobs = () => {
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
     const [isModalCreateOpen, setModalCreateOpen] = useState<boolean>(false)
     const [isModalDeleteOpen, setModalDeleteOpen] = useState<boolean>(false)
+    const [isModalSankeyOpen, setModalSankeyOpen] = useState<boolean>(false)
 
     const handleUpdateClick = (jobItem:any) => {
         setJobSelected(jobItem)
@@ -263,10 +266,13 @@ const Jobs = () => {
                     <p className={styles.newJobButton}>+</p>
                 </div>
             </div>
+
+            <button onClick={()=>setModalSankeyOpen(true)}>Sankey</button>
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
+            {isModalSankeyOpen && <ModalSankey isOpen={isModalSankeyOpen} closeFunction={setModalSankeyOpen}></ModalSankey>}
         </div>
     )
 }
