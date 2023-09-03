@@ -34,6 +34,18 @@ const ModalSankey = (props:Props) => {
 
     useEffect(() => {
         DrawChart();
+          
+        const handleKeyDown = (event:KeyboardEvent) => {
+          if (event.key === 'Escape') {
+            props.closeFunction(false)
+          }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
     }, []);
 
     function DrawChart() {
