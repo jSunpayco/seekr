@@ -2,6 +2,7 @@ import * as d3Sankey from 'd3-sankey';
 import * as d3 from 'd3'
 import styles from './sankey.module.scss';
 import { useEffect } from 'react';
+import sankeyJson from '../../sample.json'
 
 interface Props {
     isOpen: boolean;
@@ -28,53 +29,7 @@ interface SankeyDataType {
 
 const ModalSankey = (props:Props) => {
 
-    const sankeyData: SankeyDataType = {
-        nodes:[{
-            nodeId: 0,
-            name: "node0"
-        }, {
-            nodeId: 1,
-            name: "node1"
-        }, {
-            nodeId: 2,
-            name: "node2"
-        }, {
-            nodeId: 3,
-            name: "node3"
-        }, {
-            nodeId: 4,
-            name: "node4"
-        }],
-        links: [{
-            source: 0,
-            target: 2,
-            value: 1,
-        }, {
-            source: 1,
-            target: 2,
-            value: 1,
-        }, {
-            source: 1,
-            target: 3,
-            value: 1,
-        }, {
-            source: 0,
-            target: 4,
-            value: 1,
-        }, {
-            source: 2,
-            target: 3,
-            value: 1,
-        }, {
-            source: 2,
-            target: 4,
-            value: 1,
-        }, {
-            source: 3,
-            target: 4,
-            value: 1,
-        }]  
-    }
+    const sankeyData: SankeyDataType = sankeyJson;
 
 
     useEffect(() => {
