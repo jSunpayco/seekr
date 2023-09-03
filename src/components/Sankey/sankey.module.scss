@@ -17,7 +17,7 @@
     min-height: 320px;
     height: auto;
     max-width: 700px;
-    width: 90%;
+    width: 680px;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -52,4 +52,21 @@
     font-weight: 600;
     cursor: pointer;
     user-select: none;
+}
+
+.sankeyContainer{
+    max-width: fit-content;
+    display: flex;
+    justify-content: center;
+    margin: auto;
+    margin-bottom: 20px;
+}
+
+.sankeySVG {
+    min-height: 480px;
+    height: auto;
+    width: 640px;
+
+    margin-left: 10px;
+    margin-right: 10px;
 }

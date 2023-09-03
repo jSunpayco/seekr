@@ -1,7 +1,7 @@
 import * as d3Sankey from 'd3-sankey';
 import * as d3 from 'd3'
 import styles from './sankey.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface Props {
     isOpen: boolean;
@@ -17,7 +17,6 @@ interface SLinkExtra {
     source: number;
     target: number;
     value: number;
-    uom: string;
 }
 type SNode = d3Sankey.SankeyNode<SNodeExtra, SLinkExtra>;
 type SLink = d3Sankey.SankeyLink<SNodeExtra, SLinkExtra>;
@@ -32,17 +31,49 @@ const ModalSankey = (props:Props) => {
     const sankeyData: SankeyDataType = {
         nodes:[{
             nodeId: 0,
-            name: "In Progress"
+            name: "node0"
         }, {
             nodeId: 1,
-            name: "Rejected"
+            name: "node1"
+        }, {
+            nodeId: 2,
+            name: "node2"
+        }, {
+            nodeId: 3,
+            name: "node3"
+        }, {
+            nodeId: 4,
+            name: "node4"
         }],
         links: [{
             source: 0,
-            target: 1,
-            value: 2,
-            uom: 'Widget(s)'
-        }]
+            target: 2,
+            value: 1,
+        }, {
+            source: 1,
+            target: 2,
+            value: 1,
+        }, {
+            source: 1,
+            target: 3,
+            value: 1,
+        }, {
+            source: 0,
+            target: 4,
+            value: 1,
+        }, {
+            source: 2,
+            target: 3,
+            value: 1,
+        }, {
+            source: 2,
+            target: 4,
+            value: 1,
+        }, {
+            source: 3,
+            target: 4,
+            value: 1,
+        }]  
     }
 
 
@@ -52,20 +83,18 @@ const ModalSankey = (props:Props) => {
 
     function DrawChart() {
 
-        var svg = d3.select("#sankey"),
-            width = 320,
-            height = 280;
+        const svg = d3.select("#sankey")
+        const width = 640;
+        const height = 480;
 
-        var formatNumber = d3.format(",.0f"),
-            format = function (d: any) { return formatNumber(d) + " TWh"; },
-            color = d3.scaleOrdinal(d3.schemeCategory10);
+        const color = d3.scaleOrdinal(d3.schemeTableau10);
 
-        var sankey = d3Sankey.sankey()
+        const sankey = d3Sankey.sankey()
             .nodeWidth(15)
             .nodePadding(10)
             .extent([[1, 1], [width - 1, height - 6]]);
 
-        var link = svg.append("g")
+        const link = svg.append("g")
             .attr("class", "links")
             .attr("fill", "none")
             .attr("stroke", "#000")
@@ -81,14 +110,11 @@ const ModalSankey = (props:Props) => {
 
         sankey(sankeyData);
 
-        link = link
+        link
             .data(sankeyData.links)
             .enter().append("path")
             .attr("d", d3Sankey.sankeyLinkHorizontal())
             .attr("stroke-width", function (d: any) { return Math.max(1, d.width); });
-
-        link.append("title")
-            .text(function (d: any) { return d.source.name + " → " + d.target.name + "\n" + format(d.value); });
 
         node = node
             .data(sankeyData.nodes)
@@ -111,9 +137,6 @@ const ModalSankey = (props:Props) => {
             .filter(function (d: any) { return d.x0 < width / 2; })
             .attr("x", function (d: any) { return d.x1 + 6; })
             .attr("text-anchor", "start");
-
-        node.append("title")
-            .text(function (d: any) { return d.name + "\n" + format(d.value); });
     }
 
     const greyAreaClickFunction = (event:React.MouseEvent<HTMLDivElement>) => {
@@ -128,7 +151,7 @@ const ModalSankey = (props:Props) => {
                     <h1 className={styles.modalTitle}>Sankey Diagram</h1>
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
-                <div id="sankeyContainer"><svg id="sankey" width="960" height="500"></svg></div>
+                <div id="sankeyContainer" className={styles.sankeyContainer}><svg id="sankey" className={styles.sankeySVG}></svg></div>
             </div>
         </div>
     )
