@@ -1,5 +1,5 @@
 import styles from './navigation.module.scss';
-import { BiMenu, BiChevronDown } from "react-icons/bi";
+import { BiMenu, BiChevronDown, BiLogOut, BiChart } from "react-icons/bi";
 
 import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
@@ -25,6 +25,9 @@ const Navigation = (props:Props) => {
         if(isScreenSmall)
             toggleFunction(false)
     }
+
+    const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
+    const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
 
     const locationOptions = props.data.map(job => job.Location);
     const categoryOptions = props.data.map(job => job.Category)
@@ -162,7 +165,12 @@ const Navigation = (props:Props) => {
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
                     {desktopFilters()}
-                    <a href='/' className={styles.logoutButton}>Logout</a>
+                    <a href='/' className={styles.logoutButton} onMouseLeave={()=>setLogButtonHover(false)} onMouseEnter={()=>setLogButtonHover(true)}>
+                        {logButtonHover?(<BiLogOut/>):<span>Logout</span>}
+                    </a>
+                    <a href='/' className={styles.logoutButton} onMouseLeave={()=>setChartButtonHover(false)} onMouseEnter={()=>setChartButtonHover(true)}>
+                        {chartButtonHover?(<BiChart/>):<span>Report</span>}
+                    </a>
                 </div>
 
                 <BiMenu className={styles.mobileMenuButton} onClick={()=>setMenuOpened(!isMenuOpened)}/>
