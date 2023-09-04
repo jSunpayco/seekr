@@ -17,7 +17,7 @@ import { Statuses } from '../../interfaces/Statuses';
 
 const Jobs = () => {
     
-    const statusLegend = ["In Progress", "Rejected", "Offer"];
+    const statusLegend = ["In Progress", "Reject", "Offer"];
 
     const legendItems = () => {
         return statusLegend.map((item, index) => (
