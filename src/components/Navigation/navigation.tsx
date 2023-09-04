@@ -1,5 +1,5 @@
 import styles from './navigation.module.scss';
-import { BiMenu, BiChevronDown } from "react-icons/bi";
+import { BiMenu, BiChevronDown, BiLogOut, BiChart } from "react-icons/bi";
 
 import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
@@ -7,9 +7,12 @@ import { useState } from 'react';
 
 import { Job } from '../../interfaces/Job';
 
+import sankeyJson from '../../sample.json'
+
 interface Props {
     data: Job[];
     boxClick: (value: string, filter: string, checked: boolean) => void;
+    modalFunction: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const Navigation = (props:Props) => {
@@ -25,6 +28,10 @@ const Navigation = (props:Props) => {
         if(isScreenSmall)
             toggleFunction(false)
     }
+    const [isModalSankeyOpen, setModalSankeyOpen] = useState<boolean>(false);
+
+    const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
+    const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
 
     const locationOptions = props.data.map(job => job.Location);
     const categoryOptions = props.data.map(job => job.Category)
@@ -162,7 +169,13 @@ const Navigation = (props:Props) => {
                 <h1 className={styles.logo}>SeekR</h1>
                 <div className={styles.filtersContainer}>
                     {desktopFilters()}
-                    <a href='/' className={styles.logoutButton}>Logout</a>
+                    <a href='/' className={styles.logoutButton} onMouseLeave={()=>setLogButtonHover(false)} onMouseEnter={()=>setLogButtonHover(true)}>
+                        {logButtonHover?(<BiLogOut/>):<span>Logout</span>}
+                    </a>
+                    <button onClick={()=>props.modalFunction(true)} className={styles.logoutButton} style={{width:'13%'}}
+                        onMouseLeave={()=>setChartButtonHover(false)} onMouseEnter={()=>setChartButtonHover(true)}>
+                        {chartButtonHover?(<BiChart/>):<span>Report</span>}
+                    </button>
                 </div>
 
                 <BiMenu className={styles.mobileMenuButton} onClick={()=>setMenuOpened(!isMenuOpened)}/>

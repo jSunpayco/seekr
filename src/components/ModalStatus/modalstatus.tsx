@@ -34,7 +34,7 @@ const ModalStatus = (props:Props) => {
             setInputWidth(width);
         }
           
-          const handleKeyDown = (event:KeyboardEvent) => {
+        const handleKeyDown = (event:KeyboardEvent) => {
           if (event.key === 'Escape') {
             props.closeFunction(false)
           }
