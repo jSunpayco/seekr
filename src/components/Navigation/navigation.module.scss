@@ -160,7 +160,8 @@
     background-color: transparent;
     height: fit-content;
     width: 9%;
-    font-size: 1.2vw;
+    font-size: 1.1vw;
+    font-family: Arial, Helvetica, sans-serif;
     padding: 0.3vw 1vw;
     border-radius: 1.75vw;
     cursor: pointer;
@@ -172,6 +173,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    outline: none;
 
     &:hover{
         background-color: $light-black;

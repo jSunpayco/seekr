@@ -248,7 +248,7 @@ const Jobs = () => {
 
     return (
         <div className={styles.jobsContainer}>
-            <Navigation data={myInitialJobs} boxClick={handleCheckboxCick}></Navigation>
+            <Navigation data={myInitialJobs} boxClick={handleCheckboxCick} modalFunction={setModalSankeyOpen}></Navigation>
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 
@@ -266,8 +266,6 @@ const Jobs = () => {
                     <p className={styles.newJobButton}>+</p>
                 </div>
             </div>
-
-            <button onClick={()=>setModalSankeyOpen(true)}>Sankey</button>
             
             {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
