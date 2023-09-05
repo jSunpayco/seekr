@@ -4,7 +4,7 @@ import Navigation from "../../components/Navigation/navigation";
 import { useState, useEffect } from 'react';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 
-import Modal from '../../components/ModalStatus/modalstatus';
+import Modal from '../../components/ModalUpdate/modalupdate';
 import ModalCreate from '../../components/ModalCreate/modalcreate';
 import ModalDelete from '../../components/ModalDelete/modaldelete';
 import ModalSankey from '../../components/Sankey/sankey';

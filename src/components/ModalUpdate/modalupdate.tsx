@@ -1,4 +1,4 @@
-import styles from './modalstatus.module.scss';
+import styles from './modalupdate.module.scss';
 import FormButton from '../FormButton/formbutton';
 
 import { Job } from '../../interfaces/Job';
@@ -21,7 +21,7 @@ interface Props {
     statusSuggestions: string[];
 }
 
-const ModalStatus = (props:Props) => {
+const ModalUpdate = (props:Props) => {
 
     const isScreenSmall = useMediaQuery('(max-width: 560px)');
 
@@ -182,4 +182,4 @@ const ModalStatus = (props:Props) => {
     )
 }
 
-export default ModalStatus;
+export default ModalUpdate;
