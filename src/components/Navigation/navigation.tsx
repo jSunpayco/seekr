@@ -7,8 +7,6 @@ import { useState } from 'react';
 
 import { Job } from '../../interfaces/Job';
 
-import sankeyJson from '../../sample.json'
-
 interface Props {
     data: Job[];
     boxClick: (value: string, filter: string, checked: boolean) => void;
@@ -28,13 +26,12 @@ const Navigation = (props:Props) => {
         if(isScreenSmall)
             toggleFunction(false)
     }
-    const [isModalSankeyOpen, setModalSankeyOpen] = useState<boolean>(false);
 
     const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
     const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
 
-    const locationOptions = props.data.map(job => job.Location);
-    const categoryOptions = props.data.map(job => job.Category)
+    const locationOptions = props.data.filter(job => job.Location != "").map((item) => item.Location);
+    const categoryOptions = props.data.filter(job => job.Category != "").map((item) => item.Category);
     const monthOptions = props.data.map(job => job.Month);
     const positionOptions = ['Full Time', 'Intern', 'Temporary']
     const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
