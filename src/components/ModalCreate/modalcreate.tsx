@@ -88,7 +88,7 @@ const ModalCreate = (props:Props) => {
     const [currentStatus, setCurrentStatus] = useState<string>('');
 
     const statusTypes = ["In Progress", "Rejected", "Offer"];
-    const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE');
+    const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE *');
     const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
 
     function datalistHasMatches(suggestions:string[], userInput:string){
@@ -136,14 +136,6 @@ const ModalCreate = (props:Props) => {
             props.closeFunction(false)
     }
 
-    const validateCategory = () => {
-        return currentCategory.length > 0;
-    };
-
-    const validateType = () => {
-        return currentJobType.length > 0;
-    };
-
     const validateStatus = () => {
         return currentStatus.length > 0
     };
@@ -178,9 +170,9 @@ const ModalCreate = (props:Props) => {
             JobID: props.currNumberOfJobs,
             Date: currentDate,
             Month: monthMapping[currentDate.split("/")[0]],
-            Category: currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-            Company: currentCompany,
-            Location: currentLocation,
+            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            Company: currentCompany ? currentCompany : "",
+            Location: currentLocation ? currentLocation : "",
             Statuses:[
                 {
                     type: currentStatusType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
@@ -189,7 +181,7 @@ const ModalCreate = (props:Props) => {
                 }
             ],
             Title: currentTitle,
-            Type: currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+            Type: currentJobType ? currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
             URL: currentUrl
         })
     }
@@ -206,35 +198,31 @@ const ModalCreate = (props:Props) => {
                 
                 <div className={styles.inputFieldsContainer}>
                     <div className={styles.singleInputContainer}>
-                        <input id='title' {...register('Title', { required: true })} className={styles.fullInputField} placeholder='TITLE' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
+                        <input id='title' {...register('Title', { required: true })} className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
                         {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>}
                     </div>
 
                     <div className={styles.halfinputFieldsContainer}>
                         <div className={styles.halfInputField}>
-                            <input id='company' {...register('Company', { required: true })} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Company?'#d30000 solid 1px':'transparent'}} placeholder={'company'.toUpperCase()} value={currentCompany} onChange={(e)=>setCurrentCompany(e.target.value)}></input>
-                            {errors.Company && <span id='companyError' className={styles.error}>Please enter a valid company</span>}
+                            <input id='company' className={`${styles.fullInputField}`} style={{width:'100%'}} placeholder={'company'.toUpperCase()} value={currentCompany} onChange={(e)=>setCurrentCompany(e.target.value)}></input>
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='location' {...register('Location', { required: true })} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Location?'#d30000 solid 1px':'transparent'}} placeholder={'location'.toUpperCase()} value={currentLocation} onChange={(e)=>setCurrentLocation(e.target.value)}></input>
-                            {errors.Location && <span id='locationError' className={styles.error}>Please enter a valid location</span>}
+                            <input id='location' className={`${styles.fullInputField}`} style={{width:'100%'}} placeholder={'location'.toUpperCase()} value={currentLocation} onChange={(e)=>setCurrentLocation(e.target.value)}></input>
                         </div>
                     </div>
                     
                     <div className={styles.halfinputFieldsContainer}>
                         <div className={styles.halfInputField}>
-                            <input id='category' {...register('Category', { validate: validateCategory })} placeholder={'category'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Category?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setCategoryFocused(true)} onBlur={()=>handleOptionsVisibility(setCategoryFocused)} value={currentCategory} onChange={(e)=>handleDataListChange(e, categories, setCurrentCategory, setCategoriesSuggestions)}></input>
+                            <input id='category' placeholder={'category'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>setCategoryFocused(true)} onBlur={()=>handleOptionsVisibility(setCategoryFocused)} value={currentCategory} onChange={(e)=>handleDataListChange(e, categories, setCurrentCategory, setCategoriesSuggestions)}></input>
                             <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isCategoryFocused&&datalistHasMatches(categoriesSuggestions, currentCategory)?'visible':'hidden')}}>
                                 {datalistOptions(categoriesSuggestions, setCurrentCategory, 'category')}
                             </div>
-                            {errors.Category && <span id='categoryError' className={styles.error}>Please choose a valid category</span>}
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='type' {...register('Type', { validate: validateType })} placeholder={'Job type'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Type?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setJobTypeFocused(true)} onBlur={()=>handleOptionsVisibility(setJobTypeFocused)} value={currentJobType} onChange={(e)=>handleDataListChange(e, jobTypes, setCurrentJobType, setJobTypeSuggestions)}></input>
+                            <input id='type' placeholder={'Job type'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>setJobTypeFocused(true)} onBlur={()=>handleOptionsVisibility(setJobTypeFocused)} value={currentJobType} onChange={(e)=>handleDataListChange(e, jobTypes, setCurrentJobType, setJobTypeSuggestions)}></input>
                             <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isJobTypeFocused&&datalistHasMatches(jobTypeSuggestions, currentJobType)?'visible':'hidden')}}>
                                 {datalistOptions(jobTypeSuggestions, setCurrentJobType, 'Job type')}
                             </div>
-                            {errors.Type && <span id='typeError' className={styles.error}>Please choose a valid Job Type</span>}
                         </div>
                     </div>
 
@@ -244,7 +232,7 @@ const ModalCreate = (props:Props) => {
                             {errors.Date && <span id='dateError' className={styles.error}>Please choose a valid date</span>}
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL' style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
+                            <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL *' style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
                             {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>}
                         </div>
                     </div>
@@ -262,7 +250,7 @@ const ModalCreate = (props:Props) => {
                             {errors.StatusType && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>}
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, props.statuses, setCurrentStatus, setStatusSuggestions)}></input>
+                            <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name *'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, props.statuses, setCurrentStatus, setStatusSuggestions)}></input>
                             <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusFocused&&datalistHasMatches(statusSuggestions, currentStatus)?'visible':'hidden')}}>
                                 {datalistOptions(statusSuggestions, setCurrentStatus, 'status')}
                             </div>
