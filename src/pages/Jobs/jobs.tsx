@@ -204,9 +204,9 @@ const Jobs = () => {
                 <div>
                     <a href={item.URL} target="_blank" className={styles.jobTitle + " " + (item.Statuses[item.Statuses.length-1].type === 'Offer'?styles.legendColorOffer:item.Statuses[item.Statuses.length-1].type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)} data-tooltip-id="status-tip" data-tooltip-content="Visit">{item.Title}</a>
                     <ReactTooltip id="status-tip" />
-                    <p className={styles.jobInfo}>{item.Company}</p>
-                    <p className={styles.jobInfo}>{item.Type} @ {item.Location}</p>
-                    <p className={styles.jobInfo}>{item.Date}</p>
+                    <p className={styles.jobInfo} style={{display:(item.Company === "" ? 'none' : 'block')}}>{item.Company}</p>
+                    <p className={styles.jobInfo} style={{display:(item.Type === "" && item.Location === "" ? 'none' : 'block')}}>{item.Type} {(item.Type !== "" && item.Location !== "") && <span>@</span>} {item.Location}</p>
+                    <p className={styles.jobInfo}>Added: {item.Date}</p>
                     <p className={styles.jobInfo} style={{marginBottom:'7px'}} id={`job${item.JobID}statusName`}>{item.Statuses[item.Statuses.length-1].name}</p>
                 </div>
                 <div className={styles.buttonContainer}>
