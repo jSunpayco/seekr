@@ -5,7 +5,7 @@ import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
 
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
-import {useMediaQuery} from '@mui/material';
+import {useMediaQuery, Slide} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -51,6 +51,17 @@ const ModalUpdate = (props:Props) => {
         if (event.target === event.currentTarget)
             props.closeFunction(false)
     }
+
+    const [currView, setCurrView] = useState<string>("general");
+
+    function borderView(option:string){
+        if(option === "general" && currView === "general" || option === "status" && currView === "status")
+            return "1px solid";
+        else
+            return "none";
+    }
+
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
@@ -158,23 +169,28 @@ const ModalUpdate = (props:Props) => {
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
-            <div className={styles.modalContainer}>
+            <div className={styles.modalContainer} ref={containerRef}>
                 <div className={styles.modalHeader}>
                     <h1 className={styles.modalTitle}>Update Status</h1>
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
 
-                <div className={styles.optionsGrid}>
-                    {optionItem()}
+                <div className={styles.viewChoiceContainer}>
+                    <button className={styles.choiceButton} style={{borderBottom:borderView("general")}} onClick={()=>setCurrView("general")}>General</button>
+                    <button className={styles.choiceButton} style={{borderBottom:borderView("status")}} onClick={()=>setCurrView("status")}>Status</button>
                 </div>
 
-                <form className={styles.singleInputContainer}>
-                    <input id='statusNameField' {...register('StatusName', { validate: validateStatus })} placeholder={'Status Name'} className={`${styles.fullInputField}`} ref={inputReference} onFocus={()=>setFocused(true)} onBlur={()=>handleOptionsVisibility()} value={currStatus.name} onChange={(e)=>handleDataListChange(e)}></input>
-                    <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isFocused&&datalistHasMatches()?'visible':'hidden')}}>
-                        {datalistOptions()}
+                <Slide direction="right" in={currView==="general"} container={containerRef.current}>
+                    <div style={{display:(currView==="general"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
+                        general
                     </div>
-                    {errors.StatusName && <span id='statusNameError' className={styles.error}>Please enter a status name</span>}
-                </form>
+                </Slide>
+
+                <Slide direction="left" in={currView==="status"} container={containerRef.current}>
+                    <div style={{display:(currView==="status"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
+                        status
+                    </div>
+                </Slide>
                 
                 <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
             </div>

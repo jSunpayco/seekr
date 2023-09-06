@@ -54,6 +54,24 @@
     user-select: none;
 }
 
+.viewChoiceContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 70%;
+    margin: auto;
+}
+
+
+.choiceButton{
+    background-color: transparent;
+    border: none;
+    width: 30%;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
 .optionsGrid{
     width: 90%;
     position: relative;
