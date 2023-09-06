@@ -72,6 +72,56 @@
     font-size: 18px;
 }
 
+.settingsContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.fullInputField{
+    width: 85%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    height: 38px;
+    padding-left: 15px;
+    height: 54px;
+    font-size:x-large;
+    box-sizing: border-box;
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.halfinputFieldsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+        padding-right: 3%;
+    }
+}
+
+.halfInputField{
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 560px) {
+        width: 100%;
+        margin-bottom: 5%;
+    }
+}
+
+// Old classes
+
 .optionsGrid{
     width: 90%;
     position: relative;
@@ -164,31 +214,6 @@
     user-select: none;
 }
 
-.singleInputContainer{
-    display: flex;
-    flex-direction: column;
-    // align-items: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.fullInputField{
-    width: 80%;
-    border: none;
-    border-radius: 20px;
-    background-color: white;
-    height: 38px;
-    padding-left: 15px;
-    height: 54px;
-    font-size:x-large;
-    box-sizing: border-box;
-    margin: auto;
-
-    &:focus{
-        outline: none;
-    }
-}
-
 .datalistContainer{
     height: auto;
     max-height: 200px;
@@ -200,7 +225,7 @@
 
     position: absolute;
     margin-top: 55px;
-    margin-left: 10%;
+    // margin-left: 10%;
     padding-top: 10px;
     padding-bottom: 10px;
 

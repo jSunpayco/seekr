@@ -19,6 +19,9 @@ interface Props {
     jobInfo: Job;
     updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
     statusSuggestions: string[];
+    categories: string[];
+    statuses: string[];
+    jobtypes: string[];
 }
 
 const ModalUpdate = (props:Props) => {
@@ -66,6 +69,53 @@ const ModalUpdate = (props:Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
     const currentDate = new Date();
+    const [currentTitle, setCurrentTitle] = useState(props.jobInfo.Title);
+    const [currentCompany, setCurrentCompany] = useState(props.jobInfo.Company)
+    const [currentLocation, setCurrentLocation] = useState(props.jobInfo.Location)
+    const [currentUrl, setCurrentUrl] = useState(props.jobInfo.URL)
+    const [currentCategory, setCurrentCategory] = useState<string>(props.jobInfo.Category);
+    const [currentJobType, setCurrentJobType] = useState<string>('');
+    
+    const jobTypes = props.jobtypes;
+    const [jobTypeSuggestions, setJobTypeSuggestions] = useState<string[]>(jobTypes);
+    const [isJobTypeFocused, setJobTypeFocused] = useState<boolean>(false)
+
+    const categories = props.categories;
+    const [categoriesSuggestions, setCategoriesSuggestions] = useState<string[]>(categories);
+    const [isCategoryFocused, setCategoryFocused] = useState<boolean>(false)
+
+    const handleOptionsVisibility = (listFunction:Dispatch<SetStateAction<boolean>>) => {
+        setTimeout(() => {
+            listFunction(false);
+        }, 100);
+    }
+
+    const handleDataListChange = (event: React.ChangeEvent<HTMLInputElement>, defaultOptions:string[], currentItemFunction:Dispatch<SetStateAction<string>>, optionsFunction:Dispatch<SetStateAction<string[]>>) => {
+        currentItemFunction(event.target.value)
+        if(event.target.value !== ''){
+            let input = event.target.value;
+
+            let newSuggestions = defaultOptions.filter((item) => item.toLowerCase().startsWith(input.toLowerCase()))
+            optionsFunction(newSuggestions)
+        }
+        else
+            optionsFunction(defaultOptions)
+    }
+
+    const datalistOptions = (options:string[], currentFunction:Dispatch<SetStateAction<string>>, title:string) => {
+        return options.map((item, index) => (
+            <p key={`datalistOptions${title}${index}`} id={`datalistOptions${title}${index}`} className={styles.datalistOption} onClick={()=>currentFunction(item.toUpperCase())}>{item.toUpperCase()}</p>
+        ))
+    }
+
+    function datalistHasMatches(suggestions:string[], userInput:string){
+        if(suggestions.filter((item) => item.toLowerCase().startsWith(userInput)).length > 0 || userInput === '')
+            return true
+        else
+            return false
+    }
+
+    // OLD FUNCTIONS BELOW
 
     const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
         , date:`${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getFullYear())}`})
@@ -127,39 +177,6 @@ const ModalUpdate = (props:Props) => {
     const [isFocused, setFocused] = useState<boolean>(false);
     const [displayedSuggestions, setDisplayedSuggestions] = useState<string[]>(props.statusSuggestions)
 
-    const handleOptionsVisibility = () => {
-        setTimeout(() => {
-            setFocused(false);
-        }, 100);
-    }
-
-    function datalistHasMatches(){
-        if(displayedSuggestions.filter((item) => item.toLowerCase().startsWith(currStatus.name)).length > 0 || currStatus.name === '')
-            return true
-        else
-            return false
-    }
-
-    const handleDataListChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newStatus = {...currStatus,name:event.target.value}
-        setCurrStatus(newStatus)
-
-        if(event.target.value !== ''){
-            let input = event.target.value;
-
-            let newSuggestions = displayedSuggestions.filter((item) => item.toLowerCase().startsWith(input.toLowerCase()))
-            setDisplayedSuggestions(newSuggestions)
-        }
-        else
-            setDisplayedSuggestions(props.statusSuggestions)
-    }
-
-    const datalistOptions = () => {
-        return displayedSuggestions.map((item, index) => (
-            <p key={`datalistOptions${index}`} className={styles.datalistOption} onClick={()=>setCurrStatus({...currStatus,name:item})}>{item}</p>
-        ))
-    }
-
     const validateStatus = () =>{
         return currStatus.name !== ''
     }
@@ -181,8 +198,35 @@ const ModalUpdate = (props:Props) => {
                 </div>
 
                 <Slide direction="right" in={currView==="general"} container={containerRef.current}>
-                    <div style={{display:(currView==="general"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
-                        general
+                    <div className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
+                        <div className={styles.settingsContainer}>
+                            <input id='title' className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
+                            {/* {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>} */}
+                        </div>
+
+                        <div className={styles.halfinputFieldsContainer}>
+                            <div className={styles.halfInputField}>
+                                <input id='company' className={`${styles.fullInputField}`} style={{width:'100%'}} placeholder={'company'.toUpperCase()} value={currentCompany} onChange={(e)=>setCurrentCompany(e.target.value)}></input>
+                            </div>
+                            <div className={styles.halfInputField}>
+                                <input id='location' className={`${styles.fullInputField}`} style={{width:'100%'}} placeholder={'location'.toUpperCase()} value={currentLocation} onChange={(e)=>setCurrentLocation(e.target.value)}></input>
+                            </div>
+                        </div>
+
+                        <div className={styles.halfinputFieldsContainer}>
+                            <div className={styles.halfInputField}>
+                                <input id='category' placeholder={'category'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>setCategoryFocused(true)} onBlur={()=>handleOptionsVisibility(setCategoryFocused)} value={currentCategory} onChange={(e)=>handleDataListChange(e, categories, setCurrentCategory, setCategoriesSuggestions)}></input>
+                                <div className={styles.datalistContainer} style={{width:inputWidth, visibility:(isCategoryFocused&&datalistHasMatches(categoriesSuggestions, currentCategory)?'visible':'hidden')}}>
+                                    {datalistOptions(categoriesSuggestions, setCurrentCategory, 'category')}
+                                </div>
+                            </div>
+                            <div className={styles.halfInputField}>
+                                <input id='type' placeholder={'Job type'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%'}} ref={inputReference} onFocus={()=>setJobTypeFocused(true)} onBlur={()=>handleOptionsVisibility(setJobTypeFocused)} value={currentJobType} onChange={(e)=>handleDataListChange(e, jobTypes, setCurrentJobType, setJobTypeSuggestions)}></input>
+                                <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isJobTypeFocused&&datalistHasMatches(jobTypeSuggestions, currentJobType)?'visible':'hidden')}}>
+                                    {datalistOptions(jobTypeSuggestions, setCurrentJobType, 'Job type')}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </Slide>
 
@@ -192,7 +236,7 @@ const ModalUpdate = (props:Props) => {
                     </div>
                 </Slide>
                 
-                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'auto', marginTop:'15px'}} title='Update' titleColor='black'></FormButton></div>
+                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )

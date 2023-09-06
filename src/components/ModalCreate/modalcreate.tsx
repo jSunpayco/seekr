@@ -197,7 +197,7 @@ const ModalCreate = (props:Props) => {
                 </div>
                 
                 <div className={styles.inputFieldsContainer}>
-                    <div className={styles.singleInputContainer}>
+                    <div className={styles.inputFieldsContainer}>
                         <input id='title' {...register('Title', { required: true })} className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
                         {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>}
                     </div>

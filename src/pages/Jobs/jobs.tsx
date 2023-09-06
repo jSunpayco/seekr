@@ -267,7 +267,7 @@ const Jobs = () => {
                 </div>
             </div>
             
-            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]}></Modal>}
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]}></Modal>}
             {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
             {isModalSankeyOpen && <ModalSankey isOpen={isModalSankeyOpen} closeFunction={setModalSankeyOpen}></ModalSankey>}
