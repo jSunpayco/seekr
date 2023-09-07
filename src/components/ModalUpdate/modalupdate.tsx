@@ -22,7 +22,6 @@ interface Props {
     updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
     statusSuggestions: string[];
     categories: string[];
-    statuses: Statuses[];
     jobtypes: string[];
 }
 
@@ -121,8 +120,10 @@ const ModalUpdate = (props:Props) => {
 
     const [isAddHovered, setAddHovered] = useState<Boolean>(false);
 
+    const [statuses, setStatuses] = useState<Statuses[]>(props.jobInfo.Statuses);
+
     const statusItem = () => {
-        return props.statuses.map((item, index) => (
+        return statuses.map((item, index) => (
             <div key={`status${index}`} className={styles.statusItemContainer}>
                 <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>
                     {item.name}
@@ -201,6 +202,7 @@ const ModalUpdate = (props:Props) => {
         return currStatus.name !== ''
     }
 
+    //Create a condition to check if current view is in General or Status
     const onSubmit: SubmitHandler<FormInputs> = () => 
         props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
 
@@ -208,7 +210,7 @@ const ModalUpdate = (props:Props) => {
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
             <div className={styles.modalContainer} ref={containerRef}>
                 <div className={styles.modalHeader}>
-                    <h1 className={styles.modalTitle}>Update Status</h1>
+                    <h1 className={styles.modalTitle}>Update Job</h1>
                     <button className={styles.modalClose} onClick={()=>props.closeFunction(false)}>X</button>
                 </div>
 
