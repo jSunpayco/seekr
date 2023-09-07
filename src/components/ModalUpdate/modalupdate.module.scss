@@ -95,6 +95,13 @@
     }
 }
 
+.statusInputField{
+    width: 43%;
+    height: 38px;
+    border-radius: 14px;
+    font-size:large;
+}
+
 .halfinputFieldsContainer{
     display: flex;
     flex-direction: row;
@@ -171,6 +178,14 @@
 .statusButton{
     font-size: 25px;
     cursor: pointer;
+}
+
+.newStatusContainer{
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
 }
 
 // Old classes

@@ -1,4 +1,5 @@
 import styles from './modalupdate.module.scss';
+import navStyles from '../Navigation/navigation.module.scss'
 import FormButton from '../FormButton/formbutton';
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
@@ -246,8 +247,12 @@ const ModalUpdate = (props:Props) => {
 
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
                     <div className={styles.settingsContainer} style={{display:(currView==="status"?'flex':'none')}}>
-                        {/* <p className={styles.jobTitle + " " + (item.Statuses[item.Statuses.length-1].type === 'Offer'?styles.legendColorOffer:item.Statuses[item.Statuses.length-1].type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}>Example</p> */}
                         {statusItem()}
+                        <div className={styles.newStatusContainer}>
+                            <input id='statusType' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Type' style={{margin:'auto'}}></input>
+                            <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Name' style={{margin:'auto'}}></input>
+                            <button className={navStyles.logoutButton} style={{height:'38px', width:'60px', borderRadius:'1.55vw'}}>Add</button>
+                        </div>
                     </div>
                 </Slide>
                 
