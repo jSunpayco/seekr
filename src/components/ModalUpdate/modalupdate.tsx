@@ -249,6 +249,10 @@ const ModalUpdate = (props:Props) => {
                                 </div>
                             </div>
                         </div>
+                        <div className={styles.settingsContainer}>
+                            <input id='url' className={styles.fullInputField} placeholder='URL *' style={{margin:'auto'}} value={currentUrl} onChange={(e)=>setCurrentUrl(e.target.value)}></input>
+                            {/* {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>} */}
+                        </div>
                     </div>
                 </Slide>
 
