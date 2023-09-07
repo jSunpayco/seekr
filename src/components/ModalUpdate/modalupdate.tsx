@@ -1,7 +1,7 @@
 import styles from './modalupdate.module.scss';
 import navStyles from '../Navigation/navigation.module.scss'
 import FormButton from '../FormButton/formbutton';
-import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import { BiChevronDown, BiChevronUp, BiTrash, BiAddToQueue } from "react-icons/bi";
 
 import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
@@ -119,13 +119,18 @@ const ModalUpdate = (props:Props) => {
 
     // STATUS VIEW
 
+    const [isAddHovered, setAddHovered] = useState<Boolean>(false);
+
     const statusItem = () => {
         return props.statuses.map((item, index) => (
             <div key={`status${index}`} className={styles.statusItemContainer}>
-                <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>{item.name}</p>
+                <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>
+                    {item.name}
+                </p>
                 <p>{item.date}</p>
                 <BiChevronDown className={styles.statusButton}/>
                 <BiChevronUp className={styles.statusButton}/>
+                <BiTrash className={styles.statusButton}/>
             </div>
         ))
     }
@@ -247,11 +252,15 @@ const ModalUpdate = (props:Props) => {
 
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
                     <div className={styles.settingsContainer} style={{display:(currView==="status"?'flex':'none')}}>
-                        {statusItem()}
+                        <div className={styles.statusItemsContainer}>
+                            {statusItem()}
+                        </div>
                         <div className={styles.newStatusContainer}>
                             <input id='statusType' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Type' style={{margin:'auto'}}></input>
                             <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Name' style={{margin:'auto'}}></input>
-                            <button className={navStyles.logoutButton} style={{height:'38px', width:'60px', borderRadius:'1.55vw'}}>Add</button>
+                            <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)}>
+                                {isAddHovered?(<BiAddToQueue/>):(<span style={{fontSize:'17px'}}>Add</span>)}
+                            </button>
                         </div>
                     </div>
                 </Slide>

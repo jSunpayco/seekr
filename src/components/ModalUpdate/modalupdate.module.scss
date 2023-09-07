@@ -1,4 +1,5 @@
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .modalGreyScreen{
     width: 100%;
@@ -77,6 +78,13 @@
     flex-direction: column;
     justify-content: center;
     margin-top: 10px;
+}
+
+.statusItemsContainer{
+    height: 164px;
+    overflow: scroll;
+    overflow-x: hidden;
+    @include custom-scrollbar;
 }
 
 .fullInputField{
@@ -182,10 +190,18 @@
 
 .newStatusContainer{
     margin: auto;
+    margin-top: 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 80%;
+}
+
+.newStatusAddButton{
+    height: 38px;
+    width:60px; 
+    border-radius: 14px;
+    font-size: 20px;
 }
 
 // Old classes
