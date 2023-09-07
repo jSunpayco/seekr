@@ -1,5 +1,6 @@
 import styles from './modalupdate.module.scss';
 import FormButton from '../FormButton/formbutton';
+import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 
 import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
@@ -20,7 +21,7 @@ interface Props {
     updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
     statusSuggestions: string[];
     categories: string[];
-    statuses: string[];
+    statuses: Statuses[];
     jobtypes: string[];
 }
 
@@ -115,6 +116,19 @@ const ModalUpdate = (props:Props) => {
             return false
     }
 
+    // STATUS VIEW
+
+    const statusItem = () => {
+        return props.statuses.map((item, index) => (
+            <div key={`status${index}`} className={styles.statusItemContainer}>
+                <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>{item.name}</p>
+                <p>{item.date}</p>
+                <BiChevronDown className={styles.statusButton}/>
+                <BiChevronUp className={styles.statusButton}/>
+            </div>
+        ))
+    }
+
     // OLD FUNCTIONS BELOW
 
     const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
@@ -198,7 +212,7 @@ const ModalUpdate = (props:Props) => {
                 </div>
 
                 <Slide direction="right" in={currView==="general"} container={containerRef.current}>
-                    <div className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
+                    <div className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none')}}>
                         <div className={styles.settingsContainer}>
                             <input id='title' className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
                             {/* {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>} */}
@@ -231,8 +245,9 @@ const ModalUpdate = (props:Props) => {
                 </Slide>
 
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
-                    <div style={{display:(currView==="status"?'flex':'none'), justifyContent:'center', marginTop:'20px'}}>
-                        status
+                    <div className={styles.settingsContainer} style={{display:(currView==="status"?'flex':'none')}}>
+                        {/* <p className={styles.jobTitle + " " + (item.Statuses[item.Statuses.length-1].type === 'Offer'?styles.legendColorOffer:item.Statuses[item.Statuses.length-1].type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}>Example</p> */}
+                        {statusItem()}
                     </div>
                 </Slide>
                 
