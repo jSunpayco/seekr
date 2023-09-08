@@ -3,7 +3,7 @@ import { BiMenu, BiChevronDown, BiLogOut, BiChart } from "react-icons/bi";
 
 import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Job } from '../../interfaces/Job';
 
@@ -30,11 +30,41 @@ const Navigation = (props:Props) => {
     const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
     const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
 
-    const locationOptions = props.data.filter(job => job.Location != "").map((item) => item.Location);
-    const categoryOptions = props.data.filter(job => job.Category != "").map((item) => item.Category);
+    const [locationOptions, setLocationOptions] = useState<string[]>([]);
+    const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
     const monthOptions = props.data.map(job => job.Month);
-    const positionOptions = ['Full Time', 'Intern', 'Temporary']
-    const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
+    const [positionOptions, setPositionOptions] = useState<string[]>([]);
+    const [statusOptions, setStatusOptions] = useState<string[]>([]);
+
+    function addOptions(){
+        const locationSet = new Set<string>();
+        const categorySet = new Set<string>();
+        const positionSet = new Set<string>();
+        const statusSet = new Set<string>();
+
+        props.data.forEach(item => {
+            if(item.Location != "")
+                locationSet.add(item.Location);
+            
+            if(item.Category != "")
+                categorySet.add(item.Category);
+
+            if(item.Type != "")
+                positionSet.add(item.Type);
+            
+            if(item.Statuses[item.Statuses.length-1].type != "")
+                statusSet.add(item.Statuses[item.Statuses.length-1].type);
+        });
+
+        setLocationOptions(Array.from(locationSet));
+        setCategoryOptions(Array.from(categorySet));
+        setPositionOptions(Array.from(positionSet));
+        setStatusOptions(Array.from(statusSet));
+    }
+
+    useEffect(() => {
+        addOptions();
+    }, []);
 
     const [categoryClicked, setCategoryClicked] = useState(false)
     const [locationClicked, setLocationClicked] = useState(false)
