@@ -137,7 +137,7 @@ const Jobs = () => {
             if (currTypeFilters.length > 0 && !currTypeFilters.includes(item.Type))
               return false;
         
-            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Statuses[item.Statuses.length].name))
+            if (currStatusFilters.length > 0 && !currStatusFilters.includes(item.Statuses[item.Statuses.length-1].name))
               return false;
         
             return true;
