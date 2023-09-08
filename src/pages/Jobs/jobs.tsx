@@ -13,7 +13,6 @@ import JobItemButton from '../../components/JobItemButton/jobitembutton';
 import SearchBar from '../../components/SearchBar/searchbar';
 
 import { Job } from '../../interfaces/Job';
-import { Statuses } from '../../interfaces/Statuses';
 
 const Jobs = () => {
     
@@ -227,10 +226,10 @@ const Jobs = () => {
         applySearchFilter(myJobs);
     }, [myInitialJobs]);
 
-    const updateJobItem = (jobID:number, jobStatus:Statuses[]) => {
+    const updateJobItem = (changedJob:Job) => {
         let updatedJobs = myInitialJobs.map(item => {
-            if(item.JobID===jobID){
-                return{...item, Statuses:jobStatus};
+            if(item.JobID===changedJob.JobID){
+                return changedJob;
             }
             return item;
         })
@@ -239,8 +238,8 @@ const Jobs = () => {
         setMyJobs(updatedJobs);
 
         updatedJobs = myJobsFiltered.map(item => {
-            if(item.JobID===jobID){
-                return{...item, Statuses:jobStatus};
+            if(item.JobID===changedJob.JobID){
+                return changedJob;
             }
             return item;
         })

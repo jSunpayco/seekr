@@ -13,13 +13,15 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormInputs = {
     StatusName: string;
+    Title: string;
+    URL: string;
 };
 
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     jobInfo: Job;
-    updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
+    updateJobsFunction:(changedJob: Job) => void;
     statusSuggestions: string[];
     categories: string[];
     jobtypes: string[];
@@ -69,7 +71,6 @@ const ModalUpdate = (props:Props) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
-    const currentDate = new Date();
     const [currentTitle, setCurrentTitle] = useState(props.jobInfo.Title);
     const [currentCompany, setCurrentCompany] = useState(props.jobInfo.Company)
     const [currentLocation, setCurrentLocation] = useState(props.jobInfo.Location)
@@ -116,6 +117,11 @@ const ModalUpdate = (props:Props) => {
             return false
     }
 
+    const validateUrl = (value:string) => {
+        let regex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/;
+        return regex.test(value)
+    };
+
     // STATUS VIEW
 
     const [isAddHovered, setAddHovered] = useState<Boolean>(false);
@@ -136,75 +142,29 @@ const ModalUpdate = (props:Props) => {
         ))
     }
 
-    // OLD FUNCTIONS BELOW
-
-    const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
-        , date:`${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getFullYear())}`})
-
-    const [progressChecked, setProgressChecked] = useState<boolean>(currStatus.type === 'In Progress')
-
-    const [rejectedChecked, setRejectedChecked] = useState<boolean>(currStatus.type === 'Rejected')
-
-    const [offerChecked, setOfferChecked] = useState<boolean>(currStatus.type === 'Offer')
-
-    const optionMap = [
-        {
-            name: "In Progress",
-            checked: progressChecked,
-            setChecked: setProgressChecked
-
-        },
-        {
-            name: "Rejected",
-            checked: rejectedChecked,
-            setChecked: setRejectedChecked
-
-        },
-        {
-            name: "Offer",
-            checked: offerChecked,
-            setChecked: setOfferChecked
-
-        }
-    ]
-
-    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, statusName:string) => {
-        if(radioState === false){
-            for(let i = 0 ; i<3; i++){
-                if(optionMap[i].setChecked != radioButton){
-                    optionMap[i].setChecked(false)
-                }
-                else{
-                    optionMap[i].setChecked(true)
-                    let newStatus = {...currStatus,type:statusName}
-                    setCurrStatus(newStatus)
-                }
-            }
-        }
-    }
-
-    const optionItem = () => {
-        return optionMap.map((item, index) =>(
-            <div id={`statusOption${index}`} className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
-                <label key={`option${index}`} className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
-                    <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked, item.name)}/>
-                    <span className={styles.check}></span>
-                </label>
-                <p className={styles.statusTypeName}>{item.name}</p>
-            </div>
-        ))
-    }
-
-    const [isFocused, setFocused] = useState<boolean>(false);
-    const [displayedSuggestions, setDisplayedSuggestions] = useState<string[]>(props.statusSuggestions)
-
-    const validateStatus = () =>{
-        return currStatus.name !== ''
-    }
-
     //Create a condition to check if current view is in General or Status
-    const onSubmit: SubmitHandler<FormInputs> = () => 
-        props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
+    // const onSubmit: SubmitHandler<FormInputs> = () => 
+    //     props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
+
+    const onSubmit: SubmitHandler<FormInputs> = () => {
+        const tempJob = currView === "general" ? {
+            ... props.jobInfo,
+            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            Company: currentCompany,
+            Location: currentLocation,
+            Title: currentTitle,
+            Type: currentJobType ? currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            URL: currentUrl
+        }
+        : {
+            ... props.jobInfo,
+            Statuses: statuses
+        }
+
+        if(tempJob != props.jobInfo){
+            props.updateJobsFunction(tempJob);
+        }
+    };
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
@@ -220,10 +180,10 @@ const ModalUpdate = (props:Props) => {
                 </div>
 
                 <Slide direction="right" in={currView==="general"} container={containerRef.current}>
-                    <div className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none')}}>
+                    <form className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none')}}>
                         <div className={styles.settingsContainer}>
-                            <input id='title' className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
-                            {/* {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>} */}
+                            <input id='title' className={styles.fullInputField} {...register('Title', { required: true })} placeholder='TITLE *' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
+                            {errors.Title && <span id='titleError' className={styles.error}>Please enter a valid title</span>}
                         </div>
 
                         <div className={styles.halfinputFieldsContainer}>
@@ -250,10 +210,10 @@ const ModalUpdate = (props:Props) => {
                             </div>
                         </div>
                         <div className={styles.settingsContainer}>
-                            <input id='url' className={styles.fullInputField} placeholder='URL *' style={{margin:'auto'}} value={currentUrl} onChange={(e)=>setCurrentUrl(e.target.value)}></input>
-                            {/* {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>} */}
+                            <input id='url' className={styles.fullInputField} {...register('URL', { validate: validateUrl })} placeholder='URL *' style={{margin:'auto', border:errors.URL?'#d30000 solid 1px':'transparent'}} value={currentUrl} onChange={(e)=>setCurrentUrl(e.target.value)}></input>
+                            {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>}
                         </div>
-                    </div>
+                    </form>
                 </Slide>
 
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
@@ -270,7 +230,7 @@ const ModalUpdate = (props:Props) => {
                         </div>
                     </div>
                 </Slide>
-                
+                {/* Add onClick */}
                 <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
