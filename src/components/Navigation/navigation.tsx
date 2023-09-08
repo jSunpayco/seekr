@@ -3,7 +3,7 @@ import { BiMenu, BiChevronDown, BiLogOut, BiChart } from "react-icons/bi";
 
 import {ClickAwayListener, useMediaQuery} from '@mui/material';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Job } from '../../interfaces/Job';
 
@@ -11,6 +11,11 @@ interface Props {
     data: Job[];
     boxClick: (value: string, filter: string, checked: boolean) => void;
     modalFunction: React.Dispatch<React.SetStateAction<boolean>>;
+    locationOptions: string[];
+    categoryOptions: string[];
+    monthOptions: string[];
+    positionOptions: string[];
+    statusOptions: string[];
 }
 
 const Navigation = (props:Props) => {
@@ -29,12 +34,6 @@ const Navigation = (props:Props) => {
 
     const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
     const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
-
-    const locationOptions = props.data.filter(job => job.Location != "").map((item) => item.Location);
-    const categoryOptions = props.data.filter(job => job.Category != "").map((item) => item.Category);
-    const monthOptions = props.data.map(job => job.Month);
-    const positionOptions = ['Full Time', 'Intern', 'Temporary']
-    const statusOptions = ['Sent', 'Resume Reject', 'Offer', 'OA', 'OA Reject', 'Interview']
 
     const [categoryClicked, setCategoryClicked] = useState(false)
     const [locationClicked, setLocationClicked] = useState(false)
@@ -74,31 +73,31 @@ const Navigation = (props:Props) => {
             name:"Category",
             isClicked:categoryClicked,
             isClickedFunction:setCategoryClicked,
-            options:categoryOptions.sort()
+            options:props.categoryOptions.sort()
         },
         {
             name:"Location",
             isClicked:locationClicked,
             isClickedFunction:setLocationClicked,
-            options:locationOptions.sort()
+            options:props.locationOptions.sort()
         },
         {
             name:"Month",
             isClicked:monthClicked,
             isClickedFunction:setMonthClicked,
-            options:monthOptions.sort()
+            options:props.monthOptions.sort()
         },
         {
             name:"Position",
             isClicked:positionClicked,
             isClickedFunction:setPositionClicked,
-            options:positionOptions.sort()
+            options:props.positionOptions.sort()
         },
         {
             name:"Status",
             isClicked:statusClicked,
             isClickedFunction:setStatusClicked,
-            options:statusOptions.sort()
+            options:props.statusOptions.sort()
         }
     ]
 

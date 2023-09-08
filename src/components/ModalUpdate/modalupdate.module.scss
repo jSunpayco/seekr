@@ -1,4 +1,5 @@
 @import 'src/styles/variables';
+@import 'src/styles/mixins';
 
 .modalGreyScreen{
     width: 100%;
@@ -53,6 +54,157 @@
     cursor: pointer;
     user-select: none;
 }
+
+.viewChoiceContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 70%;
+    margin: auto;
+}
+
+
+.choiceButton{
+    background-color: transparent;
+    border: none;
+    width: 30%;
+    outline: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.settingsContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.statusItemsContainer{
+    height: 228px;
+    overflow: scroll;
+    overflow-x: hidden;
+    @include custom-scrollbar;
+}
+
+.fullInputField{
+    width: 85%;
+    border: none;
+    border-radius: 20px;
+    background-color: white;
+    height: 38px;
+    padding-left: 15px;
+    height: 54px;
+    font-size:x-large;
+    box-sizing: border-box;
+
+    &:focus{
+        outline: none;
+    }
+}
+
+.statusInputField{
+    width: 43%;
+    height: 38px;
+    border-radius: 14px;
+    font-size:large;
+}
+
+.halfinputFieldsContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+
+    @media (max-width: 560px) {
+        flex-direction: column;
+        padding-right: 3%;
+    }
+}
+
+.halfInputField{
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 560px) {
+        width: 100%;
+        margin-bottom: 5%;
+    }
+}
+
+.statusItemContainer{
+    margin: 10px 20% 0 20%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.statusItem{
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: black;
+    font-size: 18px;
+    user-select: none;
+    width: 150px;
+
+    @media (max-width: 347px) {
+        width: 99%;
+    }
+
+    &::before{
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 7.5px;
+        margin-right: 5px;
+    }
+}
+
+.legendColorProgress{
+    &::before{
+        background-color: orange;
+    }
+}
+
+.legendColorReject{
+    &::before{
+        background-color: red;
+    }
+}
+
+.legendColorOffer{
+    &::before{
+        background-color: green;
+    }
+}
+
+.statusButton{
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.newStatusContainer{
+    margin: auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.newStatusAddButton{
+    height: 38px;
+    width:60px; 
+    border-radius: 14px;
+    font-size: 20px;
+}
+
+// Old classes
 
 .optionsGrid{
     width: 90%;
@@ -146,31 +298,6 @@
     user-select: none;
 }
 
-.singleInputContainer{
-    display: flex;
-    flex-direction: column;
-    // align-items: center;
-    margin-top: 20px;
-    margin-bottom: 10px;
-}
-
-.fullInputField{
-    width: 80%;
-    border: none;
-    border-radius: 20px;
-    background-color: white;
-    height: 38px;
-    padding-left: 15px;
-    height: 54px;
-    font-size:x-large;
-    box-sizing: border-box;
-    margin: auto;
-
-    &:focus{
-        outline: none;
-    }
-}
-
 .datalistContainer{
     height: auto;
     max-height: 200px;
@@ -182,7 +309,7 @@
 
     position: absolute;
     margin-top: 55px;
-    margin-left: 10%;
+    // margin-left: 10%;
     padding-top: 10px;
     padding-bottom: 10px;
 
