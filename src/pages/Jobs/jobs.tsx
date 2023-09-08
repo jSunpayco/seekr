@@ -83,6 +83,67 @@ const Jobs = () => {
     const [currTypeFilters, setCurrTypeFilters] = useState<string[]>([])
     const [currStatusFilters, setCurrStatusFilters] = useState<string[]>([])
 
+    const [locationOptions, setLocationOptions] = useState<string[]>([]);
+    const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
+    const [monthOptions, setMonthOptions] = useState<string[]>([]);
+    const [positionOptions, setPositionOptions] = useState<string[]>([]);
+    const [statusOptions, setStatusOptions] = useState<string[]>([]);
+
+    function addOptions(addedJobs:Job[]){
+        const locationSet = new Set<string>();
+        const categorySet = new Set<string>();
+        const monthSet = new Set<string>();
+        const positionSet = new Set<string>();
+        const statusSet = new Set<string>();
+
+        addedJobs.forEach(item => {
+            if(item.Location != "")
+                locationSet.add(item.Location);
+            
+            if(item.Category != "")
+                categorySet.add(item.Category);
+
+            if(item.Type != "")
+                positionSet.add(item.Type);
+            
+            if(item.Statuses[item.Statuses.length-1].type != "")
+                statusSet.add(item.Statuses[item.Statuses.length-1].type);
+
+            monthSet.add(item.Month);
+        });
+
+        setLocationOptions(Array.from(locationSet));
+        setCategoryOptions(Array.from(categorySet));
+        setMonthOptions(Array.from(monthSet));
+        setPositionOptions(Array.from(positionSet));
+        setStatusOptions(Array.from(statusSet));
+    }
+
+    function checkFilterOption(modifiedJob:Job){
+        const newJobs = myInitialJobs.filter(item => item !== modifiedJob);
+
+        const locationExists = newJobs.some(item => item['Location'] === modifiedJob.Location);
+        const categoryExists = newJobs.some(item => item['Category'] === modifiedJob.Category);
+        const monthExists = newJobs.some(item => item['Month'] === modifiedJob.Month);
+        const positionExists = newJobs.some(item => item['Type'] === modifiedJob.Type);
+        const statusExists = newJobs.some(item => item['Statuses'][item['Statuses'].length-1]['type'] === modifiedJob.Statuses[modifiedJob.Statuses.length-1].type);
+
+        if(!locationExists)
+            setLocationOptions(locationOptions.filter((item) => item !== modifiedJob.Location))
+        if(!categoryExists)
+            setCategoryOptions(categoryOptions.filter((item) => item !== modifiedJob.Category))
+        if(!monthExists)
+            setMonthOptions(monthOptions.filter((item) => item !== modifiedJob.Month))
+        if(!positionExists)
+            setPositionOptions(positionOptions.filter((item) => item !== modifiedJob.Type))
+        if(!statusExists)
+            setStatusOptions(statusOptions.filter((item) => item !== modifiedJob.Statuses[modifiedJob.Statuses.length-1].type))
+    }
+
+    useEffect(() => {
+        addOptions(myInitialJobs);
+    }, []);
+
     const handleCheckboxCick = (value:string, filter:string, checked:boolean) => {
         if(checked){
             switch(filter){
@@ -162,6 +223,10 @@ const Jobs = () => {
         applySearchFilter(myJobs);
     }, [searchValue]);
 
+    useEffect(() => {
+        applySearchFilter(myJobs);
+    }, [myInitialJobs]);
+
     const updateJobItem = (jobID:number, jobStatus:Statuses[]) => {
         let updatedJobs = myInitialJobs.map(item => {
             if(item.JobID===jobID){
@@ -189,6 +254,7 @@ const Jobs = () => {
         setMyJobs(myInitialJobs => [...myInitialJobs, jobItem]);
         setMyJobsFiltered(myJobsFiltered => [...myJobsFiltered, jobItem]);
         setModalCreateOpen(false);
+        addOptions([...myInitialJobs, jobItem]);
     }
 
     const deleteJobItem = (jobId:number) => {
@@ -196,6 +262,7 @@ const Jobs = () => {
         setMyJobs(myInitialJobs.filter(item => item.JobID !== jobId));
         setMyJobsFiltered(myJobsFiltered.filter(item => item.JobID !== jobId));
         setModalDeleteOpen(false);
+        checkFilterOption(myInitialJobs[myInitialJobs.findIndex(obj => obj.JobID === jobId)])
     }
 
     const jobsContainer = () => {
@@ -248,7 +315,7 @@ const Jobs = () => {
 
     return (
         <div className={styles.jobsContainer}>
-            <Navigation data={myInitialJobs} boxClick={handleCheckboxCick} modalFunction={setModalSankeyOpen}></Navigation>
+            <Navigation data={myInitialJobs} boxClick={handleCheckboxCick} modalFunction={setModalSankeyOpen} locationOptions={locationOptions} categoryOptions={categoryOptions} monthOptions={monthOptions} positionOptions={positionOptions} statusOptions={statusOptions}></Navigation>
             
             <h1 className={styles.pageTitle}>My Applications</h1>
 
@@ -267,8 +334,8 @@ const Jobs = () => {
                 </div>
             </div>
             
-            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]} categories={[...new Set(myInitialJobs.map(job => job.Category))]} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]}></Modal>}
-            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={[...new Set(myInitialJobs.map(job => job.Category))]} statuses={getStatuses()} jobtypes={[...new Set(myInitialJobs.map(job => job.Type))]} ></ModalCreate>}
+            {isModalOpen && <Modal isOpen={isModalOpen} closeFunction={setModalOpen} jobInfo={jobSelected} updateJobsFunction={updateJobItem} statusSuggestions={[...new Set(jobSelected.Statuses.map(job => job.name))]} categories={categoryOptions} jobtypes={positionOptions}></Modal>}
+            {isModalCreateOpen && <ModalCreate isOpen={isModalCreateOpen} closeFunction={setModalCreateOpen} currNumberOfJobs={myJobs.length} createJobFunction={createJobItem} categories={categoryOptions} statuses={getStatuses()} jobtypes={positionOptions} ></ModalCreate>}
             {isModalDeleteOpen && <ModalDelete isOpen={isModalDeleteOpen} closeFunction={setModalDeleteOpen} jobId={deleteIndex} deleteFunction={deleteJobItem} jobName={myJobs[deleteIndex].Title}></ModalDelete>}
             {isModalSankeyOpen && <ModalSankey isOpen={isModalSankeyOpen} closeFunction={setModalSankeyOpen}></ModalSankey>}
         </div>

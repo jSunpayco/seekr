@@ -11,6 +11,11 @@ interface Props {
     data: Job[];
     boxClick: (value: string, filter: string, checked: boolean) => void;
     modalFunction: React.Dispatch<React.SetStateAction<boolean>>;
+    locationOptions: string[];
+    categoryOptions: string[];
+    monthOptions: string[];
+    positionOptions: string[];
+    statusOptions: string[];
 }
 
 const Navigation = (props:Props) => {
@@ -29,42 +34,6 @@ const Navigation = (props:Props) => {
 
     const [logButtonHover, setLogButtonHover] = useState<Boolean>(false);
     const [chartButtonHover, setChartButtonHover] = useState<Boolean>(false);
-
-    const [locationOptions, setLocationOptions] = useState<string[]>([]);
-    const [categoryOptions, setCategoryOptions] = useState<string[]>([]);
-    const monthOptions = props.data.map(job => job.Month);
-    const [positionOptions, setPositionOptions] = useState<string[]>([]);
-    const [statusOptions, setStatusOptions] = useState<string[]>([]);
-
-    function addOptions(){
-        const locationSet = new Set<string>();
-        const categorySet = new Set<string>();
-        const positionSet = new Set<string>();
-        const statusSet = new Set<string>();
-
-        props.data.forEach(item => {
-            if(item.Location != "")
-                locationSet.add(item.Location);
-            
-            if(item.Category != "")
-                categorySet.add(item.Category);
-
-            if(item.Type != "")
-                positionSet.add(item.Type);
-            
-            if(item.Statuses[item.Statuses.length-1].type != "")
-                statusSet.add(item.Statuses[item.Statuses.length-1].type);
-        });
-
-        setLocationOptions(Array.from(locationSet));
-        setCategoryOptions(Array.from(categorySet));
-        setPositionOptions(Array.from(positionSet));
-        setStatusOptions(Array.from(statusSet));
-    }
-
-    useEffect(() => {
-        addOptions();
-    }, []);
 
     const [categoryClicked, setCategoryClicked] = useState(false)
     const [locationClicked, setLocationClicked] = useState(false)
@@ -104,31 +73,31 @@ const Navigation = (props:Props) => {
             name:"Category",
             isClicked:categoryClicked,
             isClickedFunction:setCategoryClicked,
-            options:categoryOptions.sort()
+            options:props.categoryOptions.sort()
         },
         {
             name:"Location",
             isClicked:locationClicked,
             isClickedFunction:setLocationClicked,
-            options:locationOptions.sort()
+            options:props.locationOptions.sort()
         },
         {
             name:"Month",
             isClicked:monthClicked,
             isClickedFunction:setMonthClicked,
-            options:monthOptions.sort()
+            options:props.monthOptions.sort()
         },
         {
             name:"Position",
             isClicked:positionClicked,
             isClickedFunction:setPositionClicked,
-            options:positionOptions.sort()
+            options:props.positionOptions.sort()
         },
         {
             name:"Status",
             isClicked:statusClicked,
             isClickedFunction:setStatusClicked,
-            options:statusOptions.sort()
+            options:props.statusOptions.sort()
         }
     ]
 
