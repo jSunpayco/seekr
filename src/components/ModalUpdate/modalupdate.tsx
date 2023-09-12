@@ -137,7 +137,7 @@ const ModalUpdate = (props:Props) => {
                 <p>{item.date}</p>
                 <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
                 <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
-                <BiTrash className={styles.statusButton}/>
+                <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
             </div>
         ))
     }
@@ -153,6 +153,11 @@ const ModalUpdate = (props:Props) => {
             [temp[index], temp[index+1]] = [temp[index+1], temp[index]]
             setStatuses(temp);
         }
+    }
+
+    function deleteStatus(index:number){
+        if(statuses.length > 1)
+            setStatuses(statuses.filter((_, i) => i !== index));
     }
 
     const onSubmit: SubmitHandler<FormInputs> = () => {
