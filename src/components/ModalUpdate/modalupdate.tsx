@@ -135,16 +135,25 @@ const ModalUpdate = (props:Props) => {
                     {item.name}
                 </p>
                 <p>{item.date}</p>
-                <BiChevronDown className={styles.statusButton}/>
-                <BiChevronUp className={styles.statusButton}/>
+                <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
+                <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
                 <BiTrash className={styles.statusButton}/>
             </div>
         ))
     }
 
-    //Create a condition to check if current view is in General or Status
-    // const onSubmit: SubmitHandler<FormInputs> = () => 
-    //     props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
+    function swapStatus(index:number, direction:string){
+        const temp = [...statuses]
+        if(direction === "up" && index > 0){
+            [temp[index-1], temp[index]] = [temp[index], temp[index-1]]
+            setStatuses(temp);
+        }
+        else if(direction === "down" && index < statuses.length - 1){
+            console.log(index, direction);
+            [temp[index], temp[index+1]] = [temp[index+1], temp[index]]
+            setStatuses(temp);
+        }
+    }
 
     const onSubmit: SubmitHandler<FormInputs> = () => {
         const tempJob = currView === "general" ? {
