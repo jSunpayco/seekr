@@ -1,5 +1,6 @@
 import styles from './modalupdate.module.scss';
 import navStyles from '../Navigation/navigation.module.scss'
+import createStyles from '../ModalCreate/modalcreate.module.scss'
 import FormButton from '../FormButton/formbutton';
 import { BiChevronDown, BiChevronUp, BiTrash, BiAddToQueue } from "react-icons/bi";
 
@@ -7,7 +8,7 @@ import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
 
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
-import {useMediaQuery, Slide} from '@mui/material';
+import {useMediaQuery, Slide, ClickAwayListener} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -38,6 +39,11 @@ const ModalUpdate = (props:Props) => {
         if (inputReference.current) {
             const width = inputReference.current.offsetWidth;
             setInputWidth(width);
+        }
+
+        if (statusInputReference.current) {
+            const width = statusInputReference.current.offsetWidth;
+            setStatusInputWidth(width);
         }
           
         const handleKeyDown = (event:KeyboardEvent) => {
@@ -127,6 +133,15 @@ const ModalUpdate = (props:Props) => {
     const [isAddHovered, setAddHovered] = useState<Boolean>(false);
 
     const [statuses, setStatuses] = useState<Statuses[]>(props.jobInfo.Statuses);
+
+    const [currName, setCurrName] = useState<string>("");
+    const [currDate, setCurrDate] = useState<string>("");
+    
+    const statusTypes = ["In Progress", "Rejected", "Offer"];
+    const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE *');
+    const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
+    const statusInputReference = useRef<HTMLParagraphElement>(null);
+    const [statusInputWidth, setStatusInputWidth] = useState<string | number>('auto');
 
     const statusItem = () => {
         return statuses.map((item, index) => (
@@ -236,8 +251,19 @@ const ModalUpdate = (props:Props) => {
                             {statusItem()}
                         </div>
                         <div className={styles.newStatusContainer}>
-                            <input id='statusType' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Type' style={{margin:'auto'}}></input>
+                            <div onClick={()=>setStatusTypeClicked(!isStatusTypeClicked)} ref={statusInputReference}>
+                                <ClickAwayListener onClickAway={()=>setStatusTypeClicked(false)}>
+                                    <p id='statusType' className={`${styles.fullInputField} ${styles.statusInputField} ${styles.statusDropDown}`}>
+                                        {currentStatusType}{<BiChevronDown style ={{transform:isStatusTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
+                                    </p>
+                                </ClickAwayListener>
+                                <div className={`${createStyles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isStatusTypeClicked?'visible':'hidden'), marginTop:'-15px'}}>
+                                    {datalistOptions(statusTypes, setCurrentStatusType, 'statustype')}
+                                </div>
+                                {/* {errors.StatusType && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>} */}
+                            </div>
                             <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Name' style={{margin:'auto'}}></input>
+                            <input id='statusDate' className={`${styles.fullInputField} ${styles.statusInputField}`} type='date' style={{margin:'auto', paddingRight:'10px'}}></input>
                             <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)}>
                                 {isAddHovered?(<BiAddToQueue/>):(<span style={{fontSize:'17px'}}>Add</span>)}
                             </button>

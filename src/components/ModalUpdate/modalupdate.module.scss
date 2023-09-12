@@ -104,10 +104,19 @@
 }
 
 .statusInputField{
-    width: 43%;
+    width: 28%;
     height: 38px;
     border-radius: 14px;
     font-size:large;
+}
+
+.statusDropDown{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
+    cursor: pointer;
+    user-select: none;
 }
 
 .halfinputFieldsContainer{
@@ -194,6 +203,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     width: 80%;
 }
 
