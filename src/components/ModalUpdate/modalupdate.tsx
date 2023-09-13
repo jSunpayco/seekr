@@ -311,7 +311,7 @@ const ModalUpdate = (props:Props) => {
                                     </p>
                                 </ClickAwayListener>
                                 {/* {typeError && <span id='statusTypeError' className={styles.error}>Required</span>} */}
-                                <div className={`${styles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:'2px'}}>
+                                <div className={`${styles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:'40px'}}>
                                     {datalistOptions(statusTypes, setCurrType, 'statustype')}
                                 </div>
                             </div>
