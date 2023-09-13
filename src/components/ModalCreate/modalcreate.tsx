@@ -141,7 +141,6 @@ const ModalCreate = (props:Props) => {
     };
 
     const validateStatusType = () => {
-        console.log(currentStatusType === 'status type'.toUpperCase())
         return currentStatusType !== 'status type'.toUpperCase();
     };
 

@@ -13,7 +13,6 @@ import {useMediaQuery, Slide, ClickAwayListener} from '@mui/material';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormInputs = {
-    StatusName: string;
     Title: string;
     URL: string;
 };
@@ -65,6 +64,13 @@ const ModalUpdate = (props:Props) => {
     }
 
     const [currView, setCurrView] = useState<string>("general");
+
+    useEffect(() => {
+        if (statusInputReference.current && statusInputWidth === 0) {
+            const width = statusInputReference.current.offsetWidth;
+            setStatusInputWidth(width);
+        }
+    }, [currView]);
 
     function borderView(option:string){
         if(option === "general" && currView === "general" || option === "status" && currView === "status")
@@ -136,12 +142,23 @@ const ModalUpdate = (props:Props) => {
 
     const [currName, setCurrName] = useState<string>("");
     const [currDate, setCurrDate] = useState<string>("");
+
+    const dateRegex = /^(0?[1-9]|1[0-2])[\/](0?[1-9]|[12]\d|3[01])[\/](19|20)\d{2}$/;
+
+    const handleDateChange = (currDate:string) => {
+        let parts = currDate.split('-');
+        setCurrDate(`${parts[1]}/${parts[2]}/${parts[0]}`)
+    }
     
     const statusTypes = ["In Progress", "Rejected", "Offer"];
-    const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE *');
-    const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
+    const [currType, setCurrType] = useState<string>('STATUS TYPE');
+    const [isTypeClicked, setTypeClicked] = useState<boolean>(false);
     const statusInputReference = useRef<HTMLParagraphElement>(null);
     const [statusInputWidth, setStatusInputWidth] = useState<string | number>('auto');
+
+    const [dateError, setDateError] = useState<Boolean>(false);
+    const [typeError, setTypeError] = useState<Boolean>(false);
+    const [nameError, setNameError] = useState<Boolean>(false);
 
     const statusItem = () => {
         return statuses.map((item, index) => (
@@ -164,7 +181,6 @@ const ModalUpdate = (props:Props) => {
             setStatuses(temp);
         }
         else if(direction === "down" && index < statuses.length - 1){
-            console.log(index, direction);
             [temp[index], temp[index+1]] = [temp[index+1], temp[index]]
             setStatuses(temp);
         }
@@ -173,6 +189,38 @@ const ModalUpdate = (props:Props) => {
     function deleteStatus(index:number){
         if(statuses.length > 1)
             setStatuses(statuses.filter((_, i) => i !== index));
+    }
+
+    function addStatus(){
+        var hasError = false;
+
+        const newType = currType ? currType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "";
+        
+        if(!statusTypes.includes(newType)){
+            setTypeError(true);
+            hasError = true;
+        }else
+            setTypeError(false);
+
+        if(currName.length <= 0){
+            setNameError(true);
+            hasError = true;
+        }else
+            setNameError(false);
+
+
+        if(!dateRegex.test(currDate)){
+            setDateError(true);
+            hasError = true;
+        }else
+            setDateError(false);
+
+        if(hasError === false){
+            setStatuses([...statuses, {name:currName, date:currDate, type:newType}]);
+            setCurrDate("");
+            setCurrName("");
+            setCurrType("STATUS TYPE");
+        }
     }
 
     const onSubmit: SubmitHandler<FormInputs> = () => {
@@ -192,6 +240,9 @@ const ModalUpdate = (props:Props) => {
 
         if(tempJob != props.jobInfo){
             props.updateJobsFunction(tempJob);
+        }
+        else{
+            props.closeFunction(false)
         }
     };
 
@@ -251,20 +302,26 @@ const ModalUpdate = (props:Props) => {
                             {statusItem()}
                         </div>
                         <div className={styles.newStatusContainer}>
-                            <div onClick={()=>setStatusTypeClicked(!isStatusTypeClicked)} ref={statusInputReference}>
-                                <ClickAwayListener onClickAway={()=>setStatusTypeClicked(false)}>
-                                    <p id='statusType' className={`${styles.fullInputField} ${styles.statusInputField} ${styles.statusDropDown}`}>
-                                        {currentStatusType}{<BiChevronDown style ={{transform:isStatusTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
+                            <div onClick={()=>setTypeClicked(!isTypeClicked)} style={{width:'100%'}}>
+                                <ClickAwayListener onClickAway={()=>setTypeClicked(false)}>
+                                    <p id='statusType' className={`${styles.fullInputField} ${styles.statusInputField} ${styles.statusDropDown}`} ref={statusInputReference} style={{border:typeError?'#d30000 solid 1px':'transparent'}}>
+                                        {currType}{<BiChevronDown style ={{transform:isTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
                                     </p>
                                 </ClickAwayListener>
-                                <div className={`${createStyles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isStatusTypeClicked?'visible':'hidden'), marginTop:'-15px'}}>
-                                    {datalistOptions(statusTypes, setCurrentStatusType, 'statustype')}
+                                {typeError && <span id='statusTypeError' className={styles.error}>Required</span>}
+                                <div className={`${createStyles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:(typeError?'-15px':'2px')}}>
+                                    {datalistOptions(statusTypes, setCurrType, 'statustype')}
                                 </div>
-                                {/* {errors.StatusType && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>} */}
                             </div>
-                            <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Name' style={{margin:'auto'}}></input>
-                            <input id='statusDate' className={`${styles.fullInputField} ${styles.statusInputField}`} type='date' style={{margin:'auto', paddingRight:'10px'}}></input>
-                            <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)}>
+                            <div style={{width:'100%'}}>
+                                <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} style={{border:nameError?'#d30000 solid 1px':'transparent'}} placeholder='Status Name' value={currName} onChange={(e)=>setCurrName(e.target.value)}></input>
+                                {nameError && <span id='statusNameError' className={styles.error}>Required</span>}
+                            </div>
+                            <div style={{width:'100%'}}> 
+                                <input id='statusDate' className={`${styles.fullInputField} ${styles.statusInputField}`} type='date' style={{paddingRight:'10px', border:dateError?'#d30000 solid 1px':'transparent'}} onChange={(e)=>handleDateChange(e.target.value)}></input>
+                                {dateError && <span id='statusDateError' className={styles.error}>Required</span>}
+                            </div>
+                            <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)} onClick={()=>addStatus()}>
                                 {isAddHovered?(<BiAddToQueue/>):(<span style={{fontSize:'17px'}}>Add</span>)}
                             </button>
                         </div>
