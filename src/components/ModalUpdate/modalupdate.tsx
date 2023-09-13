@@ -34,17 +34,7 @@ const ModalUpdate = (props:Props) => {
     const inputReference = useRef<HTMLInputElement>(null);
     const [inputWidth, setInputWidth] = useState<string | number>('auto');
 
-    useEffect(() => {
-        if (inputReference.current) {
-            const width = inputReference.current.offsetWidth;
-            setInputWidth(width);
-        }
-
-        if (statusInputReference.current) {
-            const width = statusInputReference.current.offsetWidth;
-            setStatusInputWidth(width);
-        }
-          
+    useEffect(() => {          
         const handleKeyDown = (event:KeyboardEvent) => {
           if (event.key === 'Escape') {
             props.closeFunction(false)
@@ -66,6 +56,11 @@ const ModalUpdate = (props:Props) => {
     const [currView, setCurrView] = useState<string>("general");
 
     useEffect(() => {
+        if (inputReference.current) {
+            const width = inputReference.current.offsetWidth;
+            setInputWidth(width);
+        }
+
         if (statusInputReference.current) {
             const width = statusInputReference.current.offsetWidth;
             setStatusInputWidth(width);
