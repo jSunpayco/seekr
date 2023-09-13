@@ -104,10 +104,21 @@
 }
 
 .statusInputField{
-    width: 43%;
+    width: 90%;
     height: 38px;
     border-radius: 14px;
     font-size:large;
+    // margin: auto;
+}
+
+.statusDropDown{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    cursor: pointer;
+    user-select: none;
+    margin: 0;
 }
 
 .halfinputFieldsContainer{
@@ -194,108 +205,15 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     width: 80%;
 }
 
 .newStatusAddButton{
     height: 38px;
-    width:60px; 
+    min-width:60px; 
     border-radius: 14px;
     font-size: 20px;
-}
-
-// Old classes
-
-.optionsGrid{
-    width: 90%;
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    margin: auto;
-
-    @media (max-width: 470px) {
-        flex-direction: column;
-    }
-}
-
-.optionContainer{
-    width: 100%;
-    border-radius: 12px;
-    height: 75px;
-    margin: auto;
-    position: relative;
-
-    display: flex;
-    flex-direction: row;
-    justify-content: start;
-    align-items: center;
-
-    &:hover{
-        cursor: pointer;
-        background-color: $gray;
-    }
-
-    @media (max-width: 480px) {
-        width: 90%;
-    }
-}
-
-.label{
-    user-select: none;
-    display:block;
-    position: relative;
-    margin-left: 20px;
-
-    input{
-        visibility: hidden;
-        position: absolute;
-    }
-}
-
-.progressOption{
-    input{
-        &:checked ~ .check{
-            background-color: orange;
-        }
-    }
-}
-
-.rejectOption{
-    input{
-        &:checked ~ .check{
-            background-color: red;
-        }
-    }
-}
-
-.offerOption{
-    input{
-        &:checked ~ .check{
-            background-color: green;
-        }
-    }
-}
-
-.check{
-    position: absolute;
-    top: 50%;
-    left: 10%;
-    transform: translate(-20%, -50%);
-    height: 16px;
-    width: 16px;
-    background-color: transparent;
-    border: solid black;
-    border-width: 1px;
-    border-radius: 50%;
-    &:hover{
-        cursor: pointer;
-    }
-}
-
-.statusTypeName{
-    margin: auto;
-    user-select: none;
 }
 
 .datalistContainer{
@@ -308,8 +226,7 @@
     width: 45%;
 
     position: absolute;
-    margin-top: 55px;
-    // margin-left: 10%;
+    margin-top: 100px;
     padding-top: 10px;
     padding-bottom: 10px;
 
@@ -337,5 +254,5 @@
 .error{
     color: $dark-red;
     margin-top: 10px;
-    margin-left: 12%;
+    margin-left: 9%;
 }

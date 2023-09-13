@@ -1,5 +1,6 @@
 import styles from './modalupdate.module.scss';
 import navStyles from '../Navigation/navigation.module.scss'
+import createStyles from '../ModalCreate/modalcreate.module.scss'
 import FormButton from '../FormButton/formbutton';
 import { BiChevronDown, BiChevronUp, BiTrash, BiAddToQueue } from "react-icons/bi";
 
@@ -7,19 +8,20 @@ import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
 
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
-import {useMediaQuery, Slide} from '@mui/material';
+import {useMediaQuery, Slide, ClickAwayListener} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 type FormInputs = {
-    StatusName: string;
+    Title: string;
+    URL: string;
 };
 
 interface Props {
     isOpen: boolean;
     closeFunction: Dispatch<SetStateAction<boolean>>;
     jobInfo: Job;
-    updateJobsFunction:(jobID: number, jobStatus: Statuses[]) => void;
+    updateJobsFunction:(changedJob: Job) => void;
     statusSuggestions: string[];
     categories: string[];
     jobtypes: string[];
@@ -36,6 +38,11 @@ const ModalUpdate = (props:Props) => {
         if (inputReference.current) {
             const width = inputReference.current.offsetWidth;
             setInputWidth(width);
+        }
+
+        if (statusInputReference.current) {
+            const width = statusInputReference.current.offsetWidth;
+            setStatusInputWidth(width);
         }
           
         const handleKeyDown = (event:KeyboardEvent) => {
@@ -58,6 +65,13 @@ const ModalUpdate = (props:Props) => {
 
     const [currView, setCurrView] = useState<string>("general");
 
+    useEffect(() => {
+        if (statusInputReference.current && statusInputWidth === 0) {
+            const width = statusInputReference.current.offsetWidth;
+            setStatusInputWidth(width);
+        }
+    }, [currView]);
+
     function borderView(option:string){
         if(option === "general" && currView === "general" || option === "status" && currView === "status")
             return "1px solid";
@@ -69,7 +83,6 @@ const ModalUpdate = (props:Props) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormInputs>();
 
-    const currentDate = new Date();
     const [currentTitle, setCurrentTitle] = useState(props.jobInfo.Title);
     const [currentCompany, setCurrentCompany] = useState(props.jobInfo.Company)
     const [currentLocation, setCurrentLocation] = useState(props.jobInfo.Location)
@@ -116,11 +129,36 @@ const ModalUpdate = (props:Props) => {
             return false
     }
 
+    const validateUrl = (value:string) => {
+        let regex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/;
+        return regex.test(value)
+    };
+
     // STATUS VIEW
 
     const [isAddHovered, setAddHovered] = useState<Boolean>(false);
 
     const [statuses, setStatuses] = useState<Statuses[]>(props.jobInfo.Statuses);
+
+    const [currName, setCurrName] = useState<string>("");
+    const [currDate, setCurrDate] = useState<string>("");
+
+    const dateRegex = /^(0?[1-9]|1[0-2])[\/](0?[1-9]|[12]\d|3[01])[\/](19|20)\d{2}$/;
+
+    const handleDateChange = (currDate:string) => {
+        let parts = currDate.split('-');
+        setCurrDate(`${parts[1]}/${parts[2]}/${parts[0]}`)
+    }
+    
+    const statusTypes = ["In Progress", "Rejected", "Offer"];
+    const [currType, setCurrType] = useState<string>('STATUS TYPE');
+    const [isTypeClicked, setTypeClicked] = useState<boolean>(false);
+    const statusInputReference = useRef<HTMLParagraphElement>(null);
+    const [statusInputWidth, setStatusInputWidth] = useState<string | number>('auto');
+
+    const [dateError, setDateError] = useState<Boolean>(false);
+    const [typeError, setTypeError] = useState<Boolean>(false);
+    const [nameError, setNameError] = useState<Boolean>(false);
 
     const statusItem = () => {
         return statuses.map((item, index) => (
@@ -129,82 +167,84 @@ const ModalUpdate = (props:Props) => {
                     {item.name}
                 </p>
                 <p>{item.date}</p>
-                <BiChevronDown className={styles.statusButton}/>
-                <BiChevronUp className={styles.statusButton}/>
-                <BiTrash className={styles.statusButton}/>
+                <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
+                <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
+                <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
             </div>
         ))
     }
 
-    // OLD FUNCTIONS BELOW
-
-    const [currStatus, setCurrStatus] = useState<Statuses>({...props.jobInfo.Statuses[props.jobInfo.Statuses.length-1]
-        , date:`${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')}/${String(currentDate.getFullYear())}`})
-
-    const [progressChecked, setProgressChecked] = useState<boolean>(currStatus.type === 'In Progress')
-
-    const [rejectedChecked, setRejectedChecked] = useState<boolean>(currStatus.type === 'Rejected')
-
-    const [offerChecked, setOfferChecked] = useState<boolean>(currStatus.type === 'Offer')
-
-    const optionMap = [
-        {
-            name: "In Progress",
-            checked: progressChecked,
-            setChecked: setProgressChecked
-
-        },
-        {
-            name: "Rejected",
-            checked: rejectedChecked,
-            setChecked: setRejectedChecked
-
-        },
-        {
-            name: "Offer",
-            checked: offerChecked,
-            setChecked: setOfferChecked
-
+    function swapStatus(index:number, direction:string){
+        const temp = [...statuses]
+        if(direction === "up" && index > 0){
+            [temp[index-1], temp[index]] = [temp[index], temp[index-1]]
+            setStatuses(temp);
         }
-    ]
-
-    const unCheck = (radioButton:Dispatch<SetStateAction<boolean>>, radioState:boolean, statusName:string) => {
-        if(radioState === false){
-            for(let i = 0 ; i<3; i++){
-                if(optionMap[i].setChecked != radioButton){
-                    optionMap[i].setChecked(false)
-                }
-                else{
-                    optionMap[i].setChecked(true)
-                    let newStatus = {...currStatus,type:statusName}
-                    setCurrStatus(newStatus)
-                }
-            }
+        else if(direction === "down" && index < statuses.length - 1){
+            [temp[index], temp[index+1]] = [temp[index+1], temp[index]]
+            setStatuses(temp);
         }
     }
 
-    const optionItem = () => {
-        return optionMap.map((item, index) =>(
-            <div id={`statusOption${index}`} className={styles.optionContainer} style={{backgroundColor:(item.checked?'#e6e6e6':'transparent')}} onClick={() => unCheck(item.setChecked, item.checked, item.name)}>
-                <label key={`option${index}`} className={`${styles.label} ${item.name==="Offer"?styles.offerOption:item.name==="Rejected"?styles.rejectOption:styles.progressOption}`}>
-                    <input type="radio" name="radio" checked={item.checked} onChange={() => unCheck(item.setChecked, item.checked, item.name)}/>
-                    <span className={styles.check}></span>
-                </label>
-                <p className={styles.statusTypeName}>{item.name}</p>
-            </div>
-        ))
+    function deleteStatus(index:number){
+        if(statuses.length > 1)
+            setStatuses(statuses.filter((_, i) => i !== index));
     }
 
-    const [isFocused, setFocused] = useState<boolean>(false);
-    const [displayedSuggestions, setDisplayedSuggestions] = useState<string[]>(props.statusSuggestions)
+    function addStatus(){
+        var hasError = false;
 
-    const validateStatus = () =>{
-        return currStatus.name !== ''
+        const newType = currType ? currType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "";
+        
+        if(!statusTypes.includes(newType)){
+            setTypeError(true);
+            hasError = true;
+        }else
+            setTypeError(false);
+
+        if(currName.length <= 0){
+            setNameError(true);
+            hasError = true;
+        }else
+            setNameError(false);
+
+
+        if(!dateRegex.test(currDate)){
+            setDateError(true);
+            hasError = true;
+        }else
+            setDateError(false);
+
+        if(hasError === false){
+            setStatuses([...statuses, {name:currName, date:currDate, type:newType}]);
+            setCurrDate("");
+            setCurrName("");
+            setCurrType("STATUS TYPE");
+        }
     }
 
-    //Create a condition to check if current view is in General or Status
-    const onSubmit: SubmitHandler<FormInputs> = () => 
-        props.jobInfo.Statuses[props.jobInfo.Statuses.length-1] !== currStatus ? props.updateJobsFunction(props.jobInfo.JobID, [...props.jobInfo.Statuses, currStatus]) : props.closeFunction(false);
+    const onSubmit: SubmitHandler<FormInputs> = () => {
+        const tempJob = currView === "general" ? {
+            ... props.jobInfo,
+            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            Company: currentCompany,
+            Location: currentLocation,
+            Title: currentTitle,
+            Type: currentJobType ? currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            URL: currentUrl
+        }
+        : {
+            ... props.jobInfo,
+            Statuses: statuses
+        }
+
+        if(tempJob != props.jobInfo){
+            props.updateJobsFunction(tempJob);
+        }
+        else{
+            props.closeFunction(false)
+        }
+    };
 
     return (
         <div className={styles.modalGreyScreen} onClick={(e)=>greyAreaClickFunction(e)}>
@@ -220,10 +260,10 @@ const ModalUpdate = (props:Props) => {
                 </div>
 
                 <Slide direction="right" in={currView==="general"} container={containerRef.current}>
-                    <div className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none')}}>
+                    <form className={styles.settingsContainer} style={{display:(currView==="general"?'flex':'none')}}>
                         <div className={styles.settingsContainer}>
-                            <input id='title' className={styles.fullInputField} placeholder='TITLE *' style={{margin:'auto'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
-                            {/* {errors.Title && <span id='titleError' className={styles.error} style={{marginLeft:'12%'}}>Please enter a valid title</span>} */}
+                            <input id='title' className={styles.fullInputField} {...register('Title', { required: true })} placeholder='TITLE *' style={{margin:'auto', border:errors.Title?'#d30000 solid 1px':'transparent'}} value={currentTitle} onChange={(e)=>setCurrentTitle(e.target.value)}></input>
+                            {errors.Title && <span id='titleError' className={styles.error}>Please enter a valid title</span>}
                         </div>
 
                         <div className={styles.halfinputFieldsContainer}>
@@ -250,10 +290,10 @@ const ModalUpdate = (props:Props) => {
                             </div>
                         </div>
                         <div className={styles.settingsContainer}>
-                            <input id='url' className={styles.fullInputField} placeholder='URL *' style={{margin:'auto'}} value={currentUrl} onChange={(e)=>setCurrentUrl(e.target.value)}></input>
-                            {/* {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>} */}
+                            <input id='url' className={styles.fullInputField} {...register('URL', { validate: validateUrl })} placeholder='URL *' style={{margin:'auto', border:errors.URL?'#d30000 solid 1px':'transparent'}} value={currentUrl} onChange={(e)=>setCurrentUrl(e.target.value)}></input>
+                            {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>}
                         </div>
-                    </div>
+                    </form>
                 </Slide>
 
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
@@ -262,15 +302,32 @@ const ModalUpdate = (props:Props) => {
                             {statusItem()}
                         </div>
                         <div className={styles.newStatusContainer}>
-                            <input id='statusType' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Type' style={{margin:'auto'}}></input>
-                            <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} placeholder='Status Name' style={{margin:'auto'}}></input>
-                            <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)}>
+                            <div onClick={()=>setTypeClicked(!isTypeClicked)} style={{width:'100%'}}>
+                                <ClickAwayListener onClickAway={()=>setTypeClicked(false)}>
+                                    <p id='statusType' className={`${styles.fullInputField} ${styles.statusInputField} ${styles.statusDropDown}`} ref={statusInputReference} style={{border:typeError?'#d30000 solid 1px':'transparent'}}>
+                                        {currType}{<BiChevronDown style ={{transform:isTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
+                                    </p>
+                                </ClickAwayListener>
+                                {typeError && <span id='statusTypeError' className={styles.error}>Required</span>}
+                                <div className={`${styles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:(typeError?'-15px':'2px')}}>
+                                    {datalistOptions(statusTypes, setCurrType, 'statustype')}
+                                </div>
+                            </div>
+                            <div style={{width:'100%'}}>
+                                <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} style={{border:nameError?'#d30000 solid 1px':'transparent'}} placeholder='Status Name' value={currName} onChange={(e)=>setCurrName(e.target.value)}></input>
+                                {nameError && <span id='statusNameError' className={styles.error}>Required</span>}
+                            </div>
+                            <div style={{width:'100%'}}> 
+                                <input id='statusDate' className={`${styles.fullInputField} ${styles.statusInputField}`} type='date' style={{paddingRight:'10px', border:dateError?'#d30000 solid 1px':'transparent'}} onChange={(e)=>handleDateChange(e.target.value)}></input>
+                                {dateError && <span id='statusDateError' className={styles.error}>Required</span>}
+                            </div>
+                            <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)} onClick={()=>addStatus()}>
                                 {isAddHovered?(<BiAddToQueue/>):(<span style={{fontSize:'17px'}}>Add</span>)}
                             </button>
                         </div>
                     </div>
                 </Slide>
-                
+                {/* Add onClick */}
                 <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>

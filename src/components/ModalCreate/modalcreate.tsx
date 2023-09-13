@@ -141,7 +141,6 @@ const ModalCreate = (props:Props) => {
     };
 
     const validateStatusType = () => {
-        console.log(currentStatusType === 'status type'.toUpperCase())
         return currentStatusType !== 'status type'.toUpperCase();
     };
 
@@ -232,7 +231,7 @@ const ModalCreate = (props:Props) => {
                             {errors.Date && <span id='dateError' className={styles.error}>Please choose a valid date</span>}
                         </div>
                         <div className={styles.halfInputField}>
-                            <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL *' style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
+                            <input id='url' {...register('URL', { validate: validateUrl })} className={styles.fullInputField} placeholder='URL *' style={{width:'100%', border:errors.URL?'#d30000 solid 1px':'transparent'}} onChange={(e)=>setCurrentUrl(e.target.value)} value={currentUrl}></input>
                             {errors.URL && <span id='urlError' className={styles.error}>Please enter a valid URL</span>}
                         </div>
                     </div>
