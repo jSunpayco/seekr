@@ -167,9 +167,11 @@ const ModalUpdate = (props:Props) => {
                     {item.name}
                 </p>
                 <p>{item.date}</p>
-                <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
-                <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
-                <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+                <div className={styles.statusButtonsContainer}>
+                    <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
+                    <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
+                    <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+                </div>
             </div>
         ))
     }
