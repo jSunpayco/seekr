@@ -220,6 +220,17 @@
     justify-content: space-between;
     align-items: center;
     width: 80%;
+
+    @media (max-width: 740px) {
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.newStatusField{
+    max-width: 320px;
+    width: 100%;
+    margin-bottom: 10px;
 }
 
 .newStatusAddButton{
@@ -267,5 +278,9 @@
 .error{
     color: $dark-red;
     margin-top: 10px;
-    margin-left: 9%;
+    margin-left: 5%;
+
+    @media (max-width: 740px) {
+        margin-left: 3%;
+    }
 }
