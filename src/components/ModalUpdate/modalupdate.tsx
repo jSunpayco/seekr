@@ -34,17 +34,7 @@ const ModalUpdate = (props:Props) => {
     const inputReference = useRef<HTMLInputElement>(null);
     const [inputWidth, setInputWidth] = useState<string | number>('auto');
 
-    useEffect(() => {
-        if (inputReference.current) {
-            const width = inputReference.current.offsetWidth;
-            setInputWidth(width);
-        }
-
-        if (statusInputReference.current) {
-            const width = statusInputReference.current.offsetWidth;
-            setStatusInputWidth(width);
-        }
-          
+    useEffect(() => {          
         const handleKeyDown = (event:KeyboardEvent) => {
           if (event.key === 'Escape') {
             props.closeFunction(false)
@@ -66,7 +56,12 @@ const ModalUpdate = (props:Props) => {
     const [currView, setCurrView] = useState<string>("general");
 
     useEffect(() => {
-        if (statusInputReference.current && statusInputWidth === 0) {
+        if (inputReference.current) {
+            const width = inputReference.current.offsetWidth;
+            setInputWidth(width);
+        }
+
+        if (statusInputReference.current) {
             const width = statusInputReference.current.offsetWidth;
             setStatusInputWidth(width);
         }
@@ -167,9 +162,11 @@ const ModalUpdate = (props:Props) => {
                     {item.name}
                 </p>
                 <p>{item.date}</p>
-                <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
-                <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
-                <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+                <div className={styles.statusButtonsContainer}>
+                    <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
+                    <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
+                    <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+                </div>
             </div>
         ))
     }
@@ -302,24 +299,24 @@ const ModalUpdate = (props:Props) => {
                             {statusItem()}
                         </div>
                         <div className={styles.newStatusContainer}>
-                            <div onClick={()=>setTypeClicked(!isTypeClicked)} style={{width:'100%'}}>
+                            <div onClick={()=>setTypeClicked(!isTypeClicked)} className={styles.newStatusField}>
                                 <ClickAwayListener onClickAway={()=>setTypeClicked(false)}>
                                     <p id='statusType' className={`${styles.fullInputField} ${styles.statusInputField} ${styles.statusDropDown}`} ref={statusInputReference} style={{border:typeError?'#d30000 solid 1px':'transparent'}}>
                                         {currType}{<BiChevronDown style ={{transform:isTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
                                     </p>
                                 </ClickAwayListener>
-                                {typeError && <span id='statusTypeError' className={styles.error}>Required</span>}
-                                <div className={`${styles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:(typeError?'-15px':'2px')}}>
+                                {/* {typeError && <span id='statusTypeError' className={styles.error}>Required</span>} */}
+                                <div className={`${styles.datalistContainer} ${(isScreenSmall?createStyles.dataListMobileSecond:'')}`} style={{width:statusInputWidth, visibility:(isTypeClicked?'visible':'hidden'), marginTop:'40px'}}>
                                     {datalistOptions(statusTypes, setCurrType, 'statustype')}
                                 </div>
                             </div>
-                            <div style={{width:'100%'}}>
+                            <div className={styles.newStatusField}>
                                 <input id='statusName' className={`${styles.fullInputField} ${styles.statusInputField}`} style={{border:nameError?'#d30000 solid 1px':'transparent'}} placeholder='Status Name' value={currName} onChange={(e)=>setCurrName(e.target.value)}></input>
-                                {nameError && <span id='statusNameError' className={styles.error}>Required</span>}
+                                {/* {nameError && <span id='statusNameError' className={styles.error}>Required</span>} */}
                             </div>
-                            <div style={{width:'100%'}}> 
+                            <div className={styles.newStatusField}> 
                                 <input id='statusDate' className={`${styles.fullInputField} ${styles.statusInputField}`} type='date' style={{paddingRight:'10px', border:dateError?'#d30000 solid 1px':'transparent'}} onChange={(e)=>handleDateChange(e.target.value)}></input>
-                                {dateError && <span id='statusDateError' className={styles.error}>Required</span>}
+                                {/* {dateError && <span id='statusDateError' className={styles.error}>Required</span>} */}
                             </div>
                             <button className={`${navStyles.logoutButton} ${styles.newStatusAddButton}`} onMouseEnter={()=>setAddHovered(true)} onMouseLeave={()=>setAddHovered(false)} onClick={()=>addStatus()}>
                                 {isAddHovered?(<BiAddToQueue/>):(<span style={{fontSize:'17px'}}>Add</span>)}
