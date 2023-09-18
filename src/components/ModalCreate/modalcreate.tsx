@@ -90,6 +90,7 @@ const ModalCreate = (props:Props) => {
     const statusTypes = ["In Progress", "Rejected", "Offer"];
     const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE *');
     const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
+    const [statusTypeError, setStatusTypeError] = useState<boolean>(false);
 
     function datalistHasMatches(suggestions:string[], userInput:string){
         if(suggestions.filter((item) => item.toLowerCase().startsWith(userInput)).length > 0 || userInput === '')
@@ -140,10 +141,6 @@ const ModalCreate = (props:Props) => {
         return currentStatus.length > 0
     };
 
-    const validateStatusType = () => {
-        return currentStatusType !== 'status type'.toUpperCase();
-    };
-
     const validateUrl = (value:string) => {
         let regex = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/;
         return regex.test(value)
@@ -165,24 +162,29 @@ const ModalCreate = (props:Props) => {
     };
 
     const createJob = () => {
-        props.createJobFunction({
-            JobID: props.currNumberOfJobs,
-            Date: currentDate,
-            Month: monthMapping[currentDate.split("/")[0]],
-            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
-            Company: currentCompany ? currentCompany : "",
-            Location: currentLocation ? currentLocation : "",
-            Statuses:[
-                {
-                    type: currentStatusType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-                    name: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-                    date: '04/25/2023'
-                }
-            ],
-            Title: currentTitle,
-            Type: currentJobType ? currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
-            URL: currentUrl
-        })
+        if(!statusTypes.includes(currentStatusType)){
+            setStatusTypeError(true);
+        }else{
+            setStatusTypeError(false);
+            props.createJobFunction({
+                JobID: props.currNumberOfJobs,
+                Date: currentDate,
+                Month: monthMapping[currentDate.split("/")[0]],
+                Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+                Company: currentCompany ? currentCompany : "",
+                Location: currentLocation ? currentLocation : "",
+                Statuses:[
+                    {
+                        type: currentStatusType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                        name: currentStatus.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+                        date: '04/25/2023'
+                    }
+                ],
+                Title: currentTitle,
+                Type: currentJobType ? currentJobType.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+                URL: currentUrl
+            })
+        }
     }
 
     const onSubmit: SubmitHandler<FormInputs> = () => createJob();
@@ -239,14 +241,14 @@ const ModalCreate = (props:Props) => {
                     <div className={styles.halfinputFieldsContainer}>
                         <div className={styles.halfInputField} onClick={()=>setStatusTypeClicked(!isStatusTypeClicked)}>
                             <ClickAwayListener onClickAway={()=>setStatusTypeClicked(false)}>
-                                <p id='statusType' {...register('StatusType', { validate: validateStatusType })} className={`${styles.fullInputField} ${styles.dropdownField}`} style={{width:'100%', border:errors.StatusType?'#d30000 solid 1px':'transparent'}}>
+                                <p id='statusType' className={`${styles.fullInputField} ${styles.dropdownField}`} style={{width:'100%', border:statusTypeError?'#d30000 solid 1px':'transparent'}}>
                                     {currentStatusType}{<BiChevronDown style ={{transform:isStatusTypeClicked ? 'rotate(180deg)' : 'rotate(0deg)', transition:'transform 1s ease'}} className={styles.dropDownArrow}/>}
                                 </p>
                             </ClickAwayListener>
                             <div className={`${styles.datalistContainer} ${(isScreenSmall?styles.dataListMobileSecond:'')}`} style={{width:inputWidth, visibility:(isStatusTypeClicked?'visible':'hidden')}}>
                                 {datalistOptions(statusTypes, setCurrentStatusType, 'statustype')}
                             </div>
-                            {errors.StatusType && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>}
+                            {statusTypeError && <span id='statusTypeError' className={styles.error}>Please choose a status type</span>}
                         </div>
                         <div className={styles.halfInputField}>
                             <input id='status' {...register('Status', { validate: validateStatus })} placeholder={'Status Name *'.toUpperCase()} className={`${styles.fullInputField}`} style={{width:'100%', border:errors.Status?'#d30000 solid 1px':'transparent'}} ref={inputReference} onFocus={()=>setStatusFocused(true)} onBlur={()=>handleOptionsVisibility(setStatusFocused)} value={currentStatus} onChange={(e)=>handleDataListChange(e, props.statuses, setCurrentStatus, setStatusSuggestions)}></input>
