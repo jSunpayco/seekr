@@ -177,9 +177,13 @@ const Navigation = (props:Props) => {
                 <BiMenu className={styles.mobileMenuButton} onClick={()=>setMenuOpened(!isMenuOpened)}/>
             </div>
 
-            <div className={styles.mobileMenuContainer} style={{opacity:(isMenuOpened?'100':'0'), transition:'opacity 1s'}}>
+            <div className={styles.mobileMenuContainer} style={{opacity:(isMenuOpened?'100':'0'), transition:'opacity 1s'}}> 
                 {mobileFilters()}
-                <a href='/' className={`${styles.logoutButton} ${styles.mobileLogoutButton}`}>Logout</a>
+                <button onClick={()=>props.modalFunction(true)} className={`${styles.logoutButton} ${styles.mobileLogoutButton}`} style={{padding:'10px 35px'}}
+                    onMouseLeave={()=>setChartButtonHover(false)} onMouseEnter={()=>setChartButtonHover(true)}>
+                    Report
+                </button>
+                <a href='/' className={`${styles.logoutButton} ${styles.mobileLogoutButton}`} style={{marginTop:'15px'}}>Logout</a>
             </div>
         </div>
     )

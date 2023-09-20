@@ -49,7 +49,7 @@ const Jobs = () => {
             JobID:1,
             Date:"03/05/2023",
             Month:"March",
-            Category:"Intern",
+            Category:"SWE",
             Company:"Samples Companies",
             Location:"Quezon City, MetroMetroMetro",
             Statuses:[
@@ -65,7 +65,7 @@ const Jobs = () => {
                 }
             ],
             Title:"Another Samples Jobs Titles",
-            Type:"Full Time",
+            Type:"Intern",
             URL:"https://www.google.com/"
         }
     ]
@@ -118,8 +118,7 @@ const Jobs = () => {
         setStatusOptions(Array.from(statusSet));
     }
 
-    function checkFilterOption(modifiedJob:Job){
-        const newJobs = myInitialJobs.filter(item => item !== modifiedJob);
+    function checkFilterOption(newJobs:Job[], modifiedJob:Job){
 
         const locationExists = newJobs.some(item => item['Location'] === modifiedJob.Location);
         const categoryExists = newJobs.some(item => item['Category'] === modifiedJob.Category);
@@ -236,6 +235,7 @@ const Jobs = () => {
 
         setMyInitialJobs(updatedJobs);
         setMyJobs(updatedJobs);
+        checkFilterOption(updatedJobs, changedJob);
 
         updatedJobs = myJobsFiltered.map(item => {
             if(item.JobID===changedJob.JobID){
@@ -257,11 +257,12 @@ const Jobs = () => {
     }
 
     const deleteJobItem = (jobId:number) => {
-        setMyInitialJobs(myInitialJobs.filter(item => item.JobID !== jobId));
-        setMyJobs(myInitialJobs.filter(item => item.JobID !== jobId));
+        const newJobs = myInitialJobs.filter(item => item.JobID !== jobId);
+        setMyInitialJobs(newJobs);
+        setMyJobs(newJobs);
         setMyJobsFiltered(myJobsFiltered.filter(item => item.JobID !== jobId));
         setModalDeleteOpen(false);
-        checkFilterOption(myInitialJobs[myInitialJobs.findIndex(obj => obj.JobID === jobId)])
+        checkFilterOption(newJobs, myInitialJobs[myInitialJobs.findIndex(obj => obj.JobID === jobId)]);
     }
 
     const jobsContainer = () => {

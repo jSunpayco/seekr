@@ -83,7 +83,7 @@ const ModalUpdate = (props:Props) => {
     const [currentLocation, setCurrentLocation] = useState(props.jobInfo.Location)
     const [currentUrl, setCurrentUrl] = useState(props.jobInfo.URL)
     const [currentCategory, setCurrentCategory] = useState<string>(props.jobInfo.Category);
-    const [currentJobType, setCurrentJobType] = useState<string>('');
+    const [currentJobType, setCurrentJobType] = useState<string>(props.jobInfo.Type);
     
     const jobTypes = props.jobtypes;
     const [jobTypeSuggestions, setJobTypeSuggestions] = useState<string[]>(jobTypes);
@@ -223,7 +223,7 @@ const ModalUpdate = (props:Props) => {
     const onSubmit: SubmitHandler<FormInputs> = () => {
         const tempJob = currView === "general" ? {
             ... props.jobInfo,
-            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            Category: currentCategory,
             Company: currentCompany,
             Location: currentLocation,
             Title: currentTitle,
@@ -324,8 +324,8 @@ const ModalUpdate = (props:Props) => {
                         </div>
                     </div>
                 </Slide>
-                {/* Add onClick */}
-                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
+
+                <div id='updateStatusButton' style={{marginBottom:'10px'}}><FormButton clickFunction={handleSubmit(onSubmit)} position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )
