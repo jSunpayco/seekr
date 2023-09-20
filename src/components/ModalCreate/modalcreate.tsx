@@ -170,7 +170,7 @@ const ModalCreate = (props:Props) => {
                 JobID: props.currNumberOfJobs,
                 Date: currentDate,
                 Month: monthMapping[currentDate.split("/")[0]],
-                Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+                Category: currentCategory,
                 Company: currentCompany ? currentCompany : "",
                 Location: currentLocation ? currentLocation : "",
                 Statuses:[

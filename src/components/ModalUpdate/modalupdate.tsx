@@ -223,7 +223,7 @@ const ModalUpdate = (props:Props) => {
     const onSubmit: SubmitHandler<FormInputs> = () => {
         const tempJob = currView === "general" ? {
             ... props.jobInfo,
-            Category: currentCategory ? currentCategory.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ') : "",
+            Category: currentCategory,
             Company: currentCompany,
             Location: currentLocation,
             Title: currentTitle,
