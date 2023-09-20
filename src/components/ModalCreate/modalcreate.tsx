@@ -87,7 +87,7 @@ const ModalCreate = (props:Props) => {
     const [statusSuggestions, setStatusSuggestions] = useState<string[]>(statuses);
     const [currentStatus, setCurrentStatus] = useState<string>('');
 
-    const statusTypes = ["In Progress", "Rejected", "Offer"];
+    const statusTypes = ["IN PROGRESS", "REJECTED", "OFFER"];
     const [currentStatusType, setCurrentStatusType] = useState<string>('STATUS TYPE *');
     const [isStatusTypeClicked, setStatusTypeClicked] = useState<boolean>(false);
     const [statusTypeError, setStatusTypeError] = useState<boolean>(false);
