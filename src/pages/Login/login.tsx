@@ -11,6 +11,10 @@ const Login = () => {
         marginRight:'auto'
     }
 
+    const loginFunction = () =>{
+        window.location.href= '/jobs';
+    }
+
     return (
         <div className={styles.loginContainer}>
             <div className={styles.loginContentsContainer}>
@@ -22,7 +26,7 @@ const Login = () => {
                         <a href='/register' className={styles.othersAnchor}>Register Here</a>
                         <a className={styles.othersAnchor}>Forgot your password?</a>
                     </div>
-                    <a href='/jobs'><FormButton title='Login' position={loginStyle}></FormButton></a>
+                    <a><FormButton clickFunction={loginFunction} title='Login' position={loginStyle}></FormButton></a>
                 </div>
             </div>
         </div>

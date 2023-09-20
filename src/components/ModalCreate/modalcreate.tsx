@@ -260,8 +260,8 @@ const ModalCreate = (props:Props) => {
                     </div>
                 </div>
                 
-                <div id='submitJobButton' onClick={handleSubmit(onSubmit)}>
-                    <FormButton position={{margin:'auto', marginTop:'20px'}} title='Submit' titleColor='black'></FormButton>
+                <div id='submitJobButton'>
+                    <FormButton clickFunction={handleSubmit(onSubmit)} position={{margin:'auto', marginTop:'20px'}} title='Submit' titleColor='black'></FormButton>
                 </div>
             </form>
         </div>

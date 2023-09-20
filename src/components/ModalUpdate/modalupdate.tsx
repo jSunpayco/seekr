@@ -324,8 +324,8 @@ const ModalUpdate = (props:Props) => {
                         </div>
                     </div>
                 </Slide>
-                {/* Add onClick */}
-                <div id='updateStatusButton' style={{marginBottom:'10px'}} onClick={handleSubmit(onSubmit)}><FormButton position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
+
+                <div id='updateStatusButton' style={{marginBottom:'10px'}}><FormButton clickFunction={handleSubmit(onSubmit)} position={{margin:'20px auto'}} title='Update' titleColor='black'></FormButton></div>
             </div>
         </div>
     )
