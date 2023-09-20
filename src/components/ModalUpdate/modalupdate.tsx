@@ -83,7 +83,7 @@ const ModalUpdate = (props:Props) => {
     const [currentLocation, setCurrentLocation] = useState(props.jobInfo.Location)
     const [currentUrl, setCurrentUrl] = useState(props.jobInfo.URL)
     const [currentCategory, setCurrentCategory] = useState<string>(props.jobInfo.Category);
-    const [currentJobType, setCurrentJobType] = useState<string>('');
+    const [currentJobType, setCurrentJobType] = useState<string>(props.jobInfo.Type);
     
     const jobTypes = props.jobtypes;
     const [jobTypeSuggestions, setJobTypeSuggestions] = useState<string[]>(jobTypes);
