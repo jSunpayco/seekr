@@ -8,7 +8,8 @@ import { Job } from '../../interfaces/Job';
 import { Statuses } from '../../interfaces/Statuses';
 
 import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
-import {useMediaQuery, Slide, ClickAwayListener} from '@mui/material';
+import { TransitionGroup } from 'react-transition-group';
+import {useMediaQuery, Slide, ClickAwayListener, Collapse} from '@mui/material';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -157,17 +158,19 @@ const ModalUpdate = (props:Props) => {
 
     const statusItem = () => {
         return statuses.map((item, index) => (
-            <div key={`status${index}`} className={styles.statusItemContainer}>
-                <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>
-                    {item.name}
-                </p>
-                <p>{item.date}</p>
-                <div className={styles.statusButtonsContainer}>
-                    <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
-                    <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
-                    <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+            <Collapse key={`status${index}`}>
+                <div className={styles.statusItemContainer}>
+                    <p className={`${styles.statusItem} ${(item.type === 'Offer'?styles.legendColorOffer:item.type === 'Rejected'?styles.legendColorReject:styles.legendColorProgress)}`}>
+                        {item.name}
+                    </p>
+                    <p>{item.date}</p>
+                    <div className={styles.statusButtonsContainer}>
+                        <BiChevronDown className={styles.statusButton} onClick={()=>swapStatus(index, "down")}/>
+                        <BiChevronUp className={styles.statusButton} onClick={()=>swapStatus(index, "up")}/>
+                        <BiTrash className={styles.statusButton} onClick={()=>deleteStatus(index)}/>
+                    </div>
                 </div>
-            </div>
+            </Collapse>
         ))
     }
 
@@ -296,7 +299,9 @@ const ModalUpdate = (props:Props) => {
                 <Slide direction="left" in={currView==="status"} container={containerRef.current}>
                     <div className={styles.settingsContainer} style={{display:(currView==="status"?'flex':'none')}}>
                         <div className={styles.statusItemsContainer}>
-                            {statusItem()}
+                            <TransitionGroup>
+                                {statusItem()}
+                            </TransitionGroup>
                         </div>
                         <div className={styles.newStatusContainer}>
                             <div onClick={()=>setTypeClicked(!isTypeClicked)} className={styles.newStatusField}>
