@@ -31,7 +31,6 @@ const ModalSankey = (props:Props) => {
 
     const sankeyData: SankeyDataType = sankeyJson;
 
-
     useEffect(() => {
         DrawChart();
           
@@ -51,14 +50,14 @@ const ModalSankey = (props:Props) => {
     function DrawChart() {
 
         const svg = d3.select("#sankey")
-        const width = 640;
+        const width = 750;
         const height = 480;
 
         const color = d3.scaleOrdinal(d3.schemeTableau10);
 
         const sankey = d3Sankey.sankey()
             .nodeWidth(15)
-            .nodePadding(10)
+            .nodePadding(20)
             .extent([[1, 1], [width - 1, height - 6]]);
 
         const link = svg.append("g")
@@ -72,8 +71,9 @@ const ModalSankey = (props:Props) => {
             .attr("class", "nodes")
             .attr("font-family", "sans-serif")
             .attr("font-size", 10)
-            .selectAll("g");
-
+            .selectAll("g")
+            .data(sankeyData.nodes)
+            .enter().append("g");
 
         sankey(sankeyData);
 
@@ -81,18 +81,15 @@ const ModalSankey = (props:Props) => {
             .data(sankeyData.links)
             .enter().append("path")
             .attr("d", d3Sankey.sankeyLinkHorizontal())
-            .attr("stroke-width", function (d: any) { return Math.max(1, d.width); });
-
-        node = node
-            .data(sankeyData.nodes)
-            .enter().append("g");
+            .attr("stroke-width", function (d: any) { return Math.max(1, d.width); })
+            .attr("stroke", d => d3.schemeTableau10[d.index || 0 % 10]);
 
         node.append("rect")
             .attr("x", function (d: any) { return d.x0; })
             .attr("y", function (d: any) { return d.y0; })
             .attr("height", function (d: any) { return d.y1 - d.y0; })
             .attr("width", function (d: any) { return d.x1 - d.x0; })
-            .attr("fill", function (d: any) { return color(d.name.replace(/ .*/, "")); })
+            .attr("fill", function (d: any) { return color(d3.schemeTableau10[d.index || 0 % 10]); })
             .attr("stroke", "#000");
 
         node.append("text")
