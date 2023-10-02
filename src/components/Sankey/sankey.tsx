@@ -1,8 +1,9 @@
 import * as d3Sankey from 'd3-sankey';
 import * as d3 from 'd3'
 import styles from './sankey.module.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import sankeyJson from '../../sample.json'
+import { Job } from '../../interfaces/Job';
 
 interface Props {
     isOpen: boolean;
@@ -31,7 +32,55 @@ const ModalSankey = (props:Props) => {
 
     const sankeyData: SankeyDataType = sankeyJson;
 
+    const sampleData = [
+        {
+            JobID:0,
+            Date:"04/25/2023",
+            Month:"April",
+            Category:"SWE",
+            Company:"Sample Company",
+            Location:"City, State",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '04/25/2023'
+                }
+            ],
+            Title:"Junior Software Engineer",
+            Type:"Full Time",
+            URL:"https://www.google.com/"
+        },
+        {
+            JobID:1,
+            Date:"03/05/2023",
+            Month:"March",
+            Category:"SWE",
+            Company:"Samples Companies",
+            Location:"Quezon City, MetroMetroMetro",
+            Statuses:[
+                {
+                    type: 'In Progress',
+                    name: 'Sent',
+                    date: '03/05/2023'
+                },
+                {
+                    type: 'Rejected',
+                    name: 'Resume Reject',
+                    date: '03/25/2023'
+                }
+            ],
+            Title:"Another Samples Jobs Titles",
+            Type:"Intern",
+            URL:"https://www.google.com/"
+        }
+    ];
+
+    const [sampleSankeyData, setSampleSankeyData] = useState<Job[]>([]);
+
     useEffect(() => {
+        setSankeyData();
+
         DrawChart();
           
         const handleKeyDown = (event:KeyboardEvent) => {
@@ -46,6 +95,42 @@ const ModalSankey = (props:Props) => {
           document.removeEventListener('keydown', handleKeyDown);
         };
     }, []);
+
+    function setSankeyData(){
+        const links: SLinkExtra[] = [];
+        const nodesSet: Set<string> = new Set();
+        var start = 0;
+        var tempLink: SLinkExtra = {source:1, target:1, value:0};
+
+        sampleData.forEach((item) => {
+            if(item.Statuses.length > 1){
+                nodesSet.add(item.Statuses[0].name);
+                start = Array.from(nodesSet).indexOf(item.Statuses[0].name);
+
+                item.Statuses.forEach((item, index) => {
+                    if(index > 0){
+                        nodesSet.add(item.name);
+                        tempLink = {source:start, target:index, value:1};
+                        if(links.includes(tempLink)){
+                            links[links.findIndex(obj => obj === tempLink)].value += 1;
+                        }else{
+                            links.push(tempLink);
+                        }
+                        start = Array.from(nodesSet).indexOf(item.name);
+                    }
+                });
+            }else{
+                nodesSet.add(item.Statuses[0].name);
+            }
+        });
+
+        const nodes: SNodeExtra[] = [...nodesSet].map((name: string, index: number) => ({
+            nodeId: index,
+            name: name,
+        }));
+
+        console.log(nodes, links);
+    }
 
     function DrawChart() {
 
